@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sduikit.dev/schemas/widgets/badge.v1.json",
+  "title": "badge (v1) data",
+  "type": "object",
+  "properties": {
+    "label": {
+      "type": "string",
+      "minLength": 1
+    },
+    "tone": {
+      "$ref": "../common/tokens.json#/$defs/tone"
+    }
+  },
+  "required": [
+    "label"
+  ],
+  "additionalProperties": false
+}

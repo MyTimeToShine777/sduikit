@@ -5,7 +5,7 @@ import { loadFixture, page, screen, widget } from "./helpers";
 const banner = (data: unknown = { imageUrl: "https://example.com/a.jpg" }, extra = {}) => widget("banner", data, extra);
 
 describe("validate: sample files", () => {
-  it.each(["valid/page-home.json", "valid/screen-offers.json", "valid/manifest.json"])("%s is valid", (name) => {
+  it.each(["valid/page-home.json", "valid/page-showcase.json", "valid/screen-offers.json", "valid/manifest.json"])("%s is valid", (name) => {
     const result = validate(loadFixture(name));
     expect(result.errors).toEqual([]);
     expect(result.valid).toBe(true);

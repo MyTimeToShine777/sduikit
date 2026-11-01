@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sduikit.dev/schemas/widgets/form.v1.json",
+  "title": "form (v1) data",
+  "type": "object",
+  "properties": {
+    "fields": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+          },
+          "type": {
+            "enum": [
+              "text",
+              "email",
+              "number",
+              "multiline",
+              "password",
+              "checkbox",
+              "switch",
+              "select",
+              "date"
+            ]
+          },
+          "label": {
+            "type": "string",
+            "minLength": 1
+          },
+          "required": {
+            "type": "boolean"
+          },
+          "placeholder": {
+            "type": "string"
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "value": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "label": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "value",
+                "label"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 1
+          }
+        },
+        "required": [
+          "name",
+          "type",
+          "label"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1
+    },
+    "submitLabel": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "required": [
+    "fields",
+    "submitLabel"
+  ],
+  "additionalProperties": false
+}

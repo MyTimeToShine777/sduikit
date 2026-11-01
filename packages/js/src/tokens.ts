@@ -1,7 +1,7 @@
 import { schemaFiles } from "./generated/schemas.js";
 
 interface TokenFile {
-  $defs: Record<"spacing" | "radius" | "color" | "textSize" | "align", { enum: string[] }>;
+  $defs: Record<"spacing" | "radius" | "color" | "textSize" | "align" | "icon" | "tone" | "size", { enum: string[] }>;
 }
 
 const definitions = (schemaFiles["common/tokens.json"] as TokenFile).$defs;
@@ -14,4 +14,7 @@ export const tokens = {
   color: definitions.color.enum,
   textSize: definitions.textSize.enum,
   align: definitions.align.enum,
+  icon: definitions.icon.enum, // names for the icon, avatar, list_item and quick_actions widgets
+  tone: definitions.tone.enum, // neutral, info, success, warning, error (badge, alert)
+  size: definitions.size.enum, // small, medium, large (icon, avatar)
 };

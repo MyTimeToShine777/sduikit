@@ -68,7 +68,7 @@ const isKind = (word) => word === "pages" || word === "screens";
 
 export function createExampleServer() {
   const manifest = readFixture("manifest.json");
-  const live = { pages: new Map([["home", readFixture("page-home.json")]]), screens: new Map([["offers", readFixture("screen-offers.json")]]) };
+  const live = { pages: new Map([["home", readFixture("page-home.json")], ["showcase", readFixture("page-showcase.json")]]), screens: new Map([["offers", readFixture("screen-offers.json")]]) };
   const drafts = { pages: new Map(), screens: new Map() };
   const history = { pages: new Map(), screens: new Map() }; // id -> [{ document, replacedAt }]
 

@@ -101,6 +101,23 @@ describe("example server", () => {
   });
 });
 
+describe("the showcase page", () => {
+  const newWidgets =
+    "rich_text:1,quote:1,icon:1,avatar:1,badge:1,alert:1,progress:1,stat:1,key_value:1,list_item:1,empty_state:1,steps:1,accordion:1,table:1,countdown:1,gallery:1,video_card:1,hero:1,pricing_card:1,search_bar:1,chips:1,quick_actions:1,rating:1,container:1,form:1";
+
+  it("gives an up-to-date app the whole page, including the form and the hero", async () => {
+    const page = (await get(`/pages/showcase?appVersion=1.0.0&country=AE&widgets=${allWidgets},${newWidgets}`)).body;
+    assert.ok(widgetIds(page).includes("s_form"));
+    assert.ok(widgetIds(page).includes("s_hero"));
+    assert.ok(widgetIds(page).includes("s_price"));
+  });
+
+  it("gives an app that only knows a few widgets just those, without the form or hero", async () => {
+    const page = (await get(`/pages/showcase?appVersion=1.0.0&country=AE&widgets=badge:1,container:1`)).body;
+    assert.deepEqual(widgetIds(page), ["s_badge", "s_container"]);
+  });
+});
+
 describe("live data", () => {
   it("gives the page a data_list that an up-to-date app can draw, and leaves it out for an old app", async () => {
     const newer = (await get(`/pages/home?${newApp}`)).body;

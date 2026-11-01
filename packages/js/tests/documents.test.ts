@@ -19,7 +19,15 @@ describe("fixtures", () => {
   });
 
   // The fixtures are also used by the Flutter tests, so they should show everything.
-  const documents = [loadFixture("valid/page-home.json"), loadFixture("valid/screen-offers.json")];
+  const documents = [
+    loadFixture("valid/page-home.json"),
+    loadFixture("valid/page-showcase.json"),
+    loadFixture("valid/screen-offers.json"),
+  ];
+
+  it("page-showcase is a valid page", () => {
+    expect(checkPage(loadFixture("valid/page-showcase.json")), JSON.stringify(checkPage.errors)).toBe(true);
+  });
 
   function collect(value: unknown, found: { widgets: Set<string>; blocks: Set<string>; actions: Set<string> }) {
     if (Array.isArray(value)) value.forEach((item) => collect(item, found));

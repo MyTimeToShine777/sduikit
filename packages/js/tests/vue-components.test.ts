@@ -83,6 +83,13 @@ describe("SduiPreview", () => {
     expect(wrapper.text()).not.toContain("No upcoming visits");
   });
 
+  it("shows the name and main texts of widgets it does not draw in detail", () => {
+    const wrapper = mount(SduiPreview, { props: { document: loadFixture("valid/page-showcase.json") } });
+    expect(wrapper.text()).toContain("hero (v1): Spring sale");
+    expect(wrapper.text()).toContain("pricing_card (v1): Team");
+    expect(wrapper.findAll(".sdui-unknown").length).toBeGreaterThan(20);
+  });
+
   it("uses the theme for spacing and colours", () => {
     const wrapper = mount(SduiPreview, {
       props: {

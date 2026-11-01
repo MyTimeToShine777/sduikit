@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sduikit.dev/schemas/widgets/rating.v1.json",
+  "title": "rating (v1) data",
+  "type": "object",
+  "properties": {
+    "value": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 5
+    },
+    "count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "label": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "value"
+  ],
+  "additionalProperties": false
+}

@@ -9,5 +9,9 @@ describe("tokens", () => {
     expect(tokens.align).toEqual(["start", "center", "end"]);
     expect(tokens.color).toHaveLength(12);
     expect(tokens.color).toContain("onPrimary");
+    expect(tokens.tone).toEqual(["neutral", "info", "success", "warning", "error"]);
+    expect(tokens.size).toEqual(["small", "medium", "large"]);
+    expect(tokens.icon).toContain("home");
+    expect(new Set(tokens.icon).size).toBe(tokens.icon.length); // no name twice
   });
 });

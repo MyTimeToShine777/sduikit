@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sduikit.dev/schemas/widgets/quick_actions.v1.json",
+  "title": "quick_actions (v1) data",
+  "type": "object",
+  "properties": {
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "minLength": 1
+          },
+          "icon": {
+            "$ref": "../common/tokens.json#/$defs/icon"
+          },
+          "action": {
+            "$ref": "../common/action.json"
+          }
+        },
+        "required": [
+          "label",
+          "icon"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1
+    },
+    "columns": {
+      "type": "integer",
+      "minimum": 2,
+      "maximum": 6
+    }
+  },
+  "required": [
+    "items"
+  ],
+  "additionalProperties": false
+}

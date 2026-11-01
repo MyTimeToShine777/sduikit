@@ -124,9 +124,20 @@ function renderWidget(widget: Widget, theme: Theme): VNode {
         ...items(data.template).slice(0, 1).map((child) => renderWidget(child, theme)),
       ]);
     }
-    default:
-      // A widget this preview does not know (for example an app's own widget).
-      return h("div", { ...attrs, class: "sdui-unknown", style: { border: "1px dashed #999", padding: "8px" } }, `${widget.type} (v${widget.v})`);
+    default: {
+      // A widget this preview does not draw (newer built-in widgets, or an app's own widget).
+      // It shows the widget's name and its main texts so staff can still see what is there.
+      const mainTexts = ["title", "label", "message", "text", "name", "placeholder", "value"]
+        .map((key) => data[key])
+        .filter((value) => typeof value === "string" || typeof value === "number")
+        .join(" · ");
+      const name = `${widget.type} (v${widget.v})`;
+      return h(
+        "div",
+        { ...attrs, class: "sdui-unknown", style: { border: "1px dashed #999", padding: "8px" } },
+        mainTexts ? `${name}: ${mainTexts}` : name,
+      );
+    }
   }
 }
 

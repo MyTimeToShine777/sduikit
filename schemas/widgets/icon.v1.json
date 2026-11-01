@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sduikit.dev/schemas/widgets/icon.v1.json",
+  "title": "icon (v1) data",
+  "type": "object",
+  "properties": {
+    "name": {
+      "$ref": "../common/tokens.json#/$defs/icon"
+    },
+    "size": {
+      "$ref": "../common/tokens.json#/$defs/size"
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "additionalProperties": false
+}

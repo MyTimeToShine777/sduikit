@@ -452,6 +452,235 @@ export const schemaFiles: Record<string, unknown> = {
             ]
           }
         }
+      },
+      "rich_text": {
+        "versions": {
+          "1": {
+            "since": "0.2.0",
+            "schema": "widgets/rich_text.v1.json",
+            "children": []
+          }
+        }
+      },
+      "quote": {
+        "versions": {
+          "1": {
+            "since": "0.2.0",
+            "schema": "widgets/quote.v1.json",
+            "children": []
+          }
+        }
+      },
+      "icon": {
+        "versions": {
+          "1": {
+            "since": "0.2.0",
+            "schema": "widgets/icon.v1.json",
+            "children": []
+          }
+        }
+      },
+      "avatar": {
+        "versions": {
+          "1": {
+            "since": "0.2.0",
+            "schema": "widgets/avatar.v1.json",
+            "children": []
+          }
+        }
+      },
+      "badge": {
+        "versions": {
+          "1": {
+            "since": "0.2.0",
+            "schema": "widgets/badge.v1.json",
+            "children": []
+          }
+        }
+      },
+      "alert": {
+        "versions": {
+          "1": {
+            "since": "0.2.0",
+            "schema": "widgets/alert.v1.json",
+            "children": []
+          }
+        }
+      },
+      "progress": {
+        "versions": {
+          "1": {
+            "since": "0.2.0",
+            "schema": "widgets/progress.v1.json",
+            "children": []
+          }
+        }
+      },
+      "stat": {
+        "versions": {
+          "1": {
+            "since": "0.2.0",
+            "schema": "widgets/stat.v1.json",
+            "children": []
+          }
+        }
+      },
+      "key_value": {
+        "versions": {
+          "1": {
+            "since": "0.2.0",
+            "schema": "widgets/key_value.v1.json",
+            "children": []
+          }
+        }
+      },
+      "list_item": {
+        "versions": {
+          "1": {
+            "since": "0.2.0",
+            "schema": "widgets/list_item.v1.json",
+            "children": []
+          }
+        }
+      },
+      "empty_state": {
+        "versions": {
+          "1": {
+            "since": "0.2.0",
+            "schema": "widgets/empty_state.v1.json",
+            "children": []
+          }
+        }
+      },
+      "steps": {
+        "versions": {
+          "1": {
+            "since": "0.2.0",
+            "schema": "widgets/steps.v1.json",
+            "children": []
+          }
+        }
+      },
+      "accordion": {
+        "versions": {
+          "1": {
+            "since": "0.2.0",
+            "schema": "widgets/accordion.v1.json",
+            "children": [
+              "items[].widgets"
+            ]
+          }
+        }
+      },
+      "table": {
+        "versions": {
+          "1": {
+            "since": "0.2.0",
+            "schema": "widgets/table.v1.json",
+            "children": []
+          }
+        }
+      },
+      "countdown": {
+        "versions": {
+          "1": {
+            "since": "0.2.0",
+            "schema": "widgets/countdown.v1.json",
+            "children": []
+          }
+        }
+      },
+      "gallery": {
+        "versions": {
+          "1": {
+            "since": "0.2.0",
+            "schema": "widgets/gallery.v1.json",
+            "children": []
+          }
+        }
+      },
+      "video_card": {
+        "versions": {
+          "1": {
+            "since": "0.2.0",
+            "schema": "widgets/video_card.v1.json",
+            "children": []
+          }
+        }
+      },
+      "hero": {
+        "versions": {
+          "1": {
+            "since": "0.2.0",
+            "schema": "widgets/hero.v1.json",
+            "children": []
+          }
+        }
+      },
+      "pricing_card": {
+        "versions": {
+          "1": {
+            "since": "0.2.0",
+            "schema": "widgets/pricing_card.v1.json",
+            "children": []
+          }
+        }
+      },
+      "search_bar": {
+        "versions": {
+          "1": {
+            "since": "0.2.0",
+            "schema": "widgets/search_bar.v1.json",
+            "children": []
+          }
+        }
+      },
+      "chips": {
+        "versions": {
+          "1": {
+            "since": "0.2.0",
+            "schema": "widgets/chips.v1.json",
+            "children": []
+          }
+        }
+      },
+      "quick_actions": {
+        "versions": {
+          "1": {
+            "since": "0.2.0",
+            "schema": "widgets/quick_actions.v1.json",
+            "children": []
+          }
+        }
+      },
+      "rating": {
+        "versions": {
+          "1": {
+            "since": "0.2.0",
+            "schema": "widgets/rating.v1.json",
+            "children": []
+          }
+        }
+      },
+      "container": {
+        "versions": {
+          "1": {
+            "since": "0.2.0",
+            "schema": "widgets/container.v1.json",
+            "children": [
+              "children"
+            ]
+          }
+        }
+      },
+      "form": {
+        "versions": {
+          "1": {
+            "since": "0.2.0",
+            "schema": "widgets/form.v1.json",
+            "children": []
+          }
+        }
       }
     }
   },
@@ -742,6 +971,56 @@ export const schemaFiles: Record<string, unknown> = {
           "start",
           "center",
           "end"
+        ]
+      },
+      "icon": {
+        "enum": [
+          "home",
+          "search",
+          "calendar",
+          "phone",
+          "chat",
+          "location",
+          "heart",
+          "star",
+          "info",
+          "bag",
+          "check",
+          "close",
+          "warning",
+          "error",
+          "mail",
+          "share",
+          "download",
+          "lock",
+          "clock",
+          "gift",
+          "cart",
+          "camera",
+          "play",
+          "link",
+          "person",
+          "settings",
+          "payment",
+          "bell",
+          "bookmark",
+          "help"
+        ]
+      },
+      "tone": {
+        "enum": [
+          "neutral",
+          "info",
+          "success",
+          "warning",
+          "error"
+        ]
+      },
+      "size": {
+        "enum": [
+          "small",
+          "medium",
+          "large"
         ]
       }
     }
@@ -1232,6 +1511,108 @@ export const schemaFiles: Record<string, unknown> = {
     ],
     "additionalProperties": false
   },
+  "widgets/accordion.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/accordion.v1.json",
+    "title": "accordion (v1) data",
+    "type": "object",
+    "properties": {
+      "items": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string",
+              "minLength": 1
+            },
+            "widgets": {
+              "type": "array",
+              "items": {
+                "$ref": "../common/widget.json"
+              }
+            }
+          },
+          "required": [
+            "title",
+            "widgets"
+          ],
+          "additionalProperties": false
+        },
+        "minItems": 1
+      },
+      "allowMultiple": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "items"
+    ],
+    "additionalProperties": false
+  },
+  "widgets/alert.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/alert.v1.json",
+    "title": "alert (v1) data",
+    "type": "object",
+    "properties": {
+      "message": {
+        "type": "string",
+        "minLength": 1
+      },
+      "title": {
+        "type": "string"
+      },
+      "tone": {
+        "$ref": "../common/tokens.json#/$defs/tone"
+      }
+    },
+    "required": [
+      "message"
+    ],
+    "additionalProperties": false
+  },
+  "widgets/avatar.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/avatar.v1.json",
+    "title": "avatar (v1) data",
+    "type": "object",
+    "properties": {
+      "imageUrl": {
+        "type": "string",
+        "format": "uri"
+      },
+      "initials": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 3
+      },
+      "size": {
+        "$ref": "../common/tokens.json#/$defs/size"
+      }
+    },
+    "additionalProperties": false,
+    "minProperties": 1
+  },
+  "widgets/badge.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/badge.v1.json",
+    "title": "badge (v1) data",
+    "type": "object",
+    "properties": {
+      "label": {
+        "type": "string",
+        "minLength": 1
+      },
+      "tone": {
+        "$ref": "../common/tokens.json#/$defs/tone"
+      }
+    },
+    "required": [
+      "label"
+    ],
+    "additionalProperties": false
+  },
   "widgets/banner.v1.json": {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "$id": "https://sduikit.dev/schemas/widgets/banner.v1.json",
@@ -1331,6 +1712,91 @@ export const schemaFiles: Record<string, unknown> = {
     ],
     "additionalProperties": false
   },
+  "widgets/chips.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/chips.v1.json",
+    "title": "chips (v1) data",
+    "type": "object",
+    "properties": {
+      "chips": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "label": {
+              "type": "string",
+              "minLength": 1
+            },
+            "selected": {
+              "type": "boolean"
+            },
+            "action": {
+              "$ref": "../common/action.json"
+            }
+          },
+          "required": [
+            "label"
+          ],
+          "additionalProperties": false
+        },
+        "minItems": 1
+      }
+    },
+    "required": [
+      "chips"
+    ],
+    "additionalProperties": false
+  },
+  "widgets/container.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/container.v1.json",
+    "title": "container (v1) data",
+    "type": "object",
+    "properties": {
+      "children": {
+        "type": "array",
+        "items": {
+          "$ref": "../common/widget.json"
+        },
+        "minItems": 1
+      },
+      "direction": {
+        "enum": [
+          "vertical",
+          "horizontal"
+        ]
+      },
+      "gap": {
+        "$ref": "../common/tokens.json#/$defs/spacing"
+      }
+    },
+    "required": [
+      "children"
+    ],
+    "additionalProperties": false
+  },
+  "widgets/countdown.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/countdown.v1.json",
+    "title": "countdown (v1) data",
+    "type": "object",
+    "properties": {
+      "until": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "label": {
+        "type": "string"
+      },
+      "endedText": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "until"
+    ],
+    "additionalProperties": false
+  },
   "widgets/data_list.v1.json": {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "$id": "https://sduikit.dev/schemas/widgets/data_list.v1.json",
@@ -1392,6 +1858,151 @@ export const schemaFiles: Record<string, unknown> = {
     "properties": {},
     "additionalProperties": false
   },
+  "widgets/empty_state.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/empty_state.v1.json",
+    "title": "empty_state (v1) data",
+    "type": "object",
+    "properties": {
+      "title": {
+        "type": "string",
+        "minLength": 1
+      },
+      "message": {
+        "type": "string"
+      },
+      "icon": {
+        "$ref": "../common/tokens.json#/$defs/icon"
+      },
+      "actionLabel": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "title"
+    ],
+    "additionalProperties": false
+  },
+  "widgets/form.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/form.v1.json",
+    "title": "form (v1) data",
+    "type": "object",
+    "properties": {
+      "fields": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+            },
+            "type": {
+              "enum": [
+                "text",
+                "email",
+                "number",
+                "multiline",
+                "password",
+                "checkbox",
+                "switch",
+                "select",
+                "date"
+              ]
+            },
+            "label": {
+              "type": "string",
+              "minLength": 1
+            },
+            "required": {
+              "type": "boolean"
+            },
+            "placeholder": {
+              "type": "string"
+            },
+            "options": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "label": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "value",
+                  "label"
+                ],
+                "additionalProperties": false
+              },
+              "minItems": 1
+            }
+          },
+          "required": [
+            "name",
+            "type",
+            "label"
+          ],
+          "additionalProperties": false
+        },
+        "minItems": 1
+      },
+      "submitLabel": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "required": [
+      "fields",
+      "submitLabel"
+    ],
+    "additionalProperties": false
+  },
+  "widgets/gallery.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/gallery.v1.json",
+    "title": "gallery (v1) data",
+    "type": "object",
+    "properties": {
+      "images": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "format": "uri"
+            },
+            "alt": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "url"
+          ],
+          "additionalProperties": false
+        },
+        "minItems": 1
+      },
+      "aspectRatio": {
+        "type": "number",
+        "exclusiveMinimum": 0
+      },
+      "showDots": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "images"
+    ],
+    "additionalProperties": false
+  },
   "widgets/grid.v1.json": {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "$id": "https://sduikit.dev/schemas/widgets/grid.v1.json",
@@ -1414,6 +2025,51 @@ export const schemaFiles: Record<string, unknown> = {
     "required": [
       "columns",
       "items"
+    ],
+    "additionalProperties": false
+  },
+  "widgets/hero.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/hero.v1.json",
+    "title": "hero (v1) data",
+    "type": "object",
+    "properties": {
+      "imageUrl": {
+        "type": "string",
+        "format": "uri"
+      },
+      "title": {
+        "type": "string",
+        "minLength": 1
+      },
+      "subtitle": {
+        "type": "string"
+      },
+      "ctaLabel": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "imageUrl",
+      "title"
+    ],
+    "additionalProperties": false
+  },
+  "widgets/icon.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/icon.v1.json",
+    "title": "icon (v1) data",
+    "type": "object",
+    "properties": {
+      "name": {
+        "$ref": "../common/tokens.json#/$defs/icon"
+      },
+      "size": {
+        "$ref": "../common/tokens.json#/$defs/size"
+      }
+    },
+    "required": [
+      "name"
     ],
     "additionalProperties": false
   },
@@ -1446,6 +2102,39 @@ export const schemaFiles: Record<string, unknown> = {
     ],
     "additionalProperties": false
   },
+  "widgets/key_value.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/key_value.v1.json",
+    "title": "key_value (v1) data",
+    "type": "object",
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "label": {
+              "type": "string",
+              "minLength": 1
+            },
+            "value": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "label",
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        "minItems": 1
+      }
+    },
+    "required": [
+      "rows"
+    ],
+    "additionalProperties": false
+  },
   "widgets/list.v1.json": {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "$id": "https://sduikit.dev/schemas/widgets/list.v1.json",
@@ -1465,6 +2154,252 @@ export const schemaFiles: Record<string, unknown> = {
     },
     "required": [
       "items"
+    ],
+    "additionalProperties": false
+  },
+  "widgets/list_item.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/list_item.v1.json",
+    "title": "list_item (v1) data",
+    "type": "object",
+    "properties": {
+      "title": {
+        "type": "string",
+        "minLength": 1
+      },
+      "subtitle": {
+        "type": "string"
+      },
+      "icon": {
+        "$ref": "../common/tokens.json#/$defs/icon"
+      },
+      "imageUrl": {
+        "type": "string",
+        "format": "uri"
+      },
+      "trailingText": {
+        "type": "string"
+      },
+      "chevron": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "title"
+    ],
+    "additionalProperties": false
+  },
+  "widgets/pricing_card.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/pricing_card.v1.json",
+    "title": "pricing_card (v1) data",
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string",
+        "minLength": 1
+      },
+      "price": {
+        "type": "string",
+        "minLength": 1
+      },
+      "period": {
+        "type": "string"
+      },
+      "features": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "highlighted": {
+        "type": "boolean"
+      },
+      "ctaLabel": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "name",
+      "price"
+    ],
+    "additionalProperties": false
+  },
+  "widgets/progress.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/progress.v1.json",
+    "title": "progress (v1) data",
+    "type": "object",
+    "properties": {
+      "value": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 1
+      },
+      "label": {
+        "type": "string"
+      },
+      "shape": {
+        "enum": [
+          "linear",
+          "circular"
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "widgets/quick_actions.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/quick_actions.v1.json",
+    "title": "quick_actions (v1) data",
+    "type": "object",
+    "properties": {
+      "items": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "label": {
+              "type": "string",
+              "minLength": 1
+            },
+            "icon": {
+              "$ref": "../common/tokens.json#/$defs/icon"
+            },
+            "action": {
+              "$ref": "../common/action.json"
+            }
+          },
+          "required": [
+            "label",
+            "icon"
+          ],
+          "additionalProperties": false
+        },
+        "minItems": 1
+      },
+      "columns": {
+        "type": "integer",
+        "minimum": 2,
+        "maximum": 6
+      }
+    },
+    "required": [
+      "items"
+    ],
+    "additionalProperties": false
+  },
+  "widgets/quote.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/quote.v1.json",
+    "title": "quote (v1) data",
+    "type": "object",
+    "properties": {
+      "text": {
+        "type": "string",
+        "minLength": 1
+      },
+      "author": {
+        "type": "string"
+      },
+      "role": {
+        "type": "string"
+      },
+      "avatarUrl": {
+        "type": "string",
+        "format": "uri"
+      }
+    },
+    "required": [
+      "text"
+    ],
+    "additionalProperties": false
+  },
+  "widgets/rating.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/rating.v1.json",
+    "title": "rating (v1) data",
+    "type": "object",
+    "properties": {
+      "value": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 5
+      },
+      "count": {
+        "type": "integer",
+        "minimum": 0
+      },
+      "label": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "widgets/rich_text.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/rich_text.v1.json",
+    "title": "rich_text (v1) data",
+    "type": "object",
+    "properties": {
+      "spans": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "text": {
+              "type": "string",
+              "minLength": 1
+            },
+            "bold": {
+              "type": "boolean"
+            },
+            "italic": {
+              "type": "boolean"
+            },
+            "underline": {
+              "type": "boolean"
+            },
+            "color": {
+              "$ref": "../common/tokens.json#/$defs/color"
+            },
+            "size": {
+              "$ref": "../common/tokens.json#/$defs/textSize"
+            }
+          },
+          "required": [
+            "text"
+          ],
+          "additionalProperties": false
+        },
+        "minItems": 1
+      }
+    },
+    "required": [
+      "spans"
+    ],
+    "additionalProperties": false
+  },
+  "widgets/search_bar.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/search_bar.v1.json",
+    "title": "search_bar (v1) data",
+    "type": "object",
+    "properties": {
+      "placeholder": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "required": [
+      "placeholder"
     ],
     "additionalProperties": false
   },
@@ -1502,6 +2437,106 @@ export const schemaFiles: Record<string, unknown> = {
     },
     "required": [
       "size"
+    ],
+    "additionalProperties": false
+  },
+  "widgets/stat.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/stat.v1.json",
+    "title": "stat (v1) data",
+    "type": "object",
+    "properties": {
+      "label": {
+        "type": "string",
+        "minLength": 1
+      },
+      "value": {
+        "type": "string",
+        "minLength": 1
+      },
+      "delta": {
+        "type": "string"
+      },
+      "trend": {
+        "enum": [
+          "up",
+          "down",
+          "flat"
+        ]
+      }
+    },
+    "required": [
+      "label",
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "widgets/steps.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/steps.v1.json",
+    "title": "steps (v1) data",
+    "type": "object",
+    "properties": {
+      "steps": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": {
+              "type": "string"
+            },
+            "state": {
+              "enum": [
+                "done",
+                "current",
+                "todo"
+              ]
+            }
+          },
+          "required": [
+            "title"
+          ],
+          "additionalProperties": false
+        },
+        "minItems": 1
+      }
+    },
+    "required": [
+      "steps"
+    ],
+    "additionalProperties": false
+  },
+  "widgets/table.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/table.v1.json",
+    "title": "table (v1) data",
+    "type": "object",
+    "properties": {
+      "columns": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        },
+        "minItems": 1
+      },
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "required": [
+      "columns",
+      "rows"
     ],
     "additionalProperties": false
   },
@@ -1563,6 +2598,28 @@ export const schemaFiles: Record<string, unknown> = {
     },
     "required": [
       "text"
+    ],
+    "additionalProperties": false
+  },
+  "widgets/video_card.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/video_card.v1.json",
+    "title": "video_card (v1) data",
+    "type": "object",
+    "properties": {
+      "thumbnailUrl": {
+        "type": "string",
+        "format": "uri"
+      },
+      "title": {
+        "type": "string"
+      },
+      "duration": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "thumbnailUrl"
     ],
     "additionalProperties": false
   }

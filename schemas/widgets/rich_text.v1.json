@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sduikit.dev/schemas/widgets/rich_text.v1.json",
+  "title": "rich_text (v1) data",
+  "type": "object",
+  "properties": {
+    "spans": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "minLength": 1
+          },
+          "bold": {
+            "type": "boolean"
+          },
+          "italic": {
+            "type": "boolean"
+          },
+          "underline": {
+            "type": "boolean"
+          },
+          "color": {
+            "$ref": "../common/tokens.json#/$defs/color"
+          },
+          "size": {
+            "$ref": "../common/tokens.json#/$defs/textSize"
+          }
+        },
+        "required": [
+          "text"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1
+    }
+  },
+  "required": [
+    "spans"
+  ],
+  "additionalProperties": false
+}

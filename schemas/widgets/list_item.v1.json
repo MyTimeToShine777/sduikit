@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sduikit.dev/schemas/widgets/list_item.v1.json",
+  "title": "list_item (v1) data",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "subtitle": {
+      "type": "string"
+    },
+    "icon": {
+      "$ref": "../common/tokens.json#/$defs/icon"
+    },
+    "imageUrl": {
+      "type": "string",
+      "format": "uri"
+    },
+    "trailingText": {
+      "type": "string"
+    },
+    "chevron": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "title"
+  ],
+  "additionalProperties": false
+}

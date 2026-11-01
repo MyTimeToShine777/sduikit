@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sduikit.dev/schemas/widgets/video_card.v1.json",
+  "title": "video_card (v1) data",
+  "type": "object",
+  "properties": {
+    "thumbnailUrl": {
+      "type": "string",
+      "format": "uri"
+    },
+    "title": {
+      "type": "string"
+    },
+    "duration": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "thumbnailUrl"
+  ],
+  "additionalProperties": false
+}

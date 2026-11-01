@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sduikit.dev/schemas/widgets/avatar.v1.json",
+  "title": "avatar (v1) data",
+  "type": "object",
+  "properties": {
+    "imageUrl": {
+      "type": "string",
+      "format": "uri"
+    },
+    "initials": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 3
+    },
+    "size": {
+      "$ref": "../common/tokens.json#/$defs/size"
+    }
+  },
+  "additionalProperties": false,
+  "minProperties": 1
+}

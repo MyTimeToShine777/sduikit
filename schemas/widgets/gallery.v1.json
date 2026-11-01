@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sduikit.dev/schemas/widgets/gallery.v1.json",
+  "title": "gallery (v1) data",
+  "type": "object",
+  "properties": {
+    "images": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "alt": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "url"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1
+    },
+    "aspectRatio": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "showDots": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "images"
+  ],
+  "additionalProperties": false
+}

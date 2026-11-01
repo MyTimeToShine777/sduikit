@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sduikit.dev/schemas/widgets/search_bar.v1.json",
+  "title": "search_bar (v1) data",
+  "type": "object",
+  "properties": {
+    "placeholder": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "required": [
+    "placeholder"
+  ],
+  "additionalProperties": false
+}

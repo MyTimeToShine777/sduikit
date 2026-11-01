@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sduikit.dev/schemas/widgets/countdown.v1.json",
+  "title": "countdown (v1) data",
+  "type": "object",
+  "properties": {
+    "until": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "label": {
+      "type": "string"
+    },
+    "endedText": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "until"
+  ],
+  "additionalProperties": false
+}

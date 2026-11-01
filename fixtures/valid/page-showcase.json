@@ -1,0 +1,147 @@
+{
+  "schema": 1,
+  "id": "showcase",
+  "revision": "2026-11-02.1",
+  "title": "Showcase",
+  "sections": [
+    {
+      "id": "intro",
+      "title": "Introduction",
+      "widgets": [
+        {
+          "id": "s_hero", "type": "hero", "v": 1,
+          "data": { "imageUrl": "https://example.com/hero.jpg", "title": "Spring sale", "subtitle": "Up to 40% off", "ctaLabel": "Shop now" },
+          "action": { "type": "open_screen", "screenId": "sale" }
+        },
+        { "id": "s_search", "type": "search_bar", "v": 1, "data": { "placeholder": "Search products" }, "action": { "type": "open_screen", "screenId": "search" } },
+        {
+          "id": "s_quick", "type": "quick_actions", "v": 1,
+          "data": {
+            "columns": 4,
+            "items": [
+              { "label": "Orders", "icon": "bag", "action": { "type": "open_screen", "screenId": "orders" } },
+              { "label": "Wishlist", "icon": "heart", "action": { "type": "open_screen", "screenId": "wishlist" } },
+              { "label": "Offers", "icon": "gift", "action": { "type": "open_screen", "screenId": "offers" } },
+              { "label": "Help", "icon": "help", "action": { "type": "open_url", "url": "https://example.com/help", "external": true } }
+            ]
+          }
+        },
+        {
+          "id": "s_chips", "type": "chips", "v": 1,
+          "data": {
+            "chips": [
+              { "label": "All", "selected": true, "action": { "type": "call_api", "name": "set_filter", "params": { "category": "all" } } },
+              { "label": "New", "action": { "type": "call_api", "name": "set_filter", "params": { "category": "new" } } }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "content",
+      "title": "Content",
+      "widgets": [
+        {
+          "id": "s_rich", "type": "rich_text", "v": 1,
+          "data": { "spans": [{ "text": "Free delivery ", "bold": true }, { "text": "on orders over " }, { "text": "$50", "bold": true, "color": "primary" }, { "text": ".", "italic": true }] }
+        },
+        { "id": "s_icon", "type": "icon", "v": 1, "data": { "name": "star", "size": "large" }, "style": { "textColor": "warning" } },
+        { "id": "s_avatar", "type": "avatar", "v": 1, "data": { "imageUrl": "https://example.com/me.jpg", "initials": "AB", "size": "medium" } },
+        { "id": "s_badge", "type": "badge", "v": 1, "data": { "label": "New", "tone": "success" } },
+        { "id": "s_alert", "type": "alert", "v": 1, "data": { "title": "Heads up", "message": "Deliveries are slower this week.", "tone": "warning" } },
+        { "id": "s_progress", "type": "progress", "v": 1, "data": { "value": 0.6, "label": "60% complete", "shape": "linear" } },
+        { "id": "s_progress_ring", "type": "progress", "v": 1, "data": { "value": 0.25, "shape": "circular" } },
+        { "id": "s_stat", "type": "stat", "v": 1, "data": { "label": "Orders this month", "value": "128", "delta": "+12%", "trend": "up" } },
+        { "id": "s_rating", "type": "rating", "v": 1, "data": { "value": 4.6, "count": 212, "label": "Customer rating" } },
+        {
+          "id": "s_kv", "type": "key_value", "v": 1,
+          "data": { "rows": [{ "label": "Order number", "value": "A-1042" }, { "label": "Status", "value": "Shipped" }] }
+        },
+        {
+          "id": "s_item", "type": "list_item", "v": 1,
+          "data": { "title": "Notifications", "subtitle": "Choose what you hear about", "icon": "bell", "trailingText": "On", "chevron": true },
+          "action": { "type": "open_screen", "screenId": "notifications" }
+        },
+        { "id": "s_quote", "type": "quote", "v": 1, "data": { "text": "Setup took five minutes.", "author": "Sam Lee", "role": "Founder", "avatarUrl": "https://example.com/sam.jpg" } },
+        { "id": "s_table", "type": "table", "v": 1, "data": { "columns": ["Plan", "Seats"], "rows": [["Free", "1"], ["Team", "10"]] } },
+        {
+          "id": "s_steps", "type": "steps", "v": 1,
+          "data": {
+            "steps": [
+              { "title": "Order placed", "state": "done" },
+              { "title": "Packed", "description": "We are packing it now", "state": "current" },
+              { "title": "Delivered", "state": "todo" }
+            ]
+          }
+        },
+        {
+          "id": "s_empty", "type": "empty_state", "v": 1,
+          "data": { "title": "No messages yet", "message": "When someone writes to you it shows up here.", "icon": "mail", "actionLabel": "Start a conversation" },
+          "action": { "type": "open_screen", "screenId": "compose" }
+        }
+      ]
+    },
+    {
+      "id": "media",
+      "title": "Media and marketing",
+      "widgets": [
+        {
+          "id": "s_gallery", "type": "gallery", "v": 1,
+          "data": { "aspectRatio": 1.5, "showDots": true, "images": [{ "url": "https://example.com/g1.jpg", "alt": "Front" }, { "url": "https://example.com/g2.jpg", "alt": "Back" }] }
+        },
+        {
+          "id": "s_video", "type": "video_card", "v": 1,
+          "data": { "thumbnailUrl": "https://example.com/video.jpg", "title": "How it works", "duration": "2:14" },
+          "action": { "type": "open_url", "url": "https://example.com/video", "external": true }
+        },
+        { "id": "s_count", "type": "countdown", "v": 1, "data": { "until": "2026-12-01T00:00:00Z", "label": "Sale ends in", "endedText": "The sale has ended" } },
+        {
+          "id": "s_price", "type": "pricing_card", "v": 1,
+          "data": { "name": "Team", "price": "$19", "period": "per month", "features": ["10 seats", "Priority support"], "highlighted": true, "ctaLabel": "Choose Team" },
+          "action": { "type": "call_api", "name": "choose_plan", "params": { "plan": "team" } }
+        }
+      ]
+    },
+    {
+      "id": "layout",
+      "title": "Layout and forms",
+      "widgets": [
+        {
+          "id": "s_accordion", "type": "accordion", "v": 1,
+          "data": {
+            "items": [
+              { "title": "Returns", "widgets": [{ "id": "s_acc_a", "type": "text", "v": 1, "data": { "text": "Return anything within 30 days." } }] },
+              { "title": "Shipping", "widgets": [{ "id": "s_acc_b", "type": "text", "v": 1, "data": { "text": "Standard shipping takes 3 to 5 days." } }] }
+            ]
+          }
+        },
+        {
+          "id": "s_container", "type": "container", "v": 1,
+          "data": {
+            "direction": "horizontal", "gap": "sm",
+            "children": [
+              { "id": "s_cont_a", "type": "badge", "v": 1, "data": { "label": "One" } },
+              { "id": "s_cont_b", "type": "badge", "v": 1, "data": { "label": "Two", "tone": "info" } }
+            ]
+          }
+        },
+        {
+          "id": "s_form", "type": "form", "v": 1,
+          "data": {
+            "submitLabel": "Send",
+            "fields": [
+              { "name": "name", "type": "text", "label": "Your name", "required": true },
+              { "name": "email", "type": "email", "label": "Email", "required": true, "placeholder": "you@example.com" },
+              { "name": "topic", "type": "select", "label": "Topic", "options": [{ "value": "sales", "label": "Sales" }, { "value": "support", "label": "Support" }] },
+              { "name": "message", "type": "multiline", "label": "Message" },
+              { "name": "when", "type": "date", "label": "Preferred day" },
+              { "name": "subscribe", "type": "switch", "label": "Send me updates" },
+              { "name": "agree", "type": "checkbox", "label": "I agree to the terms", "required": true }
+            ]
+          },
+          "action": { "type": "call_api", "name": "contact_us", "params": { "source": "showcase" } }
+        }
+      ]
+    }
+  ]
+}

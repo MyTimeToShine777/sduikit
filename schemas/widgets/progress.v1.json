@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sduikit.dev/schemas/widgets/progress.v1.json",
+  "title": "progress (v1) data",
+  "type": "object",
+  "properties": {
+    "value": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "label": {
+      "type": "string"
+    },
+    "shape": {
+      "enum": [
+        "linear",
+        "circular"
+      ]
+    }
+  },
+  "required": [
+    "value"
+  ],
+  "additionalProperties": false
+}

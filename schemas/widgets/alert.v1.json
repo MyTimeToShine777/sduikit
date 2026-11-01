@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sduikit.dev/schemas/widgets/alert.v1.json",
+  "title": "alert (v1) data",
+  "type": "object",
+  "properties": {
+    "message": {
+      "type": "string",
+      "minLength": 1
+    },
+    "title": {
+      "type": "string"
+    },
+    "tone": {
+      "$ref": "../common/tokens.json#/$defs/tone"
+    }
+  },
+  "required": [
+    "message"
+  ],
+  "additionalProperties": false
+}

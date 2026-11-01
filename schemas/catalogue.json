@@ -1,18 +1,366 @@
 {
   "$comment": "Lists every built-in widget type and version. 'since' is the first package version that supports it. 'children' says where the widget's data holds other widgets, for example \"tabs[].widgets\".",
   "types": {
-    "text": { "versions": { "1": { "since": "0.1.0", "schema": "widgets/text.v1.json", "children": [] } } },
-    "image": { "versions": { "1": { "since": "0.1.0", "schema": "widgets/image.v1.json", "children": [] } } },
-    "button": { "versions": { "1": { "since": "0.1.0", "schema": "widgets/button.v1.json", "children": [] } } },
-    "spacer": { "versions": { "1": { "since": "0.1.0", "schema": "widgets/spacer.v1.json", "children": [] } } },
-    "divider": { "versions": { "1": { "since": "0.1.0", "schema": "widgets/divider.v1.json", "children": [] } } },
-    "section_header": { "versions": { "1": { "since": "0.1.0", "schema": "widgets/section_header.v1.json", "children": [] } } },
-    "card": { "versions": { "1": { "since": "0.1.0", "schema": "widgets/card.v1.json", "children": ["children"] } } },
-    "banner": { "versions": { "1": { "since": "0.1.0", "schema": "widgets/banner.v1.json", "children": [] } } },
-    "carousel": { "versions": { "1": { "since": "0.1.0", "schema": "widgets/carousel.v1.json", "children": ["items"] } } },
-    "list": { "versions": { "1": { "since": "0.1.0", "schema": "widgets/list.v1.json", "children": ["items"] } } },
-    "grid": { "versions": { "1": { "since": "0.1.0", "schema": "widgets/grid.v1.json", "children": ["items"] } } },
-    "tabs": { "versions": { "1": { "since": "0.1.0", "schema": "widgets/tabs.v1.json", "children": ["tabs[].widgets"] } } },
-    "data_list": { "versions": { "1": { "since": "0.2.0", "schema": "widgets/data_list.v1.json", "children": ["template"], "templates": ["template"] } } }
+    "text": {
+      "versions": {
+        "1": {
+          "since": "0.1.0",
+          "schema": "widgets/text.v1.json",
+          "children": []
+        }
+      }
+    },
+    "image": {
+      "versions": {
+        "1": {
+          "since": "0.1.0",
+          "schema": "widgets/image.v1.json",
+          "children": []
+        }
+      }
+    },
+    "button": {
+      "versions": {
+        "1": {
+          "since": "0.1.0",
+          "schema": "widgets/button.v1.json",
+          "children": []
+        }
+      }
+    },
+    "spacer": {
+      "versions": {
+        "1": {
+          "since": "0.1.0",
+          "schema": "widgets/spacer.v1.json",
+          "children": []
+        }
+      }
+    },
+    "divider": {
+      "versions": {
+        "1": {
+          "since": "0.1.0",
+          "schema": "widgets/divider.v1.json",
+          "children": []
+        }
+      }
+    },
+    "section_header": {
+      "versions": {
+        "1": {
+          "since": "0.1.0",
+          "schema": "widgets/section_header.v1.json",
+          "children": []
+        }
+      }
+    },
+    "card": {
+      "versions": {
+        "1": {
+          "since": "0.1.0",
+          "schema": "widgets/card.v1.json",
+          "children": [
+            "children"
+          ]
+        }
+      }
+    },
+    "banner": {
+      "versions": {
+        "1": {
+          "since": "0.1.0",
+          "schema": "widgets/banner.v1.json",
+          "children": []
+        }
+      }
+    },
+    "carousel": {
+      "versions": {
+        "1": {
+          "since": "0.1.0",
+          "schema": "widgets/carousel.v1.json",
+          "children": [
+            "items"
+          ]
+        }
+      }
+    },
+    "list": {
+      "versions": {
+        "1": {
+          "since": "0.1.0",
+          "schema": "widgets/list.v1.json",
+          "children": [
+            "items"
+          ]
+        }
+      }
+    },
+    "grid": {
+      "versions": {
+        "1": {
+          "since": "0.1.0",
+          "schema": "widgets/grid.v1.json",
+          "children": [
+            "items"
+          ]
+        }
+      }
+    },
+    "tabs": {
+      "versions": {
+        "1": {
+          "since": "0.1.0",
+          "schema": "widgets/tabs.v1.json",
+          "children": [
+            "tabs[].widgets"
+          ]
+        }
+      }
+    },
+    "data_list": {
+      "versions": {
+        "1": {
+          "since": "0.2.0",
+          "schema": "widgets/data_list.v1.json",
+          "children": [
+            "template"
+          ],
+          "templates": [
+            "template"
+          ]
+        }
+      }
+    },
+    "rich_text": {
+      "versions": {
+        "1": {
+          "since": "0.2.0",
+          "schema": "widgets/rich_text.v1.json",
+          "children": []
+        }
+      }
+    },
+    "quote": {
+      "versions": {
+        "1": {
+          "since": "0.2.0",
+          "schema": "widgets/quote.v1.json",
+          "children": []
+        }
+      }
+    },
+    "icon": {
+      "versions": {
+        "1": {
+          "since": "0.2.0",
+          "schema": "widgets/icon.v1.json",
+          "children": []
+        }
+      }
+    },
+    "avatar": {
+      "versions": {
+        "1": {
+          "since": "0.2.0",
+          "schema": "widgets/avatar.v1.json",
+          "children": []
+        }
+      }
+    },
+    "badge": {
+      "versions": {
+        "1": {
+          "since": "0.2.0",
+          "schema": "widgets/badge.v1.json",
+          "children": []
+        }
+      }
+    },
+    "alert": {
+      "versions": {
+        "1": {
+          "since": "0.2.0",
+          "schema": "widgets/alert.v1.json",
+          "children": []
+        }
+      }
+    },
+    "progress": {
+      "versions": {
+        "1": {
+          "since": "0.2.0",
+          "schema": "widgets/progress.v1.json",
+          "children": []
+        }
+      }
+    },
+    "stat": {
+      "versions": {
+        "1": {
+          "since": "0.2.0",
+          "schema": "widgets/stat.v1.json",
+          "children": []
+        }
+      }
+    },
+    "key_value": {
+      "versions": {
+        "1": {
+          "since": "0.2.0",
+          "schema": "widgets/key_value.v1.json",
+          "children": []
+        }
+      }
+    },
+    "list_item": {
+      "versions": {
+        "1": {
+          "since": "0.2.0",
+          "schema": "widgets/list_item.v1.json",
+          "children": []
+        }
+      }
+    },
+    "empty_state": {
+      "versions": {
+        "1": {
+          "since": "0.2.0",
+          "schema": "widgets/empty_state.v1.json",
+          "children": []
+        }
+      }
+    },
+    "steps": {
+      "versions": {
+        "1": {
+          "since": "0.2.0",
+          "schema": "widgets/steps.v1.json",
+          "children": []
+        }
+      }
+    },
+    "accordion": {
+      "versions": {
+        "1": {
+          "since": "0.2.0",
+          "schema": "widgets/accordion.v1.json",
+          "children": [
+            "items[].widgets"
+          ]
+        }
+      }
+    },
+    "table": {
+      "versions": {
+        "1": {
+          "since": "0.2.0",
+          "schema": "widgets/table.v1.json",
+          "children": []
+        }
+      }
+    },
+    "countdown": {
+      "versions": {
+        "1": {
+          "since": "0.2.0",
+          "schema": "widgets/countdown.v1.json",
+          "children": []
+        }
+      }
+    },
+    "gallery": {
+      "versions": {
+        "1": {
+          "since": "0.2.0",
+          "schema": "widgets/gallery.v1.json",
+          "children": []
+        }
+      }
+    },
+    "video_card": {
+      "versions": {
+        "1": {
+          "since": "0.2.0",
+          "schema": "widgets/video_card.v1.json",
+          "children": []
+        }
+      }
+    },
+    "hero": {
+      "versions": {
+        "1": {
+          "since": "0.2.0",
+          "schema": "widgets/hero.v1.json",
+          "children": []
+        }
+      }
+    },
+    "pricing_card": {
+      "versions": {
+        "1": {
+          "since": "0.2.0",
+          "schema": "widgets/pricing_card.v1.json",
+          "children": []
+        }
+      }
+    },
+    "search_bar": {
+      "versions": {
+        "1": {
+          "since": "0.2.0",
+          "schema": "widgets/search_bar.v1.json",
+          "children": []
+        }
+      }
+    },
+    "chips": {
+      "versions": {
+        "1": {
+          "since": "0.2.0",
+          "schema": "widgets/chips.v1.json",
+          "children": []
+        }
+      }
+    },
+    "quick_actions": {
+      "versions": {
+        "1": {
+          "since": "0.2.0",
+          "schema": "widgets/quick_actions.v1.json",
+          "children": []
+        }
+      }
+    },
+    "rating": {
+      "versions": {
+        "1": {
+          "since": "0.2.0",
+          "schema": "widgets/rating.v1.json",
+          "children": []
+        }
+      }
+    },
+    "container": {
+      "versions": {
+        "1": {
+          "since": "0.2.0",
+          "schema": "widgets/container.v1.json",
+          "children": [
+            "children"
+          ]
+        }
+      }
+    },
+    "form": {
+      "versions": {
+        "1": {
+          "since": "0.2.0",
+          "schema": "widgets/form.v1.json",
+          "children": []
+        }
+      }
+    }
   }
 }

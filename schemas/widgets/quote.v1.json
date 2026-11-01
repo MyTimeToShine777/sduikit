@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sduikit.dev/schemas/widgets/quote.v1.json",
+  "title": "quote (v1) data",
+  "type": "object",
+  "properties": {
+    "text": {
+      "type": "string",
+      "minLength": 1
+    },
+    "author": {
+      "type": "string"
+    },
+    "role": {
+      "type": "string"
+    },
+    "avatarUrl": {
+      "type": "string",
+      "format": "uri"
+    }
+  },
+  "required": [
+    "text"
+  ],
+  "additionalProperties": false
+}

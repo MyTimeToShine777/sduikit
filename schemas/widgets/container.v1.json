@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sduikit.dev/schemas/widgets/container.v1.json",
+  "title": "container (v1) data",
+  "type": "object",
+  "properties": {
+    "children": {
+      "type": "array",
+      "items": {
+        "$ref": "../common/widget.json"
+      },
+      "minItems": 1
+    },
+    "direction": {
+      "enum": [
+        "vertical",
+        "horizontal"
+      ]
+    },
+    "gap": {
+      "$ref": "../common/tokens.json#/$defs/spacing"
+    }
+  },
+  "required": [
+    "children"
+  ],
+  "additionalProperties": false
+}

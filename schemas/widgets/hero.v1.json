@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sduikit.dev/schemas/widgets/hero.v1.json",
+  "title": "hero (v1) data",
+  "type": "object",
+  "properties": {
+    "imageUrl": {
+      "type": "string",
+      "format": "uri"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "subtitle": {
+      "type": "string"
+    },
+    "ctaLabel": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "imageUrl",
+    "title"
+  ],
+  "additionalProperties": false
+}
