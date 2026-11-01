@@ -1,0 +1,12 @@
+{
+  "name": "sduikit-example-server",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node server.mjs",
+    "test": "npm run build --workspace sduikit && node --test server.test.mjs"
+  },
+  "dependencies": {
+    "sduikit": "*"
+  }
+}
