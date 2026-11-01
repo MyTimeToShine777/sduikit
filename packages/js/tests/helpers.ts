@@ -33,3 +33,17 @@ export function compileSchema(file: string): ValidateFunction {
   if (!check) throw new Error(`No schema file named ${file}`);
   return check;
 }
+
+// Builds a small page holding the given widgets in one section.
+export function page(...widgets: unknown[]): any {
+  return { schema: 1, id: "p", revision: "1", sections: [{ id: "s", widgets }] };
+}
+
+// Builds a small screen whose root is the given block.
+export function screen(root: unknown): any {
+  return { schema: 1, id: "s", revision: "1", root };
+}
+
+export function widget(type: string, data: unknown, extra: Record<string, unknown> = {}): any {
+  return { id: `w_${type}`, type, v: 1, data, ...extra };
+}
