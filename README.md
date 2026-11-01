@@ -35,14 +35,14 @@ It is open source (MIT) and made for any app, not for one company.
    draws. It keeps the last good copy so the app works offline.
 4. **Dashboard pieces** (`sduikit/vue`): an edit form for any widget, a quick preview, and helpers for
    drag-and-drop. A complete example dashboard screen lives in the Medivoy internal dashboard.
-   The preview draws all 38 widgets in a Material style with the app's own colours, sizes and light or
+   The preview draws all 66 widgets in a Material style with the app's own colours, sizes and light or
    dark mode, and fills live-data lists with example rows. It is a close look, not a pixel-exact copy.
    For a pixel-exact preview, build [`examples/preview`](examples/preview) (a Flutter web page using the same
    package as the app); a dashboard can show it in the same phone frame.
 
 | Part | Where | Status |
 |---|---|---|
-| Format (schemas, 38 widgets) | [`schemas/`](schemas) | Built, tested |
+| Format (schemas, 66 widgets) | [`schemas/`](schemas) | Built, tested |
 | JavaScript package | [`packages/js`](packages/js) | Built, 285 tests pass |
 | Vue dashboard pieces | `packages/js/src/vue` | Built, tested |
 | Flutter package | [`packages/flutter`](packages/flutter) | Written, **tests not run yet** |
@@ -103,7 +103,7 @@ app at once.
 
 ---
 
-## 38 built-in widgets
+## 66 built-in widgets
 
 Full table of every field: **[docs/widgets.md](docs/widgets.md)** (generated from the schemas).
 
@@ -115,6 +115,9 @@ Full table of every field: **[docs/widgets.md](docs/widgets.md)** (generated fro
 | **Content** | `avatar` `alert` `progress` `stat` `key_value` `list_item` `empty_state` `rating` `quote` `table` `steps` `countdown` `pricing_card` |
 | **Interactive** | `search_bar` `chips` `quick_actions` `form` (text, email, number, date, select, checkbox, switch, with checks) |
 | **Live data** | `data_list` (rows from your own API, drawn through a template) |
+| **Building blocks** | Named after Flutter's own widgets: `row` `column` `stack` `positioned` `padding` `align` `center` `sized_box` `expanded` `flexible` `aspect_ratio` `fractionally_sized_box` `constrained_box` `fitted_box` `wrap` `single_child_scroll_view` `list_view` `grid_view` `indexed_stack` `opacity` `transform` `rotated_box` `clip` `box` (Flutter's Container: gradient, border, shadows, background picture) `visibility` `backdrop_blur` `ink_well` `safe_area` |
+
+Every widget also takes the shared `style`: a theme name (`"md"`, `"primary"`, follows dark mode and re-branding) **or an exact value** (`13`, `"#FF8800"`) for space inside and outside (each side), size, colours, text size and weight, border, shadow and opacity.
 
 Your app adds its own widgets (a product tile, a map, a chart) next to these. They are checked and
 drawn the same way (see "Your own widgets").

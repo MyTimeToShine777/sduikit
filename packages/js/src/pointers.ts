@@ -164,3 +164,12 @@ export function findPointerById(document: unknown, id: string): Pointer | undefi
   };
   return search(document, []);
 }
+
+/** The widget that holds the widget at `pointer` (a card holding a text, say), or undefined if it sits directly in a section. */
+export function parentWidgetPointer(document: unknown, pointer: Pointer): Pointer | undefined {
+  for (let length = pointer.length - 1; length >= 1; length--) {
+    const candidate = getAt(document, pointer.slice(0, length));
+    if (isObject(candidate) && typeof candidate.type === "string" && isObject(candidate.data)) return pointer.slice(0, length);
+  }
+  return undefined;
+}

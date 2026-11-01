@@ -7,6 +7,23 @@ and the packages use [semantic versioning](https://semver.org/). The format itse
 
 ## [Unreleased]
 
+### Added (full control)
+- **Exact styling.** `style` still takes theme names, and now also exact values: any `#RRGGBB` or `#RRGGBBAA` colour, numbers for
+  space, corners and text size, `padding` and `margin` per side, `width`, `height` (a number or `"fill"`), `borderWidth`,
+  `borderColor`, `shadow`, `opacity`, `fontWeight` and `italic`. Old pages are unchanged. Done in the schema, the JavaScript
+  preview and the Flutter app.
+- **28 building blocks named after Flutter's widgets** (`row`, `column`, `stack`, `positioned`, `padding`, `align`, `box` and more;
+  see the README). 66 built-in widgets in all.
+- **Edit forms for everything.** `SduiForm` now edits lists (add, remove, move), groups of fields, and tap actions. New
+  `SduiStyleEditor`, `SduiActionEditor`, `SduiColorInput`, `SduiValueInput` and `SduiJsonBox`.
+- **The preview is a design canvas.** `SduiPreview` takes `editable` and `selectedId`, and sends `select`, `edit` (text retyped in place)
+  and `move` (dragged before or after another widget).
+- `parentWidgetPointer` and the pointer helpers (`getAt`, `setAt`, `moveAt`, `duplicateAt`...) edit a widget at any depth.
+
+### Changed (breaking for custom code that read the old types)
+- In the TypeScript types, `Style` values are now `token | number` (or `token | "#RRGGBB"` for colours).
+- `SduiForm` no longer reports lists as "unsupported"; `FieldKind` has new kinds (`longtext`, `action`, `group`, `list`, `json`).
+
 ### Changed (the preview, again)
 - Page content now has a side margin of 16, except pictures, banners, carousels and other full-width widgets
   (`FULL_BLEED_WIDGETS` in JavaScript, `SduiRender.pageChildren` in Flutter).

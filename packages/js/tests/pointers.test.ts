@@ -7,6 +7,7 @@ import {
   insertAt,
   isInside,
   moveAt,
+  parentWidgetPointer,
   removeAt,
   sampleWidget,
   setAt,
@@ -172,5 +173,16 @@ describe("editing the whole catalogue at depth keeps pages valid", () => {
     page = moveAt(page, findPointerById(page, "w_rating_new")!, accordionList, 0);
     expect(validate(page).errors).toEqual([]);
     expect(ids(getAt(page, accordionList) as any[])[0]).toBe("w_rating_new");
+  });
+});
+
+describe("parentWidgetPointer", () => {
+  it("finds the widget that holds another, however deep, and nothing for a widget straight on a section", () => {
+    const home = loadFixture("valid/page-home.json");
+    const inner = findPointerById(home, "w_card_2_text")!;
+    const parent = parentWidgetPointer(home, inner)!;
+    expect((getAt(home, parent) as any).id).toBe("w_card_2");
+    expect(parentWidgetPointer(home, parent)).toEqual(findPointerById(home, "w_carousel_1"));
+    expect(parentWidgetPointer(home, findPointerById(home, "w_banner_1")!)).toBeUndefined();
   });
 });
