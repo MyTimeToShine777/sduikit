@@ -35,9 +35,10 @@ It is open source (MIT) and made for any app, not for one company.
    draws. It keeps the last good copy so the app works offline.
 4. **Dashboard pieces** (`sduikit/vue`): an edit form for any widget, a quick preview, and helpers for
    drag-and-drop. A complete example dashboard screen lives in the Medivoy internal dashboard.
-   The quick preview is an HTML imitation. For a preview that is **exactly** what people see on their
-   phones, build [`examples/preview`](examples/preview): a Flutter web page that uses the same package
-   as the app, shown by the dashboard in a phone-sized frame.
+   The preview draws all 38 widgets in a Material style with the app's own colours, sizes and light or
+   dark mode, and fills live-data lists with example rows. It is a close look, not a pixel-exact copy.
+   For a pixel-exact preview, build [`examples/preview`](examples/preview) (a Flutter web page using the same
+   package as the app); a dashboard can show it in the same phone frame.
 
 | Part | Where | Status |
 |---|---|---|
@@ -312,7 +313,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for how to add a widget, and [CHANGELOG.m
 
 * Maps and in-app video playback (the `video_card` hands the video to your app). These need native
   plugins, so the plan is separate add-on packages.
-* The exact phone preview has not been built or tried (it needs a Flutter SDK); dashboards fall back to the quick HTML preview and say so.
+* The pixel-exact phone preview (`examples/preview`) has not been built or tried (it needs a Flutter SDK). Until then dashboards use the close HTML preview.
 * A ready-made dashboard product. The pieces exist and a complete screen is in the Medivoy internal
   dashboard; a standalone admin app is for each team to build.
 * A database and staff login in the example server (it has a token and a saved file only).

@@ -7,6 +7,10 @@ and the packages use [semantic versioning](https://semver.org/). The format itse
 
 ## [Unreleased]
 
+### Added (a preview that looks like the app)
+- `SduiPreview` now draws all 38 widgets in a Material style with the app's theme (`theme`), light or dark mode (`dark`)
+  and example rows for live-data lists (`dataSamples`). `fillTemplate` is exported for dashboards.
+
 ### Added (exact preview)
 - Flutter: `SduiContent` draws a page or screen that is already in hand (no loading), and `examples/preview`
   is a Flutter web page a dashboard can show in a frame to preview a page exactly like the app draws it.

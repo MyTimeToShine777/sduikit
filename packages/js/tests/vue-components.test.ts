@@ -62,9 +62,18 @@ describe("SduiForm", () => {
 });
 
 describe("SduiPreview", () => {
+  // The text of the page itself (the preview also carries its own stylesheet, which is not page text).
+  const textOf = (wrapper: { find: (selector: string) => { text: () => string } }) => wrapper.find(".sp-content").text();
+
+  const home = () => loadFixture("valid/page-home.json");
+  const showcase = () => loadFixture("valid/page-showcase.json");
+  const doctors = [
+    { id: 7, name: "Dr Rao", specialty: "Dentist", fee: 150, photoUrl: "https://example.com/rao.jpg" },
+    { id: 8, name: "Dr Khan", specialty: "Cardiologist", fee: 300 },
+  ];
+
   it("draws the sample page: text, nested widgets and the first tab", () => {
-    const wrapper = mount(SduiPreview, { props: { document: loadFixture("valid/page-home.json") } });
-    const text = wrapper.text();
+    const text = textOf(mount(SduiPreview, { props: { document: home() } }));
     expect(text).toContain("Welcome"); // banner title
     expect(text).toContain("Popular services"); // section header
     expect(text).toContain("Teeth cleaning"); // card inside the carousel
@@ -72,53 +81,122 @@ describe("SduiPreview", () => {
     expect(text).toContain("Book a visit"); // button
     expect(text).toContain("No upcoming visits"); // first tab
     expect(text).not.toContain("No past visits");
-    expect(text).toContain("Live data: doctors_nearby"); // data_list shows its source and template
-    expect(text).toContain("{{name}}");
   });
 
   it("switches tab when clicked", async () => {
-    const wrapper = mount(SduiPreview, { props: { document: loadFixture("valid/page-home.json") } });
+    const wrapper = mount(SduiPreview, { props: { document: home() } });
     await wrapper.find('[data-tab="past"]').trigger("click");
-    expect(wrapper.text()).toContain("No past visits");
-    expect(wrapper.text()).not.toContain("No upcoming visits");
+    expect(textOf(wrapper)).toContain("No past visits");
+    expect(textOf(wrapper)).not.toContain("No upcoming visits");
   });
 
-  it("shows the name and main texts of widgets it does not draw in detail", () => {
-    const wrapper = mount(SduiPreview, { props: { document: loadFixture("valid/page-showcase.json") } });
-    expect(wrapper.text()).toContain("hero (v1): Spring sale");
-    expect(wrapper.text()).toContain("pricing_card (v1): Team");
-    expect(wrapper.findAll(".sdui-unknown").length).toBeGreaterThan(20);
+  it("draws every widget of the showcase page properly (none is left as a grey 'not drawn' box)", () => {
+    const wrapper = mount(SduiPreview, { props: { document: showcase() } });
+    expect(wrapper.findAll(".sdui-unknown")).toHaveLength(0);
+    const text = textOf(wrapper);
+    for (const expected of [
+      "Spring sale", "Shop now", "Search products", "Orders", "Wishlist", "Latest", "Heads up", "60% complete",
+      "Orders this month", "+12%", "Order number", "A-1042", "Notifications", "Setup took five minutes.",
+      "Order placed", "We are packing it now", "No messages yet", "How it works", "Sale ends in", "10 seats",
+      "Choose Team", "Returns", "Your name *", "Send",
+    ]) {
+      expect(text, expected).toContain(expected);
+    }
+    expect(text).toContain("4.6 (212) Customer rating");
   });
 
-  it("uses the theme for spacing and colours", () => {
-    const wrapper = mount(SduiPreview, {
-      props: {
-        document: {
-          sections: [{ id: "s", widgets: [{ id: "a", type: "text", v: 1, data: { text: "Hi" }, style: { spacing: "lg", textSize: "headline" } }] }],
-        },
-      },
+  it("opens and closes the accordion, one section at a time", async () => {
+    const wrapper = mount(SduiPreview, { props: { document: showcase() } });
+    expect(textOf(wrapper)).not.toContain("Return anything within 30 days.");
+    await wrapper.find('[data-accordion="Returns"]').trigger("click");
+    expect(textOf(wrapper)).toContain("Return anything within 30 days.");
+    await wrapper.find('[data-accordion="Shipping"]').trigger("click");
+    expect(textOf(wrapper)).toContain("Standard shipping takes 3 to 5 days.");
+    expect(textOf(wrapper)).not.toContain("Return anything within 30 days.");
+  });
+
+  describe("live data", () => {
+    it("shows grey boxes and says where the rows come from when it has no example rows", () => {
+      const wrapper = mount(SduiPreview, { props: { document: home() } });
+      expect(textOf(wrapper)).toContain('Live list from "doctors_nearby"');
+      expect(wrapper.findAll(".sp-skel")).toHaveLength(3);
     });
-    const style = (wrapper.find('[data-widget="text"]').element as HTMLElement).style;
-    expect(style.padding).toBe("24px");
-    expect(style.fontSize).toBe("24px");
+
+    it("draws the template once per example row, with the row's values filled in", () => {
+      const wrapper = mount(SduiPreview, { props: { document: home(), dataSamples: { doctors_nearby: doctors } } });
+      const text = textOf(wrapper);
+      expect(text).toContain("Dr Rao");
+      expect(text).toContain("Dentist · 150 AED");
+      expect(text).toContain("Dr Khan");
+      expect(text).toContain("Cardiologist · 300 AED");
+      expect(text).not.toContain("{{");
+    });
+
+    it("leaves out a picture the row does not have instead of inventing one", () => {
+      const wrapper = mount(SduiPreview, { props: { document: home(), dataSamples: { doctors_nearby: doctors } } });
+      const cards = wrapper.findAll('[data-id="w_doctor_row"]');
+      expect(cards).toHaveLength(2);
+      expect(cards[0].find("img").exists()).toBe(true); // Dr Rao has a photo
+      expect(cards[1].find("img").exists()).toBe(false); // Dr Khan has none
+    });
+
+    it("shows the empty text when there are no rows", () => {
+      const wrapper = mount(SduiPreview, { props: { document: home(), dataSamples: { doctors_nearby: [] } } });
+      expect(textOf(wrapper)).toContain("No doctors found nearby");
+    });
+  });
+
+  describe("the app's look", () => {
+    it("uses the theme for spacing, text size and colours", () => {
+      const document = {
+        sections: [{ id: "s", widgets: [{ id: "a", type: "text", v: 1, data: { text: "Hi" }, style: { spacing: "lg", textSize: "headline", color: "surface" } }] }],
+      };
+      const style = (mount(SduiPreview, { props: { document } }).find('[data-widget="text"]').element as HTMLElement).style;
+      expect(style.padding).toBe("24px");
+      expect(style.fontSize).toBe("24px");
+      expect(style.background).toBe("rgb(243, 244, 246)"); // the "surface" colour of the default theme (#F3F4F6)
+    });
+
+    it("uses the colours of the theme it is given", () => {
+      const theme = loadFixture("valid/manifest.json").theme;
+      theme.light.primary = "#123456";
+      const wrapper = mount(SduiPreview, { props: { document: home(), theme } });
+      expect((wrapper.find(".sp-root").element as HTMLElement).style.getPropertyValue("--sp-primary")).toBe("#123456");
+    });
+
+    it("switches to the dark colours of the theme in dark mode", () => {
+      const theme = loadFixture("valid/manifest.json").theme;
+      const background = (dark: boolean) =>
+        (mount(SduiPreview, { props: { document: home(), theme, dark } }).find(".sp-root").element as HTMLElement).style.getPropertyValue("--sp-bg");
+      expect(background(false)).toBe("#FFFFFF");
+      expect(background(true)).toBe("#0B0F14");
+      expect(mount(SduiPreview, { props: { document: home(), theme, dark: true } }).find(".sp-root").attributes("data-dark")).toBe("true");
+    });
+
+    it("shows a grey box when a picture cannot load, like the app", async () => {
+      const document = { sections: [{ id: "s", widgets: [{ id: "i", type: "image", v: 1, data: { url: "https://example.com/missing.jpg" } }] }] };
+      const wrapper = mount(SduiPreview, { props: { document } });
+      expect(wrapper.find("img").exists()).toBe(true);
+      await wrapper.find("img").trigger("error");
+      expect(wrapper.find("img").exists()).toBe(false);
+      expect(wrapper.find(".sp-ph").exists()).toBe(true);
+    });
   });
 
   it("draws a screen made of blocks", () => {
     const wrapper = mount(SduiPreview, { props: { document: loadFixture("valid/screen-offers.json") } });
-    expect(wrapper.text()).toContain("This month's offers");
-    expect(wrapper.text()).toContain("Book now");
-    expect(wrapper.text()).toContain("Winter check-ups"); // banner widget embedded in a block
+    expect(textOf(wrapper)).toContain("This month's offers");
+    expect(textOf(wrapper)).toContain("Book now");
+    expect(textOf(wrapper)).toContain("Winter check-ups"); // banner widget embedded in a block
     expect(wrapper.find('[data-block="grid"]').exists()).toBe(true);
   });
 
   it("marks a widget it does not know instead of crashing", () => {
-    const wrapper = mount(SduiPreview, {
-      props: { document: { sections: [{ id: "s", widgets: [{ id: "d", type: "doctor_card", v: 1, data: {} }] }] } },
-    });
-    expect(wrapper.find(".sdui-unknown").text()).toBe("doctor_card (v1)");
+    const document = { sections: [{ id: "s", widgets: [{ id: "d", type: "doctor_card", v: 1, data: { name: "Dr Rao" } }] }] };
+    expect(mount(SduiPreview, { props: { document } }).find(".sdui-unknown").text()).toBe("doctor_card (v1): Dr Rao");
   });
 
   it("says so when there is nothing to show", () => {
-    expect(mount(SduiPreview, { props: { document: {} } }).text()).toBe("Nothing to show.");
+    expect(textOf(mount(SduiPreview, { props: { document: {} } }))).toBe("Nothing to show.");
   });
 });
