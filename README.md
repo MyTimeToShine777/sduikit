@@ -10,8 +10,8 @@ review, no update for the user.
 It is open source (MIT) and made for any app, not for one company.
 
 > **Status: early development.** Nothing is published to npm or pub.dev yet. The JavaScript side
-> (format, checker, filter, dashboard pieces) is built and tested (284 tests). The Flutter package
-> is fully written with about 130 tests, but **those tests have not been run yet** because the
+> (format, checker, filter, dashboard pieces) is built and tested (285 tests). The Flutter package
+> is fully written with 94 tests, but **those tests have not been run yet** because the
 > author had no Flutter SDK at hand; the first job for a Flutter developer is described in
 > [packages/flutter/README.md](packages/flutter/README.md).
 
@@ -39,7 +39,7 @@ It is open source (MIT) and made for any app, not for one company.
 | Part | Where | Status |
 |---|---|---|
 | Format (schemas, 38 widgets) | [`schemas/`](schemas) | Built, tested |
-| JavaScript package | [`packages/js`](packages/js) | Built, 284 tests pass |
+| JavaScript package | [`packages/js`](packages/js) | Built, 285 tests pass |
 | Vue dashboard pieces | `packages/js/src/vue` | Built, tested |
 | Flutter package | [`packages/flutter`](packages/flutter) | Written, **tests not run yet** |
 | Example server | [`examples/server`](examples/server) | Built, 26 tests pass |
@@ -295,7 +295,7 @@ docs/superpowers/    design document and implementation plans
 npm ci                   # use ci, not install (see CONTRIBUTING.md)
 npm run schemas          # after changing anything in /schemas
 npm run docs             # after changing a widget schema or the catalogue
-npm test                 # the JavaScript package (284 tests)
+npm test                 # the JavaScript package (285 tests)
 npm run test:example     # the example server (26 tests)
 ```
 
