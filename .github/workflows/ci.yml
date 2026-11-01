@@ -21,3 +21,22 @@ jobs:
         run: npm test
       - name: Example server end-to-end test
         run: npm run test:example
+
+  flutter:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - name: Flutter package analysis and tests (they read the shared sample files in /fixtures)
+        working-directory: packages/flutter
+        run: |
+          flutter pub get
+          flutter analyze
+          flutter test
+      - name: Example app analysis
+        working-directory: examples/app
+        run: |
+          flutter pub get
+          flutter analyze
