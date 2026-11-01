@@ -6,7 +6,7 @@ import { repoRoot } from "./helpers";
 
 // The Flutter code cannot be run here, but it can be read: every part a widget lists must be used by that
 // widget's drawing code, or the part would be accepted in a page and then silently ignored in the app.
-const files = ["builtin_widgets", "display_widgets", "interactive_widgets", "form_widget", "data_list_widget"].map((name) =>
+const files = ["builtin_widgets", "display_widgets", "interactive_widgets", "form_widget", "data_list_widget", "options"].map((name) =>
   readFileSync(join(repoRoot, "packages", "flutter", "lib", "src", `${name}.dart`), "utf8").replace(/\r\n/g, "\n"),
 );
 const source = files.join("\n");
@@ -23,6 +23,8 @@ function codeOf(builder: string): string {
   let body = source.slice(start, next < 0 ? undefined : next);
   const extra = { _tabs: "_SduiTabsState", _accordion: "_SduiAccordionState", _gallery: "_SduiGalleryState", buildForm: "_SduiFormState", buildDataList: "_SduiDataListState" }[builder];
   if (extra) body += source.slice(source.indexOf(`class ${extra}`), source.indexOf(`class ${extra}`) + 6000);
+  // The dark layer over a picture is drawn by a shared helper.
+  if (body.includes("sduiPictureOverlay(")) body += source.slice(source.indexOf("Widget sduiPictureOverlay("));
   return body;
 }
 

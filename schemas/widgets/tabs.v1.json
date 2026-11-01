@@ -10,15 +10,58 @@
       "items": {
         "type": "object",
         "properties": {
-          "id": { "type": "string", "minLength": 1 },
-          "label": { "type": "string", "minLength": 1 },
-          "widgets": { "type": "array", "items": { "$ref": "../common/widget.json" } }
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "label": {
+            "type": "string",
+            "minLength": 1
+          },
+          "widgets": {
+            "type": "array",
+            "items": {
+              "$ref": "../common/widget.json"
+            }
+          },
+          "icon": {
+            "$ref": "../common/tokens.json#/$defs/icon"
+          }
         },
-        "required": ["id", "label", "widgets"],
+        "required": [
+          "id",
+          "label",
+          "widgets"
+        ],
         "additionalProperties": false
       }
+    },
+    "initialIndex": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 50
+    },
+    "variant": {
+      "enum": [
+        "chips",
+        "underline",
+        "segmented"
+      ]
+    },
+    "scrollable": {
+      "type": "boolean"
+    },
+    "tabAlignment": {
+      "enum": [
+        "start",
+        "center",
+        "end",
+        "stretch"
+      ]
     }
   },
-  "required": ["tabs"],
+  "required": [
+    "tabs"
+  ],
   "additionalProperties": false
 }

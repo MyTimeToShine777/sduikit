@@ -4,9 +4,38 @@
   "title": "list (v1) data",
   "type": "object",
   "properties": {
-    "items": { "type": "array", "items": { "$ref": "../common/widget.json" }, "minItems": 1 },
-    "dividers": { "type": "boolean" }
+    "items": {
+      "type": "array",
+      "items": {
+        "$ref": "../common/widget.json"
+      },
+      "minItems": 1
+    },
+    "dividers": {
+      "type": "boolean"
+    },
+    "spacing": {
+      "$ref": "../common/style.json#/$defs/space"
+    },
+    "height": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 5000
+    },
+    "reverse": {
+      "type": "boolean"
+    },
+    "dividerIndent": {
+      "$ref": "../common/style.json#/$defs/space"
+    },
+    "dividerThickness": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 10
+    }
   },
-  "required": ["items"],
+  "required": [
+    "items"
+  ],
   "additionalProperties": false
 }

@@ -7,6 +7,20 @@
     "placeholder": {
       "type": "string",
       "minLength": 1
+    },
+    "leadingIcon": {
+      "$ref": "../common/tokens.json#/$defs/icon"
+    },
+    "trailingIcon": {
+      "$ref": "../common/tokens.json#/$defs/icon"
+    },
+    "filled": {
+      "type": "boolean"
+    },
+    "height": {
+      "type": "number",
+      "minimum": 24,
+      "maximum": 120
     }
   },
   "required": [

@@ -113,7 +113,9 @@
       "parts": [
         "image",
         "title",
-        "subtitle"
+        "subtitle",
+        "overlay",
+        "button"
       ]
     },
     "carousel": {
@@ -468,7 +470,8 @@
         "image",
         "title",
         "subtitle",
-        "button"
+        "button",
+        "overlay"
       ]
     },
     "pricing_card": {

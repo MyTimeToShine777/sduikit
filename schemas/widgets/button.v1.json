@@ -4,9 +4,50 @@
   "title": "button (v1) data",
   "type": "object",
   "properties": {
-    "label": { "type": "string", "minLength": 1 },
-    "variant": { "enum": ["filled", "outline", "text"] }
+    "label": {
+      "type": "string",
+      "minLength": 1
+    },
+    "variant": {
+      "enum": [
+        "filled",
+        "outline",
+        "text",
+        "tonal",
+        "elevated"
+      ]
+    },
+    "icon": {
+      "$ref": "../common/tokens.json#/$defs/icon"
+    },
+    "iconPosition": {
+      "enum": [
+        "start",
+        "end"
+      ]
+    },
+    "size": {
+      "enum": [
+        "small",
+        "medium",
+        "large"
+      ]
+    },
+    "fullWidth": {
+      "type": "boolean"
+    },
+    "enabled": {
+      "type": "boolean"
+    },
+    "loading": {
+      "type": "boolean"
+    },
+    "tooltip": {
+      "type": "string"
+    }
   },
-  "required": ["label"],
+  "required": [
+    "label"
+  ],
   "additionalProperties": false
 }

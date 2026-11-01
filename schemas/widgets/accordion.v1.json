@@ -18,6 +18,12 @@
             "items": {
               "$ref": "../common/widget.json"
             }
+          },
+          "subtitle": {
+            "type": "string"
+          },
+          "icon": {
+            "$ref": "../common/tokens.json#/$defs/icon"
           }
         },
         "required": [
@@ -30,6 +36,23 @@
     },
     "allowMultiple": {
       "type": "boolean"
+    },
+    "initiallyOpen": {
+      "type": "array",
+      "items": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 200
+      }
+    },
+    "dividers": {
+      "type": "boolean"
+    },
+    "iconPosition": {
+      "enum": [
+        "start",
+        "end"
+      ]
     }
   },
   "required": [

@@ -930,7 +930,8 @@
           "data": {
             "imageUrl": "https://picsum.photos/seed/bsub/800/450",
             "title": "Banner title",
-            "subtitle": "Banner subtitle"
+            "subtitle": "Banner subtitle",
+            "ctaLabel": "Banner button"
           }
         },
         {

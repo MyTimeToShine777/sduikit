@@ -23,10 +23,31 @@
             "type": "boolean"
           },
           "color": {
-            "$ref": "../common/tokens.json#/$defs/color"
+            "$ref": "../common/style.json#/$defs/colour"
           },
           "size": {
-            "$ref": "../common/tokens.json#/$defs/textSize"
+            "$ref": "../common/style.json#/$defs/textSize"
+          },
+          "strikethrough": {
+            "type": "boolean"
+          },
+          "background": {
+            "$ref": "../common/style.json#/$defs/colour"
+          },
+          "action": {
+            "$ref": "../common/action.json"
+          },
+          "weight": {
+            "enum": [
+              "normal",
+              "medium",
+              "bold"
+            ]
+          },
+          "letterSpacing": {
+            "type": "number",
+            "minimum": -5,
+            "maximum": 50
           }
         },
         "required": [
@@ -35,6 +56,9 @@
         "additionalProperties": false
       },
       "minItems": 1
+    },
+    "selectable": {
+      "type": "boolean"
     }
   },
   "required": [

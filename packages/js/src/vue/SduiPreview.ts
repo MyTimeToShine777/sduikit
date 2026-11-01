@@ -1,5 +1,5 @@
 import { computed, defineComponent, h, nextTick, onBeforeUnmount, onMounted, onUpdated, ref, watch, type PropType, type VNode } from "vue";
-import { renderBuildingBlock } from "./blocksPreview.js";
+import { alignmentFlex, renderBuildingBlock } from "./blocksPreview.js";
 import { attachCanvasEditing, markDraggable, quoteId } from "./canvasEditing.js";
 import { fillTemplate } from "../templates.js";
 import type { Block, Manifest, Sides, Space, Style, StyleLook, Widget } from "../types.js";
@@ -56,6 +56,9 @@ const CSS = `
 .sp-btn{display:inline-flex;align-items:center;justify-content:center;height:40px;padding:0 24px;border-radius:20px;border:0;font:inherit;font-weight:500;background:var(--sp-primary);color:var(--sp-on-primary);cursor:default;white-space:nowrap}
 .sp-btn--outline{background:transparent;color:var(--sp-primary);border:1px solid var(--sp-outline)}
 .sp-btn--text{background:transparent;color:var(--sp-primary);padding:0 12px}
+.sp-btn--tonal{background:color-mix(in srgb,var(--sp-primary) 18%,transparent);color:var(--sp-primary)}
+.sp-btn--elevated{background:var(--sp-surface);color:var(--sp-primary);box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.sp-btn-icon{margin:0 6px}
 .sp-line{height:1px;border:0;background:var(--sp-outline);margin:8px 0}
 .sp-row{display:flex;align-items:center;gap:8px}
 .sp-grow{flex:1;min-width:0}
@@ -234,68 +237,139 @@ const SpImage = defineComponent({
     height: Number,
     // Fill the whole box the picture sits in (used where the box already has a size, like a gallery slide).
     fill: Boolean,
+    position: String, // where the picture sits inside its box (CSS object-position)
+    repeat: String, // noRepeat, repeat, repeatX, repeatY
+    grayscale: Boolean,
+    placeholderColor: String, // the colour shown before the picture is there, or when it fails
+    errorText: String, // shown instead of the picture when it cannot load
+    loader: Boolean, // show a plain box while the picture loads
   },
   setup(props) {
     const failed = ref(false);
+    const loaded = ref(false);
     return () => {
       const box: Record<string, string> = {};
       if (props.ratio) box.aspectRatio = String(props.ratio);
       if (props.height) box.height = `${props.height}px`;
       if (props.fill) box.height = "100%";
+      const filter = props.grayscale ? "grayscale(1)" : undefined;
       // A picture that cannot load shows a grey box of the same size instead, exactly as the app does.
-      if (failed.value) return h("div", { class: "sp-ph", style: { ...box, height: box.height ?? (props.ratio ? undefined : "120px") } }, "▨");
-      return h("img", { class: "sp-img", src: props.url, alt: props.alt ?? "", style: { ...box, objectFit: props.fit }, onError: () => (failed.value = true) });
+      if (failed.value) return h("div", { class: "sp-ph", style: { ...box, background: props.placeholderColor, height: box.height ?? (props.ratio ? undefined : "120px") } }, props.errorText ?? "▨");
+      if (props.repeat && props.repeat !== "noRepeat") {
+        const tiling = ({ repeat: "repeat", repeatX: "repeat-x", repeatY: "repeat-y" } as Record<string, string>)[props.repeat];
+        return h("div", { class: "sp-img", style: { ...box, height: box.height ?? "160px", backgroundImage: `url("${props.url}")`, backgroundRepeat: tiling, backgroundPosition: props.position, filter } });
+      }
+      return h("img", {
+        class: "sp-img",
+        src: props.url,
+        alt: props.alt ?? "",
+        onLoad: () => (loaded.value = true),
+        onError: () => (failed.value = true),
+        style: { ...box, objectFit: props.fit, objectPosition: props.position, filter, background: props.placeholderColor ?? (props.loader && !loaded.value ? "var(--sp-surface)" : undefined) },
+      });
     };
   },
 });
 
 const SpTabs = defineComponent({
   name: "SpTabs",
-  props: { tabs: { type: Array as PropType<Array<{ id: string; label: string; widgets: Widget[] }>>, required: true }, ctx: { type: Object as PropType<Context>, required: true }, part: { type: Function as PropType<Part>, required: true } },
+  props: {
+    tabs: { type: Array as PropType<Array<{ id: string; label: string; icon?: string; widgets: Widget[] }>>, required: true },
+    ctx: { type: Object as PropType<Context>, required: true },
+    part: { type: Function as PropType<Part>, required: true },
+    initial: { type: Number, default: 0 }, // which tab starts open
+    variant: { type: String, default: "chips" }, // chips, underline or segmented
+    scrollable: Boolean,
+    alignment: { type: String, default: "start" }, // start, center, end or stretch
+  },
   setup(props) {
-    const open = ref(0);
-    return () =>
-      h("div", {}, [
-        h("div", { class: "sp-wrap", style: { padding: "0 0 8px" } }, props.tabs.map((tab, index) =>
-          h("button", props.part("tab", { type: "button", "data-tab": tab.id, class: ["sp-chip", index === open.value ? "sp-chip--on" : ""], style: { font: "inherit", color: "inherit", cursor: "default" }, onClick: () => (open.value = index) }), tab.label),
-        )),
+    const open = ref(Math.min(Math.max(props.initial, 0), Math.max(props.tabs.length - 1, 0)));
+    return () => {
+      const justify = ({ start: "flex-start", center: "center", end: "flex-end", stretch: "stretch" } as Record<string, string>)[props.alignment] ?? "flex-start";
+      const stretch = props.alignment === "stretch" ? { flex: "1", justifyContent: "center" } : {};
+      return h("div", {}, [
+        h("div", {
+          style: {
+            display: "flex", gap: props.variant === "chips" ? "8px" : "0", justifyContent: justify, flexWrap: props.scrollable ? "nowrap" : "wrap", overflowX: props.scrollable ? "auto" : undefined, padding: "0 0 8px",
+            ...(props.variant === "underline" ? { borderBottom: "1px solid var(--sp-outline)", marginBottom: "8px", paddingBottom: "0" } : {}),
+          },
+        }, props.tabs.map((tab, index) => {
+          const on = index === open.value;
+          const look = props.variant === "underline"
+            ? { border: "0", borderBottom: `2px solid ${on ? "var(--sp-primary)" : "transparent"}`, borderRadius: "0", background: "transparent", color: on ? "var(--sp-primary)" : "inherit", height: "40px", padding: "0 16px", ...stretch }
+            : props.variant === "segmented"
+              ? { borderRadius: index === 0 ? "8px 0 0 8px" : index === props.tabs.length - 1 ? "0 8px 8px 0" : "0", marginInlineStart: index === 0 ? "0" : "-1px", ...stretch }
+              : stretch;
+          return h("button", props.part("tab", {
+            type: "button",
+            "data-tab": tab.id,
+            class: ["sp-chip", on ? "sp-chip--on" : ""],
+            style: { font: "inherit", color: "inherit", cursor: "default", display: "inline-flex", alignItems: "center", gap: "6px", ...look },
+            onClick: () => (open.value = index),
+          }), [tab.icon ? h("span", iconSymbol(tab.icon)) : null, tab.label]);
+        })),
         h("div", props.part("content"), (props.tabs[open.value]?.widgets ?? []).map((widget) => renderWidget(props.ctx, widget))),
       ]);
+    };
   },
 });
 
 const SpAccordion = defineComponent({
   name: "SpAccordion",
-  props: { items: { type: Array as PropType<Array<{ title: string; widgets: Widget[] }>>, required: true }, multiple: Boolean, ctx: { type: Object as PropType<Context>, required: true }, part: { type: Function as PropType<Part>, required: true } },
+  props: {
+    items: { type: Array as PropType<Array<{ title: string; subtitle?: string; icon?: string; widgets: Widget[] }>>, required: true },
+    multiple: Boolean,
+    ctx: { type: Object as PropType<Context>, required: true },
+    part: { type: Function as PropType<Part>, required: true },
+    initial: { type: Array as PropType<number[]>, default: () => [] }, // which sections start open
+    dividers: { type: Boolean, default: true },
+    iconPosition: { type: String, default: "end" }, // start or end
+  },
   setup(props) {
-    const open = ref<number[]>([]);
+    const open = ref<number[]>(props.multiple ? [...props.initial] : props.initial.slice(0, 1));
     const toggle = (index: number) => {
       if (open.value.includes(index)) open.value = open.value.filter((each) => each !== index);
       else open.value = props.multiple ? [...open.value, index] : [index];
     };
     return () =>
-      h("div", {}, props.items.flatMap((item, index) => [
-        h("div", props.part("header", { class: "sp-acc", "data-accordion": item.title, onClick: () => toggle(index) }), [h("span", item.title), h("span", { class: `sp-chev${open.value.includes(index) ? " sp-chev--open" : ""}` })]),
-        ...(open.value.includes(index) ? [h("div", props.part("content"), item.widgets.map((widget) => renderWidget(props.ctx, widget)))] : []),
-      ]));
+      h("div", {}, props.items.flatMap((item, index) => {
+        const arrow = h("span", { class: `sp-chev${open.value.includes(index) ? " sp-chev--open" : ""}` });
+        const text = h("span", { style: { flex: "1" } }, [h("span", {}, [item.icon ? h("span", { style: { marginInlineEnd: "8px" } }, iconSymbol(item.icon)) : null, item.title]), item.subtitle ? h("span", { class: "sp-muted sp-small", style: { display: "block", fontWeight: "400" } }, item.subtitle) : null]);
+        return [
+          h("div", props.part("header", { class: "sp-acc", "data-accordion": item.title, style: { gap: "12px", ...(props.dividers ? {} : { borderBottom: "0" }) }, onClick: () => toggle(index) }), props.iconPosition === "start" ? [arrow, text] : [text, arrow]),
+          ...(open.value.includes(index) ? [h("div", props.part("content"), item.widgets.map((widget) => renderWidget(props.ctx, widget)))] : []),
+        ];
+      }));
   },
 });
 
 const SpGallery = defineComponent({
   name: "SpGallery",
-  props: { images: { type: Array as PropType<Array<{ url: string; alt?: string }>>, required: true }, ratio: { type: Number, default: 16 / 9 }, dots: { type: Boolean, default: true }, part: { type: Function as PropType<Part>, required: true } },
+  props: {
+    images: { type: Array as PropType<Array<{ url: string; alt?: string; caption?: string }>>, required: true },
+    ratio: { type: Number, default: 16 / 9 },
+    dots: { type: Boolean, default: true },
+    part: { type: Function as PropType<Part>, required: true },
+    fraction: { type: Number, default: 1 }, // how much of the width each picture takes (less than 1 lets the next one peek in)
+    fit: { type: String, default: "cover" },
+    counter: Boolean, // shows "2 / 5"
+  },
   setup(props) {
     const page = ref(0);
     return () =>
-      h("div", {}, [
+      h("div", { style: { position: "relative" } }, [
         h("div", {
           class: "sp-scroll",
           style: { aspectRatio: String(props.ratio) },
           onScroll: (event: Event) => {
             const element = event.target as HTMLElement;
-            page.value = Math.round(element.scrollLeft / Math.max(element.clientWidth, 1));
+            page.value = Math.round(element.scrollLeft / Math.max(element.clientWidth * props.fraction, 1));
           },
-        }, props.images.map((image) => h("div", props.part("image", { style: { width: "100%", height: "100%" } }), [h(SpImage, { url: image.url, alt: image.alt, fill: true, fit: "cover" })]))),
+        }, props.images.map((image) => h("div", props.part("image", { style: { width: `${props.fraction * 100}%`, height: "100%", position: "relative" } }), [
+          h(SpImage, { url: image.url, alt: image.alt, fill: true, fit: props.fit }),
+          image.caption ? h("div", { class: "sp-over-text sp-small", style: { color: "#fff" } }, image.caption) : null,
+        ]))),
+        props.counter ? h("span", { class: "sp-badge", style: { position: "absolute", top: "8px", right: "8px", background: "rgba(0,0,0,.55)", color: "#fff" } }, `${page.value + 1} / ${props.images.length}`) : null,
         props.dots && props.images.length > 1 ? h("div", props.part("dots", { class: "sp-dots" }), props.images.map((_, index) => h("i", { class: index === page.value ? "on" : "" }))) : null,
       ]);
   },
@@ -357,6 +431,52 @@ function makePart(ctx: Context, widget: Widget): Part {
   });
 }
 
+// ── Shared bits for drawing the original widgets ──
+const FIT_CSS: Record<string, string> = { cover: "cover", contain: "contain", fill: "fill", fitWidth: "cover", fitHeight: "cover", none: "none", scaleDown: "scale-down" };
+const POSITION_CSS: Record<string, string> = {
+  topLeft: "0% 0%", topCenter: "50% 0%", topRight: "100% 0%", centerLeft: "0% 50%", center: "50% 50%", centerRight: "100% 50%", bottomLeft: "0% 100%", bottomCenter: "50% 100%", bottomRight: "100% 100%",
+};
+const FLEX_MAIN: Record<string, string> = { start: "flex-start", end: "flex-end", center: "center", spaceBetween: "space-between", spaceAround: "space-around", spaceEvenly: "space-evenly" };
+const FLEX_CROSS: Record<string, string> = { start: "flex-start", end: "flex-end", center: "center", stretch: "stretch" };
+// Full, empty and half symbols for each kind of rating mark.
+const GLYPHS: Record<string, [string, string, string]> = { star: ["★", "☆", "⯪"], heart: ["♥", "♡", "♥"], thumb: ["👍", "👍", "👍"], circle: ["●", "○", "◐"] };
+
+// Show at most this many lines, ending with "...".
+const clamp = (lines: unknown): Record<string, string> =>
+  typeof lines === "number" ? { display: "-webkit-box", WebkitLineClamp: String(lines), WebkitBoxOrient: "vertical", overflow: "hidden" } : {};
+
+// The dark layer over a picture (banner, hero), in the colour and strength the page asked for.
+function shade(data: Record<string, any>, colour: (value: unknown) => string | undefined, part: Part): VNode {
+  // A colour you choose is laid over the picture at 40% unless you say how strong; the default is a fade to dark.
+  const look = data.overlayColor ? { background: colour(data.overlayColor), opacity: String(data.overlayOpacity ?? 0.4) } : data.overlayOpacity === undefined ? {} : { opacity: String(data.overlayOpacity) };
+  return h("div", part("overlay", { class: "sp-shade", style: look }));
+}
+
+// Text on top of a picture sits at the bottom left, or wherever `contentAlignment` says.
+function overText(alignment: unknown): Record<string, unknown> {
+  if (typeof alignment !== "string") return { class: "sp-over-text" };
+  const [across, down] = alignmentFlex(alignment);
+  return { class: "sp-over-text", style: { top: "12px", display: "flex", flexDirection: "column", justifyContent: down, alignItems: across, textAlign: across === "center" ? "center" : across === "flex-end" ? "right" : "left" } };
+}
+
+// "2d 3h 4m", "2 days 3 hours 4 minutes" or "51:04:00", the time that is left.
+function countdownText(milliseconds: number, data: Record<string, any>): string {
+  const total = Math.floor(milliseconds / 1000);
+  const days = Math.floor(total / 86400);
+  const hours = Math.floor((total % 86400) / 3600);
+  const minutes = Math.floor((total % 3600) / 60);
+  const seconds = total % 60;
+  const pad = (value: number) => String(value).padStart(2, "0");
+  if (data.format === "clock") return `${pad(days * 24 + hours)}:${pad(minutes)}${data.showSeconds ? `:${pad(seconds)}` : ""}`;
+  const plural = (value: number, word: string) => `${value} ${word}${value === 1 ? "" : "s"}`;
+  if (data.format === "long") {
+    const pieces = [days ? plural(days, "day") : "", days || hours ? plural(hours, "hour") : "", plural(minutes, "minute"), data.showSeconds ? plural(seconds, "second") : ""];
+    return pieces.filter(Boolean).join(" ");
+  }
+  const compact = days ? `${days}d ${hours}h ${minutes}m` : hours ? `${hours}h ${minutes}m` : `${minutes}m`;
+  return data.showSeconds ? `${compact} ${seconds}s` : compact;
+}
+
 // ── One widget ──
 function renderWidget(ctx: Context, widget: Widget): VNode | null {
   if (!widget || typeof widget !== "object") return null;
@@ -366,47 +486,79 @@ function renderWidget(ctx: Context, widget: Widget): VNode | null {
   const kids = (value: unknown) => list(value).map((child) => renderWidget(ctx, child));
   const p = paletteOf(ctx.theme, ctx.dark);
   const part = makePart(ctx, widget);
+  // A theme colour name or "#RRGGBB"; a number or theme name for a space; a size name or a number of pixels.
+  const colour = (value: unknown): string | undefined => (typeof value !== "string" ? undefined : value.startsWith("#") ? value : (p as any)[value]);
+  const space = (value: unknown): number => (typeof value === "number" ? value : ctx.theme.spacing[value as keyof Theme["spacing"]] ?? 0);
+  const sized = (value: unknown, small: number, medium: number, large: number): number => (typeof value === "number" ? value : value === "small" ? small : value === "large" ? large : medium);
+  const fitOf = (value: unknown): string => FIT_CSS[value as string] ?? "cover";
 
   switch (widget.type) {
     case "text":
-      return h("p", { ...tag, style: { ...tag.style, ...(data.maxLines && widget.style?.maxLines === undefined ? { display: "-webkit-box", WebkitLineClamp: String(data.maxLines), WebkitBoxOrient: "vertical", overflow: "hidden" } : {}) } }, data.text);
+      return h("p", { ...tag, ...(data.semanticsLabel ? { "aria-label": data.semanticsLabel } : {}), style: { ...(data.selectable ? { userSelect: "text" } : {}), ...tag.style, ...(data.maxLines && widget.style?.maxLines === undefined ? { display: "-webkit-box", WebkitLineClamp: String(data.maxLines), WebkitBoxOrient: "vertical", overflow: "hidden" } : {}) } }, data.text);
     case "image":
-      return h("div", tag, [h("div", part("image"), [h(SpImage, { url: data.url, alt: data.alt, ratio: data.aspectRatio, fit: data.fit === "contain" ? "contain" : "cover" })])]);
+      return h("div", tag, [h("div", part("image"), [h(SpImage, { url: data.url, alt: data.alt, ratio: data.aspectRatio, fit: fitOf(data.fit), position: POSITION_CSS[data.alignment as string], repeat: data.repeat, grayscale: data.grayscale === true, placeholderColor: colour(data.placeholderColor), errorText: data.errorText, loader: data.showLoader === true })])]);
     case "button": {
-      const variant = data.variant === "outline" ? " sp-btn--outline" : data.variant === "text" ? " sp-btn--text" : "";
-      return h("div", tag, [h("button", part("button", { type: "button", class: `sp-btn${variant}` }), data.label)]);
+      const variant = { outline: " sp-btn--outline", text: " sp-btn--text", tonal: " sp-btn--tonal", elevated: " sp-btn--elevated" }[data.variant as string] ?? "";
+      const size = data.size === "small" ? { height: "32px", padding: "0 16px", fontSize: "12px" } : data.size === "large" ? { height: "52px", padding: "0 32px", fontSize: "16px" } : {};
+      const icon = data.icon ? h("span", { class: "sp-btn-icon" }, iconSymbol(data.icon)) : null;
+      const label = data.loading ? h("span", { class: "sp-btn-icon" }, "◌") : null;
+      return h("div", tag, [
+        h("button", part("button", {
+          type: "button",
+          title: data.tooltip,
+          disabled: data.enabled === false || undefined,
+          class: `sp-btn${variant}`,
+          style: { ...size, ...(data.fullWidth ? { display: "flex", width: "100%" } : {}), ...(data.enabled === false ? { opacity: "0.38" } : {}) },
+        }), data.iconPosition === "end" ? [label, data.label, icon] : [label, icon, data.label]),
+      ]);
     }
     case "spacer": {
-      const size = ctx.theme.spacing[data.size as keyof Theme["spacing"]] ?? 0;
-      return h("div", { ...tag, style: { width: `${size}px`, height: `${size}px`, ...tag.style } });
+      const side = (value: unknown, fallback: number) => (value === undefined ? fallback : space(value));
+      const size = data.size === undefined ? 0 : space(data.size);
+      return h("div", { ...tag, style: { width: `${side(data.width, size)}px`, height: `${side(data.height, size)}px`, ...tag.style } });
     }
-    case "divider":
-      return h("div", tag, [h("hr", part("line", { class: "sp-line" }))]);
+    case "divider": {
+      const thickness = data.thickness ?? 1;
+      const line = colour(data.color) ?? "var(--sp-outline)";
+      const extent = data.space === undefined ? 16 : space(data.space);
+      const vertical = data.vertical === true;
+      return h("div", { ...tag, style: { display: vertical ? "inline-flex" : "flex", alignItems: "center", justifyContent: "center", ...(vertical ? { width: `${extent}px`, alignSelf: "stretch" } : { height: `${extent}px` }), ...tag.style } }, [
+        h("div", part("line", { style: { background: line, ...(vertical ? { width: `${thickness}px`, alignSelf: "stretch" } : { height: `${thickness}px`, flex: "1" }), marginInlineStart: data.indent === undefined ? undefined : `${space(data.indent)}px`, marginInlineEnd: data.endIndent === undefined ? undefined : `${space(data.endIndent)}px` } })),
+      ]);
+    }
     case "section_header":
-      return h("div", { ...tag, class: "sp-row" }, [
-        h("div", { class: "sp-grow" }, [h("p", part("title", { class: "sp-medium" }), data.title), data.subtitle ? h("p", part("subtitle", { class: "sp-muted sp-small" }), data.subtitle) : null]),
-        data.actionLabel ? h("span", part("action", { class: "sp-btn sp-btn--text" }), data.actionLabel) : null,
-      ]);
-    case "card":
-      return h("div", { ...tag, class: "sp-card" }, [
-        data.imageUrl ? h("div", part("image"), [h(SpImage, { url: data.imageUrl, height: 120 })]) : null,
-        h("div", part("body", { class: "sp-card-body" }), [
-          data.title ? h("p", part("title", { class: "sp-medium" }), data.title) : null,
-          data.subtitle ? h("p", part("subtitle", { class: "sp-muted sp-small" }), data.subtitle) : null,
-          ...kids(data.children),
+      return h("div", tag, [
+        h("div", { class: "sp-row" }, [
+          data.icon ? h("span", { class: "sp-btn-icon" }, iconSymbol(data.icon)) : null,
+          h("div", { class: "sp-grow" }, [h("p", part("title", { class: "sp-medium", style: { ...(data.uppercase ? { textTransform: "uppercase" } : {}), ...clamp(data.titleMaxLines) } }), data.title), data.subtitle ? h("p", part("subtitle", { class: "sp-muted sp-small" }), data.subtitle) : null]),
+          data.actionLabel ? h("span", part("action", { class: "sp-btn sp-btn--text" }), [data.actionLabel, data.actionIcon ? h("span", { class: "sp-btn-icon" }, iconSymbol(data.actionIcon)) : null]) : null,
         ]),
+        data.showDivider ? h("hr", { class: "sp-line" }) : null,
       ]);
+    case "card": {
+      const picture = data.imageUrl
+        ? h("div", part("image"), [h(SpImage, { url: data.imageUrl, height: data.imageAspectRatio ? undefined : data.imageHeight ?? 120, ratio: data.imageAspectRatio, fit: fitOf(data.imageFit) })])
+        : null;
+      const body = h("div", part("body", { class: "sp-card-body" }), [
+        data.title ? h("p", part("title", { class: "sp-medium" }), data.title) : null,
+        data.subtitle ? h("p", part("subtitle", { class: "sp-muted sp-small" }), data.subtitle) : null,
+        ...kids(data.children),
+      ]);
+      const elevation = typeof data.elevation === "number" ? { boxShadow: data.elevation === 0 ? "none" : `0 ${data.elevation / 2}px ${data.elevation * 1.5}px rgba(0,0,0,${Math.min(0.12 + data.elevation * 0.01, 0.4)})` } : {};
+      const outlined = data.outlined ? { border: "1px solid var(--sp-outline)", boxShadow: "none" } : {};
+      return h("div", { ...tag, class: "sp-card", style: { ...elevation, ...outlined, ...tag.style } }, data.imagePosition === "bottom" ? [body, picture] : [picture, body]);
+    }
     case "banner":
-      return h("div", { ...tag, class: "sp-over", style: { height: "160px", ...tag.style } }, [
-        h("div", part("image"), [h(SpImage, { url: data.imageUrl, height: 160 })]),
-        h("div", { class: "sp-shade" }),
-        data.title || data.subtitle ? h("div", { class: "sp-over-text" }, [data.title ? h("strong", part("title"), data.title) : null, data.subtitle ? h("span", part("subtitle"), data.subtitle) : null]) : null,
+      return h("div", { ...tag, class: "sp-over", style: { height: `${data.height ?? 160}px`, ...tag.style } }, [
+        h("div", part("image"), [h(SpImage, { url: data.imageUrl, height: data.height ?? 160, fit: fitOf(data.imageFit) })]),
+        shade(data, colour, part),
+        data.title || data.subtitle || data.ctaLabel ? h("div", overText(data.contentAlignment), [data.title ? h("strong", part("title"), data.title) : null, data.subtitle ? h("span", part("subtitle"), data.subtitle) : null, data.ctaLabel ? h("span", part("button", { class: "sp-btn", style: { marginTop: "8px" } }), data.ctaLabel) : null]) : null,
       ]);
     case "hero":
-      return h("div", { ...tag, class: "sp-over", style: { height: "240px", ...tag.style } }, [
-        h("div", part("image"), [h(SpImage, { url: data.imageUrl, height: 240 })]),
-        h("div", { class: "sp-shade" }),
-        h("div", { class: "sp-over-text" }, [
+      return h("div", { ...tag, class: "sp-over", style: { height: `${data.height ?? 240}px`, ...tag.style } }, [
+        h("div", part("image"), [h(SpImage, { url: data.imageUrl, height: data.height ?? 240, fit: fitOf(data.imageFit) })]),
+        shade(data, colour, part),
+        h("div", overText(data.contentAlignment), [
           h("strong", part("title", { style: { fontSize: "26px" } }), data.title),
           data.subtitle ? h("span", part("subtitle", { style: { fontSize: "16px", display: "block" } }), data.subtitle) : null,
           data.ctaLabel ? h("span", part("button", { class: "sp-btn", style: { marginTop: "12px" } }), data.ctaLabel) : null,
@@ -414,158 +566,260 @@ function renderWidget(ctx: Context, widget: Widget): VNode | null {
       ]);
     case "carousel": {
       const width = `${Math.round((data.viewportFraction ?? 0.85) * 100)}%`;
-      return h("div", { ...tag, class: "sp-scroll" }, kids(data.items).map((item) => h("div", part("item", { style: { width } }), [item])));
+      const cards = kids(data.items).map((item, index) => h("div", part("item", { style: { width, ...(data.enlargeCenter && index !== (data.initialIndex ?? 0) ? { transform: "scale(0.92)" } : {}) } }), [item]));
+      return h("div", { ...tag, style: { ...(data.height ? { height: `${data.height}px` } : {}), ...tag.style } }, [
+        h("div", { class: "sp-scroll", style: { gap: `${data.spacing === undefined ? 0 : space(data.spacing)}px`, ...(data.height ? { height: "100%" } : {}) } }, cards),
+        data.showDots ? h("div", { class: "sp-dots" }, cards.map((_, index) => h("i", { class: index === (data.initialIndex ?? 0) ? "on" : "" }))) : null,
+      ]);
     }
     case "list":
-      return h("div", tag, kids(data.items).flatMap((item, index) => [index > 0 && data.dividers ? h("hr", part("divider", { class: "sp-line" })) : null, h("div", part("item"), [item])]));
+      return h("div", { ...tag, style: { ...(data.height ? { height: `${data.height}px`, overflowY: "auto" } : {}), ...(data.reverse ? { display: "flex", flexDirection: "column-reverse" } : {}), ...tag.style } }, kids(data.items).flatMap((item, index) => [
+        index > 0 && data.dividers ? h("hr", part("divider", { class: "sp-line", style: { ...(data.dividerIndent === undefined ? {} : { marginInlineStart: `${space(data.dividerIndent)}px` }), ...(data.dividerThickness === undefined ? {} : { height: `${data.dividerThickness}px` }) } })) : null,
+        h("div", part("item", { style: index > 0 && data.spacing !== undefined ? { marginTop: `${space(data.spacing)}px` } : {} }), [item]),
+      ]));
     case "grid":
-      return h("div", { ...tag, class: "sp-gridrows", style: { gridTemplateColumns: `repeat(${data.columns ?? 2}, 1fr)`, ...tag.style } }, kids(data.items).map((item) => h("div", part("item"), [item])));
+      return h("div", { ...tag, class: "sp-gridrows", style: { gridTemplateColumns: `repeat(${data.columns ?? 2}, 1fr)`, ...(data.mainAxisSpacing === undefined ? {} : { rowGap: `${space(data.mainAxisSpacing)}px` }), ...(data.crossAxisSpacing === undefined ? {} : { columnGap: `${space(data.crossAxisSpacing)}px` }), ...tag.style } }, kids(data.items).map((item) => h("div", part("item", { style: data.childAspectRatio ? { aspectRatio: String(data.childAspectRatio), overflow: "hidden" } : {} }), [item])));
     case "container":
-      return h("div", { ...tag, style: { display: "flex", flexDirection: data.direction === "horizontal" ? "row" : "column", gap: `${ctx.theme.spacing[data.gap as keyof Theme["spacing"]] ?? 0}px`, ...tag.style } }, kids(data.children));
+      return h("div", { ...tag, style: { display: "flex", flexDirection: data.direction === "horizontal" ? "row" : "column", gap: `${ctx.theme.spacing[data.gap as keyof Theme["spacing"]] ?? 0}px`, ...(data.mainAxisAlignment ? { justifyContent: FLEX_MAIN[data.mainAxisAlignment as string] } : {}), ...(data.crossAxisAlignment ? { alignItems: FLEX_CROSS[data.crossAxisAlignment as string] } : {}), ...(data.wrap ? { flexWrap: "wrap" } : {}), ...tag.style } }, kids(data.children));
     case "tabs":
-      return h("div", tag, [h(SpTabs, { tabs: Array.isArray(data.tabs) ? data.tabs : [], ctx, part })]);
+      return h("div", tag, [h(SpTabs, { tabs: Array.isArray(data.tabs) ? data.tabs : [], ctx, part, initial: data.initialIndex ?? 0, variant: data.variant ?? "chips", scrollable: data.scrollable === true, alignment: data.tabAlignment ?? "start" })]);
     case "accordion":
-      return h("div", tag, [h(SpAccordion, { items: Array.isArray(data.items) ? data.items : [], multiple: data.allowMultiple === true, ctx, part })]);
+      return h("div", tag, [h(SpAccordion, { items: Array.isArray(data.items) ? data.items : [], multiple: data.allowMultiple === true, ctx, part, initial: Array.isArray(data.initiallyOpen) ? data.initiallyOpen : [], dividers: data.dividers !== false, iconPosition: data.iconPosition ?? "end" })]);
     case "data_list":
       return renderDataList(ctx, widget, tag, part);
     case "rich_text":
-      return h("p", tag, list(data.spans).map((span: any) =>
-        h("span", { style: { fontWeight: span.bold ? "700" : undefined, fontStyle: span.italic ? "italic" : undefined, textDecoration: span.underline ? "underline" : undefined, color: span.color ? p[span.color as keyof typeof p] : undefined, fontSize: span.size ? `${ctx.theme.textSizes[span.size as keyof Theme["textSizes"]]}px` : undefined } }, span.text),
+      return h("p", { ...tag, style: { ...(data.selectable ? { userSelect: "text" } : {}), ...tag.style } }, list(data.spans).map((span: any) =>
+        h("span", {
+          onClick: span.action ? () => undefined : undefined,
+          style: {
+            fontWeight: span.weight ? { normal: "400", medium: "500", bold: "700" }[span.weight as string] : span.bold ? "700" : undefined,
+            fontStyle: span.italic ? "italic" : undefined,
+            textDecoration: [span.underline || span.action ? "underline" : "", span.strikethrough ? "line-through" : ""].filter(Boolean).join(" ") || undefined,
+            color: colour(span.color) ?? (span.action ? p.primary : undefined),
+            background: colour(span.background),
+            letterSpacing: span.letterSpacing === undefined ? undefined : `${span.letterSpacing}px`,
+            fontSize: span.size === undefined ? undefined : `${typeof span.size === "number" ? span.size : ctx.theme.textSizes[span.size as keyof Theme["textSizes"]]}px`,
+          },
+        }, span.text),
       ));
-    case "quote":
-      return h("div", { ...tag, style: { borderInlineStart: `4px solid ${p.primary}`, paddingInlineStart: "12px", ...tag.style } }, [
-        h("p", part("text", { style: { fontStyle: "italic", fontSize: "16px" } }), data.text),
+    case "quote": {
+      const bar = data.showBar === false ? {} : { borderInlineStart: `${data.barWidth ?? 4}px solid ${colour(data.barColor) ?? p.primary}`, paddingInlineStart: "12px" };
+      const avatar = data.avatarSize ?? 28;
+      return h("div", { ...tag, style: { ...bar, ...tag.style } }, [
+        h("p", part("text", { style: { fontStyle: data.italic === false ? "normal" : "italic", fontSize: "16px" } }), [data.showQuoteMark ? h("span", { style: { fontSize: "28px", lineHeight: "0", marginInlineEnd: "4px", color: p.muted } }, "“") : null, data.text]),
         data.author || data.role || data.avatarUrl ? h("div", { class: "sp-row", style: { marginTop: "8px" } }, [
-          data.avatarUrl ? h("div", part("avatar", { style: { width: "28px", height: "28px", borderRadius: "50%", overflow: "hidden" } }), [h(SpImage, { url: data.avatarUrl, height: 28 })]) : null,
+          data.avatarUrl ? h("div", part("avatar", { style: { width: `${avatar}px`, height: `${avatar}px`, borderRadius: "50%", overflow: "hidden" } }), [h(SpImage, { url: data.avatarUrl, height: avatar })]) : null,
           h("span", part("author", { class: "sp-small" }), [data.author, data.role].filter(Boolean).join(", ")),
         ]) : null,
       ]);
+    }
     case "icon": {
-      const size = data.size === "small" ? 16 : data.size === "large" ? 40 : 24;
-      return h("span", { ...tag, style: { fontSize: `${size}px`, display: "inline-block", lineHeight: "1", ...tag.style } }, iconSymbol(data.name));
+      const size = sized(data.size, 16, 24, 40);
+      const boxed = data.shape && data.shape !== "none";
+      const pad = data.padding === undefined ? (boxed ? 8 : 0) : space(data.padding);
+      return h("span", {
+        ...tag,
+        title: data.tooltip,
+        style: {
+          fontSize: `${size}px`, display: "inline-flex", alignItems: "center", justifyContent: "center", lineHeight: "1", padding: `${pad}px`,
+          color: colour(data.color),
+          background: colour(data.background),
+          borderRadius: data.shape === "circle" ? "50%" : data.shape === "rounded" ? "12px" : undefined,
+          transform: [data.rotation ? `rotate(${data.rotation}deg)` : "", data.flipX ? "scaleX(-1)" : ""].filter(Boolean).join(" ") || undefined,
+          ...tag.style,
+        },
+      }, iconSymbol(data.name));
     }
     case "avatar": {
-      const size = data.size === "small" ? 32 : data.size === "large" ? 80 : 48;
-      return h("div", { ...tag, style: { width: `${size}px`, height: `${size}px`, borderRadius: "50%", overflow: "hidden", position: "relative", background: tint(p.primary, 20), display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "700", ...tag.style } }, [
-        data.initials ? h("span", part("initials"), data.initials) : null,
-        data.imageUrl ? h("div", { style: { position: "absolute", inset: "0" } }, [h(SpImage, { url: data.imageUrl, height: size })]) : null,
+      const size = sized(data.size, 32, 48, 80);
+      const radius = data.shape === "square" ? "0" : data.shape === "rounded" ? `${Math.round(size / 5)}px` : "50%";
+      const dotColor = { online: "#22C55E", offline: "#9CA3AF", busy: "#EF4444", away: "#F59E0B" }[data.status as string];
+      return h("div", { ...tag, style: { position: "relative", width: `${size}px`, height: `${size}px`, flexShrink: "0", ...tag.style } }, [
+        h("div", { style: { width: "100%", height: "100%", borderRadius: radius, overflow: "hidden", position: "relative", background: colour(data.backgroundColor) ?? tint(p.primary, 20), color: colour(data.foregroundColor), display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "700", fontSize: `${Math.round(size / 2.6)}px`, ...(data.borderWidth || data.borderColor ? { border: `${data.borderWidth ?? 2}px solid ${colour(data.borderColor) ?? "var(--sp-outline)"}` } : {}) } }, [
+          data.initials ? h("span", part("initials"), data.initials) : null,
+          data.imageUrl ? h("div", { style: { position: "absolute", inset: "0" } }, [h(SpImage, { url: data.imageUrl, height: size })]) : null,
+        ]),
+        dotColor ? h("span", { style: { position: "absolute", right: "0", bottom: "0", width: `${Math.max(8, size / 4)}px`, height: `${Math.max(8, size / 4)}px`, borderRadius: "50%", background: dotColor, border: "2px solid var(--sp-bg)" } }) : null,
       ]);
     }
     case "badge": {
       const color = toneColor(ctx, data.tone);
-      return h("span", { ...tag, class: "sp-badge", style: { background: tint(color, 15), color, ...tag.style } }, data.label);
+      const look = data.variant === "solid" ? { background: color, color: "#fff" } : data.variant === "outline" ? { background: "transparent", color, border: `1px solid ${color}` } : { background: tint(color, 15), color };
+      const size = data.size === "small" ? { fontSize: "9px", padding: "1px 6px" } : data.size === "large" ? { fontSize: "13px", padding: "4px 12px" } : {};
+      const radius = data.shape === "square" ? "0" : data.shape === "rounded" ? "6px" : undefined;
+      if (data.dot) return h("span", { ...tag, class: "sp-badge", style: { width: "10px", height: "10px", padding: "0", borderRadius: "50%", background: color, ...tag.style } });
+      return h("span", { ...tag, class: "sp-badge", style: { ...look, ...size, ...(radius === undefined ? {} : { borderRadius: radius }), ...tag.style } }, [data.icon ? h("span", { style: { marginInlineEnd: "4px" } }, iconSymbol(data.icon)) : null, data.label]);
     }
     case "alert": {
       const color = toneColor(ctx, data.tone);
-      return h("div", { ...tag, class: "sp-alert", style: { background: tint(color, 12), ...tag.style } }, [
-        h("span", part("icon", { style: { color, fontSize: "20px" } }), data.tone === "success" ? "✓" : data.tone === "warning" ? "⚠" : data.tone === "error" ? "⛔" : "ⓘ"),
-        h("div", {}, [data.title ? h("p", part("title", { style: { fontWeight: "500" } }), data.title) : null, h("p", part("message"), data.message)]),
+      const variant = data.variant === "solid" ? { background: color, color: "#fff" } : data.variant === "outline" ? { background: "transparent", border: `1px solid ${color}` } : data.variant === "accent" ? { background: tint(color, 12), borderInlineStart: `4px solid ${color}`, borderRadius: "4px" } : { background: tint(color, 12) };
+      const glyph = data.icon ? iconSymbol(data.icon) : data.tone === "success" ? "✓" : data.tone === "warning" ? "⚠" : data.tone === "error" ? "⛔" : "ⓘ";
+      return h("div", { ...tag, class: "sp-alert", style: { ...variant, ...tag.style } }, [
+        data.showIcon === false ? null : h("span", part("icon", { style: { color: data.variant === "solid" ? "#fff" : color, fontSize: "20px" } }), glyph),
+        h("div", { style: { flex: "1" } }, [data.title ? h("p", part("title", { style: { fontWeight: "500" } }), data.title) : null, h("p", part("message"), data.message), data.actionLabel ? h("span", { class: "sp-btn sp-btn--text", style: { height: "28px", padding: "0", marginTop: "4px" } }, data.actionLabel) : null]),
+        data.dismissible ? h("span", { style: { cursor: "default", opacity: "0.7" }, title: "Close" }, "✕") : null,
       ]);
     }
     case "progress": {
+      const indeterminate = data.indeterminate === true;
       const value = Math.max(0, Math.min(1, Number(data.value) || 0));
+      const stroke = data.strokeWidth ?? 4;
       if (data.shape === "circular") {
-        return h("div", { ...tag, class: "sp-ring" }, [
-          h("svg", { viewBox: "0 0 36 36", width: 56, height: 56, style: { transform: "rotate(-90deg)" } }, [
-            h("circle", { cx: 18, cy: 18, r: 15.9, fill: "none", stroke: "var(--sp-outline)", "stroke-width": 3 }),
-            h("circle", { cx: 18, cy: 18, r: 15.9, fill: "none", stroke: "var(--sp-primary)", "stroke-width": 3, "stroke-dasharray": `${value * 100} 100`, "stroke-linecap": "round" }),
+        const diameter = data.size ?? 56;
+        const unit = stroke / (diameter / 36);
+        return h("div", { ...tag, class: "sp-ring", style: { width: `${diameter}px`, height: `${diameter}px`, ...tag.style } }, [
+          h("svg", { viewBox: "0 0 36 36", width: diameter, height: diameter, style: { transform: "rotate(-90deg)" } }, [
+            h("circle", part("track", { cx: 18, cy: 18, r: 15.9, fill: "none", stroke: "var(--sp-outline)", "stroke-width": unit })),
+            h("circle", part("fill", { cx: 18, cy: 18, r: 15.9, fill: "none", stroke: "var(--sp-primary)", "stroke-width": unit, "stroke-dasharray": `${indeterminate ? 25 : value * 100} 100`, "stroke-linecap": data.rounded === false ? "butt" : "round" })),
           ]),
-          h("span", part("label"), `${Math.round(value * 100)}%`),
+          indeterminate ? null : h("span", part("label"), `${Math.round(value * 100)}%`),
         ]);
       }
-      return h("div", tag, [data.label ? h("p", part("label", { style: { marginBottom: "4px" } }), data.label) : null, h("div", part("track", { class: "sp-bar" }), [h("i", part("fill", { style: { width: `${value * 100}%` } }))])]);
+      const radius = data.rounded === false ? "0" : `${stroke / 2}px`;
+      return h("div", tag, [
+        data.label || data.showPercent ? h("div", { class: "sp-row", style: { justifyContent: "space-between", marginBottom: "4px" } }, [h("p", part("label"), data.label ?? ""), data.showPercent && !indeterminate ? h("span", { class: "sp-small" }, `${Math.round(value * 100)}%`) : null]) : null,
+        h("div", part("track", { class: "sp-bar", style: { height: `${stroke}px`, borderRadius: radius } }), [h("i", part("fill", { style: { width: indeterminate ? "40%" : `${value * 100}%`, marginInlineStart: indeterminate ? "30%" : undefined, borderRadius: radius } }))]),
+      ]);
     }
     case "stat": {
       const trend = data.trend as string | undefined;
       const color = trend === "up" ? p.success : trend === "down" ? p.error : p.muted;
       return h("div", tag, [
-        h("p", part("label", { class: "sp-muted sp-small" }), data.label),
-        h("p", part("value", { style: { fontSize: "24px" } }), data.value),
+        h("p", part("label", { class: "sp-muted sp-small" }), [data.icon ? h("span", { style: { marginInlineEnd: "4px" } }, iconSymbol(data.icon)) : null, data.label]),
+        h("p", part("value", { style: { fontSize: "24px" } }), [data.prefix ?? "", data.value, data.suffix ?? ""].join("")),
         data.delta ? h("p", part("delta", { class: "sp-small", style: { color } }), `${trend === "up" ? "↑ " : trend === "down" ? "↓ " : ""}${data.delta}`) : null,
       ]);
     }
-    case "key_value":
-      return h("div", tag, list(data.rows).map((row: any) => h("div", part("row", { class: "sp-kv" }), [h("span", part("label", { class: "sp-muted" }), row.label), h("strong", part("value"), String(row.value ?? ""))])));
-    case "list_item":
-      return h("div", { ...tag, class: "sp-row", style: { padding: "8px 0", ...tag.style } }, [
-        data.imageUrl ? h("div", part("image", { style: { width: "40px", height: "40px", borderRadius: "8px", overflow: "hidden", flexShrink: "0" } }), [h(SpImage, { url: data.imageUrl, height: 40 })]) : data.icon ? h("span", part("icon", { style: { fontSize: "22px", width: "40px", textAlign: "center" } }), iconSymbol(data.icon)) : null,
-        h("div", { class: "sp-grow" }, [h("p", part("title", { class: "sp-medium", style: { fontSize: "16px" } }), data.title), data.subtitle ? h("p", part("subtitle", { class: "sp-muted sp-small" }), data.subtitle) : null]),
+    case "key_value": {
+      const stacked = data.layout === "stacked";
+      return h("div", tag, list(data.rows).map((row: any, index: number) => h("div", part("row", { class: "sp-kv", style: { ...(stacked ? { flexDirection: "column", gap: "2px" } : {}), ...(data.dividers && index > 0 ? { borderTop: "1px solid var(--sp-outline)" } : {}) } }), [
+        h("span", part("label", { class: "sp-muted", style: data.labelFraction && !stacked ? { width: `${data.labelFraction * 100}%`, flexShrink: "0" } : {} }), [row.icon ? h("span", { style: { marginInlineEnd: "6px" } }, iconSymbol(row.icon)) : null, row.label]),
+        h("strong", part("value", { style: { flex: "1", textAlign: data.valueAlign === "start" ? "start" : stacked ? "start" : "end" } }), String(row.value ?? "")),
+      ])));
+    }
+    case "list_item": {
+      const imageSize = data.imageSize ?? 40;
+      const imageRadius = data.imageShape === "circle" ? "50%" : data.imageShape === "square" ? "0" : "8px";
+      return h("div", { ...tag, class: "sp-row", style: { padding: data.dense ? "2px 0" : "8px 0", ...(data.selected ? { background: tint(p.primary, 12) } : {}), ...tag.style } }, [
+        data.imageUrl ? h("div", part("image", { style: { width: `${imageSize}px`, height: `${imageSize}px`, borderRadius: imageRadius, overflow: "hidden", flexShrink: "0" } }), [h(SpImage, { url: data.imageUrl, height: imageSize })]) : data.icon ? h("span", part("icon", { style: { fontSize: "22px", width: "40px", textAlign: "center" } }), iconSymbol(data.icon)) : null,
+        h("div", { class: "sp-grow" }, [h("p", part("title", { class: "sp-medium", style: { fontSize: data.dense ? "14px" : "16px", ...clamp(data.titleMaxLines) } }), data.title), data.subtitle ? h("p", part("subtitle", { class: "sp-muted sp-small", style: clamp(data.subtitleMaxLines) }), data.subtitle) : null]),
+        data.badge ? h("span", { class: "sp-badge", style: { background: tint(p.primary, 15), color: p.primary } }, data.badge) : null,
         data.trailingText ? h("span", part("trailing", { class: "sp-muted" }), data.trailingText) : null,
+        data.trailingIcon ? h("span", { class: "sp-muted" }, iconSymbol(data.trailingIcon)) : null,
         data.chevron ? h("span", { class: "sp-muted" }, "›") : null,
       ]);
+    }
     case "empty_state":
-      return h("div", { ...tag, style: { padding: "24px", textAlign: "center", ...tag.style } }, [
-        data.icon ? h("div", part("icon", { style: { fontSize: "48px", color: p.muted } }), iconSymbol(data.icon)) : null,
+      return h("div", { ...tag, style: { padding: data.compact ? "8px" : "24px", textAlign: "center", ...tag.style } }, [
+        data.imageUrl ? h("div", { style: { maxWidth: "200px", margin: "0 auto 12px" } }, [h(SpImage, { url: data.imageUrl, ratio: 1.5 })]) : null,
+        data.icon ? h("div", part("icon", { style: { fontSize: `${data.iconSize ?? 48}px`, color: p.muted } }), iconSymbol(data.icon)) : null,
         h("p", part("title", { class: "sp-medium", style: { marginTop: "12px" } }), data.title),
         data.message ? h("p", part("message", { style: { marginTop: "4px" } }), data.message) : null,
         data.actionLabel ? h("span", part("button", { class: "sp-btn", style: { marginTop: "16px" } }), data.actionLabel) : null,
       ]);
     case "rating": {
       const value = Number(data.value) || 0;
-      const stars = [1, 2, 3, 4, 5].map((star) => (value >= star ? "★" : value >= star - 0.5 ? "⯪" : "☆"));
+      const count = data.max ?? 5;
+      const [full, empty, half] = GLYPHS[(data.icon as string) ?? "star"] ?? GLYPHS.star;
+      const stars = Array.from({ length: count }, (_, index) => ({ glyph: value >= index + 1 ? full : value >= index + 0.5 ? half : empty, filled: value >= index + 0.5 }));
+      const summary = [data.showValue === false ? "" : value.toFixed(1), data.showCount !== false && data.count !== undefined ? ` (${data.count})` : "", data.label ? ` ${data.label}` : ""].join("").trim();
       return h("div", { ...tag, class: "sp-row" }, [
-        h("span", part("stars", { style: { color: "#FBBF24", letterSpacing: "1px", fontSize: "18px" } }), stars.join("")),
-        h("span", part("text"), [value.toFixed(1), data.count !== undefined ? ` (${data.count})` : "", data.label ? ` ${data.label}` : ""].join("")),
+        h("span", part("stars", { style: { letterSpacing: "1px", fontSize: `${data.size ?? 18}px` } }), stars.map((star) => h("span", { style: { color: star.filled ? colour(data.color) ?? "#FBBF24" : colour(data.emptyColor) ?? colour(data.color) ?? "#FBBF24" } }, star.glyph))),
+        summary ? h("span", part("text"), summary) : null,
       ]);
     }
     case "table": {
       const columns: string[] = list(data.columns) as unknown as string[];
+      const alignOf = (index: number) => ({ start: "left", center: "center", end: "right" }[(data.columnAlign as string[] | undefined)?.[index] ?? "start"] ?? "left");
+      const pad = data.dense ? "4px 8px" : "8px";
+      const border = data.border === "none" ? { border: "0" } : data.border === "horizontal" ? { border: "0", borderBottom: "1px solid var(--sp-outline)" } : {};
       return h("div", { ...tag, style: { overflowX: "auto", ...tag.style } }, [
         h("table", { class: "sp-table" }, [
-          h("thead", [h("tr", columns.map((column) => h("th", part("header"), column)))]),
-          h("tbody", (list(data.rows) as unknown as string[][]).map((row) => h("tr", columns.map((_, index) => h("td", part("cell"), row?.[index] ?? ""))))),
+          Array.isArray(data.columnWidths) ? h("colgroup", data.columnWidths.map((width: number) => h("col", { style: { width: `${width * 20}%` } }))) : null,
+          h("thead", [h("tr", columns.map((column, index) => h("th", part("header", { style: { textAlign: alignOf(index), padding: pad, ...border } }), column)))]),
+          h("tbody", (list(data.rows) as unknown as string[][]).map((row, rowIndex) => h("tr", { style: data.striped && rowIndex % 2 === 1 ? { background: tint(p.muted, 10) } : {} }, columns.map((_, index) => h("td", part("cell", { style: { textAlign: alignOf(index), padding: pad, ...border, ...(data.firstColumnBold && index === 0 ? { fontWeight: "700" } : {}) } }), row?.[index] ?? ""))))),
         ]),
       ]);
     }
-    case "steps":
-      return h("div", tag, list(data.steps).map((step: any) =>
-        h("div", { class: "sp-step" }, [
-          h("span", part("dot", { class: `sp-dot${step.state === "done" ? " sp-dot--done" : step.state === "current" ? " sp-dot--current" : ""}` }), step.state === "done" ? "✓" : ""),
+    case "steps": {
+      const horizontal = data.direction === "horizontal";
+      const all = list(data.steps) as any[];
+      return h("div", { ...tag, style: { ...(horizontal ? { display: "flex", gap: "8px" } : {}), ...tag.style } }, all.map((step: any, index: number) =>
+        h("div", { class: "sp-step", style: horizontal ? { flex: "1", flexDirection: "column" } : { position: "relative" } }, [
+          h("span", part("dot", { class: `sp-dot${step.state === "done" ? " sp-dot--done" : step.state === "current" ? " sp-dot--current" : ""}` }), step.icon ? iconSymbol(step.icon) : step.state === "done" ? "✓" : data.numbered && step.state !== "current" ? String(index + 1) : ""),
+          data.showConnector && index < all.length - 1 && !horizontal ? h("span", { style: { position: "absolute", left: "10px", top: "28px", bottom: "-6px", width: "2px", background: "var(--sp-outline)" } }) : null,
           h("div", {}, [h("p", part("title", { style: { fontWeight: "500" } }), step.title), step.description ? h("p", part("description", { class: "sp-muted sp-small" }), step.description) : null]),
         ]),
       ));
+    }
     case "countdown": {
       const left = new Date(data.until).getTime() - Date.now();
       if (!Number.isFinite(left)) return h("p", tag, "");
-      if (left <= 0) return h("p", tag, data.endedText ?? "");
-      const minutes = Math.floor(left / 60000);
-      const text = minutes >= 1440 ? `${Math.floor(minutes / 1440)}d ${Math.floor((minutes % 1440) / 60)}h ${minutes % 60}m` : minutes >= 60 ? `${Math.floor(minutes / 60)}h ${minutes % 60}m` : `${minutes}m`;
-      return h("p", { ...tag, class: "sp-medium" }, data.label ? `${data.label} ${text}` : text);
+      if (left <= 0) return data.hideWhenEnded ? h("p", { ...tag, style: { display: "none" } }, "") : h("p", tag, data.endedText ?? "");
+      const text = countdownText(left, data);
+      return h("p", { ...tag, class: "sp-medium" }, [data.prefix ?? "", data.label ? `${data.label} ${text}` : text, data.suffix ?? ""].join(""));
     }
     case "gallery":
-      return h("div", tag, [h(SpGallery, { images: Array.isArray(data.images) ? data.images : [], ratio: data.aspectRatio ?? 16 / 9, dots: data.showDots !== false, part })]);
+      return h("div", tag, [h(SpGallery, { images: Array.isArray(data.images) ? data.images : [], ratio: data.aspectRatio ?? 16 / 9, dots: data.showDots !== false, part, fraction: data.viewportFraction ?? 1, fit: fitOf(data.fit), counter: data.showCounter === true })]);
     case "video_card":
-      return h("div", { ...tag, class: "sp-over", style: { aspectRatio: "16 / 9", ...tag.style } }, [
+      return h("div", { ...tag, class: "sp-over", style: { aspectRatio: String(data.aspectRatio ?? 16 / 9), ...tag.style } }, [
         h("div", part("image"), [h(SpImage, { url: data.thumbnailUrl })]),
-        h("div", { class: "sp-shade" }),
-        h("div", part("play", { class: "sp-play" }), "▶"),
-        data.title ? h("div", { class: "sp-over-text", style: { right: "64px" } }, [h("strong", part("title", { style: { fontSize: "14px" } }), data.title)]) : null,
+        h("div", { class: "sp-shade", style: data.overlayOpacity === undefined ? {} : { opacity: String(data.overlayOpacity) } }),
+        data.showPlay === false ? null : h("div", part("play", { class: "sp-play" }), "▶"),
+        data.badge ? h("span", { class: "sp-badge", style: { position: "absolute", left: "12px", top: "12px", background: "#EF4444", color: "#fff" } }, data.badge) : null,
+        data.title || data.subtitle ? h("div", { class: "sp-over-text", style: { right: "64px" } }, [data.title ? h("strong", part("title", { style: { fontSize: "14px" } }), data.title) : null, data.subtitle ? h("span", { class: "sp-small", style: { display: "block" } }, data.subtitle) : null]) : null,
         data.duration ? h("span", part("duration", { style: { position: "absolute", right: "12px", bottom: "12px", textShadow: "0 1px 4px rgba(0,0,0,.6)" } }), data.duration) : null,
       ]);
     case "pricing_card":
-      return h("div", { ...tag, class: `sp-price${data.highlighted ? " sp-price--on" : ""}` }, [
+      return h("div", { ...tag, class: `sp-price${data.highlighted ? " sp-price--on" : ""}`, style: { position: "relative", ...tag.style } }, [
+        data.badge ? h("span", { class: "sp-badge", style: { position: "absolute", top: "-10px", right: "12px", background: p.primary, color: p.onPrimary } }, data.badge) : null,
         h("p", part("name", { class: "sp-medium" }), data.name),
-        h("p", part("price", { style: { fontSize: "28px" } }), [data.price, data.period ? h("span", part("period", { class: "sp-muted sp-small", style: { marginInlineStart: "6px" } }), data.period) : null]),
-        h("div", { style: { margin: "8px 0" } }, list(data.features).map((feature) => h("p", part("feature", { style: { padding: "2px 0" } }), [h("span", { style: { color: p.primary } }, "✓ "), String(feature)]))),
+        data.description ? h("p", { class: "sp-muted sp-small" }, data.description) : null,
+        h("p", part("price", { style: { fontSize: "28px" } }), [data.originalPrice ? h("span", { class: "sp-muted", style: { fontSize: "16px", textDecoration: "line-through", marginInlineEnd: "8px" } }, data.originalPrice) : null, data.price, data.period ? h("span", part("period", { class: "sp-muted sp-small", style: { marginInlineStart: "6px" } }), data.period) : null]),
+        h("div", { style: { margin: "8px 0" } }, [
+          ...list(data.features).map((feature) => h("p", part("feature", { style: { padding: "2px 0" } }), [h("span", { style: { color: p.primary } }, `${data.featureIcon ? iconSymbol(data.featureIcon) : "✓"} `), String(feature)])),
+          ...(Array.isArray(data.disabledFeatures) ? data.disabledFeatures : []).map((feature: unknown) => h("p", part("feature", { style: { padding: "2px 0", opacity: "0.5", textDecoration: "line-through" } }), [h("span", "✕ "), String(feature)])),
+        ]),
         data.ctaLabel ? h("span", part("button", { class: "sp-btn", style: { display: "flex", marginTop: "12px" } }), data.ctaLabel) : null,
       ]);
     case "search_bar":
-      return h("div", tag, [h("div", part("field", { class: "sp-search" }), [h("span", "⌕"), h("span", data.placeholder)])]);
+      return h("div", tag, [h("div", part("field", { class: "sp-search", style: { ...(data.filled ? { background: "var(--sp-surface)", borderColor: "transparent" } : {}), ...(data.height ? { height: `${data.height}px` } : {}) } }), [h("span", data.leadingIcon ? iconSymbol(data.leadingIcon) : "⌕"), h("span", { style: { flex: "1" } }, data.placeholder), data.trailingIcon ? h("span", iconSymbol(data.trailingIcon)) : null])]);
     case "chips":
-      return h("div", { ...tag, class: "sp-wrap" }, list(data.chips).map((chip: any) => h("span", part("chip", { class: `sp-chip${chip.selected ? " sp-chip--on" : ""}` }), [chip.selected ? h("span", "✓") : null, chip.label])));
-    case "quick_actions":
-      return h("div", { ...tag, class: "sp-gridrows", style: { gridTemplateColumns: `repeat(${data.columns ?? 4}, 1fr)`, ...tag.style } }, list(data.items).map((item: any) =>
-        h("div", part("item", { class: "sp-quick" }), [h("i", part("icon"), iconSymbol(item.icon)), h("span", part("label"), item.label)]),
+      return h("div", { ...tag, class: "sp-wrap", style: { ...(data.spacing === undefined ? {} : { columnGap: `${space(data.spacing)}px` }), ...(data.runSpacing === undefined ? {} : { rowGap: `${space(data.runSpacing)}px` }), ...(data.scrollable ? { flexWrap: "nowrap", overflowX: "auto" } : {}), ...(data.alignment ? { justifyContent: FLEX_MAIN[data.alignment as string] } : {}), ...tag.style } }, list(data.chips).map((chip: any) =>
+        h("span", part("chip", { class: `sp-chip${chip.selected ? " sp-chip--on" : ""}`, style: chip.disabled ? { opacity: "0.38" } : {} }), [
+          chip.avatarUrl ? h("span", { style: { width: "20px", height: "20px", borderRadius: "50%", overflow: "hidden", display: "inline-block" } }, [h(SpImage, { url: chip.avatarUrl, height: 20 })]) : chip.icon ? h("span", iconSymbol(chip.icon)) : null,
+          chip.selected && (data.variant ?? "filter") === "filter" ? h("span", "✓") : null,
+          chip.label,
+          data.variant === "input" ? h("span", { style: { opacity: "0.6" } }, "✕") : null,
+        ])));
+    case "quick_actions": {
+      const diameter = data.size ?? 48;
+      const radius = data.shape === "square" ? "0" : data.shape === "rounded" ? "14px" : "50%";
+      return h("div", { ...tag, class: "sp-gridrows", style: { gridTemplateColumns: `repeat(${data.columns ?? 4}, 1fr)`, ...(data.spacing === undefined ? {} : { gap: `${space(data.spacing)}px` }), ...tag.style } }, list(data.items).map((item: any) =>
+        h("div", part("item", { class: "sp-quick" }), [
+          h("i", part("icon", { style: { width: `${diameter}px`, height: `${diameter}px`, borderRadius: radius, fontSize: `${data.iconSize ?? 20}px`, position: "relative" } }), [iconSymbol(item.icon), item.badge ? h("b", { style: { position: "absolute", top: "-4px", right: "-4px", minWidth: "16px", height: "16px", borderRadius: "8px", background: "#EF4444", color: "#fff", fontSize: "10px", display: "flex", alignItems: "center", justifyContent: "center", padding: "0 4px", fontStyle: "normal" } }, item.badge) : null]),
+          data.showLabels === false ? null : h("span", part("label", { style: clamp(data.labelMaxLines ?? 2) }), item.label),
+        ]),
       ));
-    case "form":
-      return h("div", tag, [
+    }
+    case "form": {
+      const variant = data.fieldVariant === "filled" ? { background: "var(--sp-surface)", border: "0", borderBottom: "1px solid var(--sp-muted)", borderRadius: "4px 4px 0 0" } : data.fieldVariant === "underline" ? { border: "0", borderBottom: "1px solid var(--sp-muted)", borderRadius: "0" } : {};
+      return h("div", { ...tag, style: { ...(data.spacing === undefined ? {} : { display: "flex", flexDirection: "column", gap: `${space(data.spacing)}px` }), ...tag.style } }, [
         ...list(data.fields).map((field: any) =>
           field.type === "checkbox" || field.type === "switch"
             ? h("div", { class: "sp-row sp-field" }, [h("span", field.type === "switch" ? "◐" : "☐"), h("span", part("label"), `${field.label}${field.required ? " *" : ""}`)])
-            : h("div", { class: "sp-field" }, [h("label", part("label"), `${field.label}${field.required ? " *" : ""}`), h("div", part("field", { class: "sp-input" }), field.type === "select" ? "Choose…  ⌄" : field.placeholder ?? (field.type === "date" ? "Choose a date  ▦" : ""))]),
+            : h("div", { class: "sp-field", style: data.spacing === undefined ? {} : { marginBottom: "0" } }, [
+                h("label", part("label"), `${field.label}${field.required ? " *" : ""}`),
+                h("div", part("field", { class: "sp-input", style: { ...variant, ...(field.rows ? { minHeight: `${field.rows * 22 + 24}px` } : {}), ...(field.readOnly ? { opacity: "0.7" } : {}) } }), [field.icon ? h("span", { style: { marginInlineEnd: "8px" } }, iconSymbol(field.icon)) : null, field.initialValue ?? (field.type === "select" ? "Choose…  ⌄" : field.placeholder ?? (field.type === "date" ? "Choose a date  ▦" : ""))]),
+                field.helperText ? h("small", { class: "sp-muted sp-small" }, field.helperText) : null,
+              ]),
         ),
-        h("span", part("button", { class: "sp-btn", style: { display: "flex" } }), data.submitLabel),
+        h("div", { class: "sp-row" }, [
+          h("span", part("button", { class: "sp-btn", style: { display: "flex", ...(data.submitFullWidth ? { flex: "1" } : {}) } }), [data.submitIcon ? h("span", { class: "sp-btn-icon" }, iconSymbol(data.submitIcon)) : null, data.submitLabel]),
+          data.resetLabel ? h("span", { class: "sp-btn sp-btn--text" }, data.resetLabel) : null,
+        ]),
       ]);
+    }
     default: {
       const block = renderBuildingBlock(widget.type, data, tag, {
         space: (value) => (typeof value === "number" ? value : ctx.theme.spacing[value as keyof Theme["spacing"]] ?? 0),

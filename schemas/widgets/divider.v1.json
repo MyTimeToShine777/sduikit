@@ -3,6 +3,27 @@
   "$id": "https://sduikit.dev/schemas/widgets/divider.v1.json",
   "title": "divider (v1) data",
   "type": "object",
-  "properties": {},
+  "properties": {
+    "thickness": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 20
+    },
+    "indent": {
+      "$ref": "../common/style.json#/$defs/space"
+    },
+    "endIndent": {
+      "$ref": "../common/style.json#/$defs/space"
+    },
+    "color": {
+      "$ref": "../common/style.json#/$defs/colour"
+    },
+    "vertical": {
+      "type": "boolean"
+    },
+    "space": {
+      "$ref": "../common/style.json#/$defs/space"
+    }
+  },
   "additionalProperties": false
 }

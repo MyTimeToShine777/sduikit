@@ -15,6 +15,9 @@
           },
           "alt": {
             "type": "string"
+          },
+          "caption": {
+            "type": "string"
           }
         },
         "required": [
@@ -29,6 +32,28 @@
       "exclusiveMinimum": 0
     },
     "showDots": {
+      "type": "boolean"
+    },
+    "viewportFraction": {
+      "type": "number",
+      "minimum": 0.3,
+      "maximum": 1
+    },
+    "autoplay": {
+      "type": "boolean"
+    },
+    "autoplayInterval": {
+      "type": "number",
+      "minimum": 1,
+      "maximum": 60
+    },
+    "fit": {
+      "$ref": "../common/layout.json#/$defs/boxFit"
+    },
+    "showCounter": {
+      "type": "boolean"
+    },
+    "loop": {
       "type": "boolean"
     }
   },

@@ -17,6 +17,28 @@
     "avatarUrl": {
       "type": "string",
       "format": "uri"
+    },
+    "showBar": {
+      "type": "boolean"
+    },
+    "barColor": {
+      "$ref": "../common/style.json#/$defs/colour"
+    },
+    "barWidth": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 20
+    },
+    "italic": {
+      "type": "boolean"
+    },
+    "avatarSize": {
+      "type": "number",
+      "minimum": 16,
+      "maximum": 120
+    },
+    "showQuoteMark": {
+      "type": "boolean"
     }
   },
   "required": [

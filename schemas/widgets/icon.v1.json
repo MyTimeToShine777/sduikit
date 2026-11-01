@@ -8,7 +8,35 @@
       "$ref": "../common/tokens.json#/$defs/icon"
     },
     "size": {
-      "$ref": "../common/tokens.json#/$defs/size"
+      "$ref": "../common/layout.json#/$defs/iconSize"
+    },
+    "color": {
+      "$ref": "../common/style.json#/$defs/colour"
+    },
+    "rotation": {
+      "type": "number",
+      "minimum": -360,
+      "maximum": 360
+    },
+    "flipX": {
+      "type": "boolean"
+    },
+    "background": {
+      "$ref": "../common/style.json#/$defs/colour"
+    },
+    "shape": {
+      "enum": [
+        "none",
+        "circle",
+        "square",
+        "rounded"
+      ]
+    },
+    "padding": {
+      "$ref": "../common/style.json#/$defs/space"
+    },
+    "tooltip": {
+      "type": "string"
     }
   },
   "required": [

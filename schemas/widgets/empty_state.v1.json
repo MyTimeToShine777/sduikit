@@ -16,6 +16,18 @@
     },
     "actionLabel": {
       "type": "string"
+    },
+    "imageUrl": {
+      "type": "string",
+      "format": "uri"
+    },
+    "iconSize": {
+      "type": "number",
+      "minimum": 16,
+      "maximum": 200
+    },
+    "compact": {
+      "type": "boolean"
     }
   },
   "required": [

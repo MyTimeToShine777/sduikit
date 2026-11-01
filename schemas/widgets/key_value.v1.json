@@ -15,6 +15,9 @@
           },
           "value": {
             "type": "string"
+          },
+          "icon": {
+            "$ref": "../common/tokens.json#/$defs/icon"
           }
         },
         "required": [
@@ -24,6 +27,26 @@
         "additionalProperties": false
       },
       "minItems": 1
+    },
+    "dividers": {
+      "type": "boolean"
+    },
+    "layout": {
+      "enum": [
+        "sideBySide",
+        "stacked"
+      ]
+    },
+    "valueAlign": {
+      "enum": [
+        "start",
+        "end"
+      ]
+    },
+    "labelFraction": {
+      "type": "number",
+      "minimum": 0.1,
+      "maximum": 0.9
     }
   },
   "required": [

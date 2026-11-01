@@ -4,10 +4,36 @@
   "title": "section_header (v1) data",
   "type": "object",
   "properties": {
-    "title": { "type": "string", "minLength": 1 },
-    "subtitle": { "type": "string" },
-    "actionLabel": { "type": "string" }
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "subtitle": {
+      "type": "string"
+    },
+    "actionLabel": {
+      "type": "string"
+    },
+    "icon": {
+      "$ref": "../common/tokens.json#/$defs/icon"
+    },
+    "actionIcon": {
+      "$ref": "../common/tokens.json#/$defs/icon"
+    },
+    "showDivider": {
+      "type": "boolean"
+    },
+    "titleMaxLines": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 10
+    },
+    "uppercase": {
+      "type": "boolean"
+    }
   },
-  "required": ["title"],
+  "required": [
+    "title"
+  ],
   "additionalProperties": false
 }

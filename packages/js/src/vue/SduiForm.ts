@@ -1,5 +1,5 @@
 import { defineComponent, h, type PropType, type VNode } from "vue";
-import { SduiActionEditor, SduiJsonBox } from "./controls.js";
+import { SduiActionEditor, SduiColorInput, SduiJsonBox, SduiValueInput } from "./controls.js";
 import { blankFor, schemaToFields, type Field } from "./fields.js";
 import { moveItem, removeItem } from "./reorder.js";
 
@@ -84,6 +84,18 @@ export const SduiForm = defineComponent({
               ...(field.choices ?? []).map((choice) => h("option", { value: choice }, choice)),
             ],
           );
+        case "colour":
+          return h(SduiColorInput, { name: path, modelValue: typeof current === "string" ? current : undefined, "onUpdate:modelValue": (value: any) => onChange(value) });
+        case "value":
+          return h(SduiValueInput, {
+            name: path,
+            presets: field.presets ?? [],
+            min: field.min ?? 0,
+            max: field.max ?? 5000,
+            placeholder: field.presets?.length ? "name or number" : "number",
+            modelValue: typeof current === "string" || typeof current === "number" ? current : undefined,
+            "onUpdate:modelValue": (value: any) => onChange(value),
+          });
         case "widgets": {
           const count = Array.isArray(current) ? current.length : 0;
           return h("p", { ...attrs, class: "sdui-form-note" }, `${count} widget(s) inside. Edit them in the layers on the left.`);

@@ -20,6 +20,40 @@
           "type": "string"
         }
       }
+    },
+    "striped": {
+      "type": "boolean"
+    },
+    "border": {
+      "enum": [
+        "none",
+        "all",
+        "horizontal"
+      ]
+    },
+    "columnAlign": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "start",
+          "center",
+          "end"
+        ]
+      }
+    },
+    "columnWidths": {
+      "type": "array",
+      "items": {
+        "type": "number",
+        "minimum": 0.05,
+        "maximum": 20
+      }
+    },
+    "dense": {
+      "type": "boolean"
+    },
+    "firstColumnBold": {
+      "type": "boolean"
     }
   },
   "required": [

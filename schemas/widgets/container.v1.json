@@ -19,6 +19,15 @@
     },
     "gap": {
       "$ref": "../common/tokens.json#/$defs/spacing"
+    },
+    "mainAxisAlignment": {
+      "$ref": "../common/layout.json#/$defs/mainAxisAlignment"
+    },
+    "crossAxisAlignment": {
+      "$ref": "../common/layout.json#/$defs/crossAxisAlignment"
+    },
+    "wrap": {
+      "type": "boolean"
     }
   },
   "required": [

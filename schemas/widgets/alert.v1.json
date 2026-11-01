@@ -13,6 +13,26 @@
     },
     "tone": {
       "$ref": "../common/tokens.json#/$defs/tone"
+    },
+    "icon": {
+      "$ref": "../common/tokens.json#/$defs/icon"
+    },
+    "showIcon": {
+      "type": "boolean"
+    },
+    "variant": {
+      "enum": [
+        "soft",
+        "solid",
+        "outline",
+        "accent"
+      ]
+    },
+    "dismissible": {
+      "type": "boolean"
+    },
+    "actionLabel": {
+      "type": "string"
     }
   },
   "required": [

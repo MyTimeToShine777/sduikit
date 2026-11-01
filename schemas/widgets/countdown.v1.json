@@ -13,6 +13,25 @@
     },
     "endedText": {
       "type": "string"
+    },
+    "format": {
+      "enum": [
+        "compact",
+        "long",
+        "clock"
+      ]
+    },
+    "showSeconds": {
+      "type": "boolean"
+    },
+    "hideWhenEnded": {
+      "type": "boolean"
+    },
+    "prefix": {
+      "type": "string"
+    },
+    "suffix": {
+      "type": "string"
     }
   },
   "required": [

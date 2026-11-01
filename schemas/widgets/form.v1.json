@@ -57,6 +57,45 @@
               "additionalProperties": false
             },
             "minItems": 1
+          },
+          "helperText": {
+            "type": "string"
+          },
+          "initialValue": {
+            "type": "string"
+          },
+          "minLength": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000
+          },
+          "maxLength": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10000
+          },
+          "min": {
+            "type": "number"
+          },
+          "max": {
+            "type": "number"
+          },
+          "pattern": {
+            "type": "string"
+          },
+          "patternMessage": {
+            "type": "string"
+          },
+          "rows": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 12
+          },
+          "readOnly": {
+            "type": "boolean"
+          },
+          "icon": {
+            "$ref": "../common/tokens.json#/$defs/icon"
           }
         },
         "required": [
@@ -71,6 +110,25 @@
     "submitLabel": {
       "type": "string",
       "minLength": 1
+    },
+    "spacing": {
+      "$ref": "../common/style.json#/$defs/space"
+    },
+    "fieldVariant": {
+      "enum": [
+        "outlined",
+        "filled",
+        "underline"
+      ]
+    },
+    "submitFullWidth": {
+      "type": "boolean"
+    },
+    "submitIcon": {
+      "$ref": "../common/tokens.json#/$defs/icon"
+    },
+    "resetLabel": {
+      "type": "string"
     }
   },
   "required": [

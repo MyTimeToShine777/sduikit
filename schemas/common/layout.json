@@ -120,6 +120,27 @@
         }
       },
       "additionalProperties": false
+    },
+    "iconSize": {
+      "type": [
+        "string",
+        "number"
+      ],
+      "if": {
+        "type": "string"
+      },
+      "then": {
+        "enum": [
+          "small",
+          "medium",
+          "large"
+        ]
+      },
+      "else": {
+        "minimum": 8,
+        "maximum": 300
+      },
+      "description": "A size name (small, medium, large) or a number of pixels."
     }
   }
 }

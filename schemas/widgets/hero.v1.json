@@ -17,6 +17,25 @@
     },
     "ctaLabel": {
       "type": "string"
+    },
+    "height": {
+      "type": "number",
+      "minimum": 40,
+      "maximum": 1200
+    },
+    "overlayColor": {
+      "$ref": "../common/style.json#/$defs/colour"
+    },
+    "overlayOpacity": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "contentAlignment": {
+      "$ref": "../common/layout.json#/$defs/alignment"
+    },
+    "imageFit": {
+      "$ref": "../common/layout.json#/$defs/boxFit"
     }
   },
   "required": [

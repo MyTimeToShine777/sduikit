@@ -26,17 +26,24 @@ describe("reorder helpers", () => {
 describe("schemaToFields", () => {
   it("builds fields for a banner", () => {
     const fields = schemaToFields(widgetDataSchema("banner", 1)!);
-    expect(fields).toEqual([
+    expect(fields.slice(0, 3)).toEqual([
       { key: "imageUrl", label: "Image url", kind: "url", required: true },
       { key: "title", label: "Title", kind: "text", required: false },
       { key: "subtitle", label: "Subtitle", kind: "text", required: false },
     ]);
+    // ...and the options added later: a number, a choice, a colour
+    expect(fields.find((f) => f.key === "height")!.kind).toBe("number");
+    expect(fields.find((f) => f.key === "contentAlignment")!.kind).toBe("choice");
+    expect(fields.find((f) => f.key === "overlayColor")!.kind).toBe("colour");
   });
 
   it("turns a token reference into a choice list", () => {
     const [size] = schemaToFields(widgetDataSchema("spacer", 1)!);
-    expect(size.kind).toBe("choice");
-    expect(size.choices).toEqual(["none", "xs", "sm", "md", "lg", "xl"]);
+    // a space is a name from the theme or an exact number
+    expect(size.kind).toBe("value");
+    expect(size.presets).toEqual(["none", "xs", "sm", "md", "lg", "xl"]);
+    const icon = schemaToFields(widgetDataSchema("icon", 1)!).find((f) => f.key === "name")!;
+    expect(icon.kind).toBe("choice");
   });
 
   it("knows numbers, whole numbers, true/false and lists of widgets", () => {
@@ -54,7 +61,7 @@ describe("schemaToFields", () => {
     expect(tabs.kind).toBe("list");
     expect(tabs.minItems).toBe(1);
     expect(tabs.item!.kind).toBe("group");
-    expect(tabs.item!.fields!.map((f) => [f.key, f.kind])).toEqual([["id", "text"], ["label", "text"], ["widgets", "widgets"]]);
+    expect(tabs.item!.fields!.map((f) => [f.key, f.kind])).toEqual([["id", "text"], ["label", "text"], ["widgets", "widgets"], ["icon", "choice"]]);
   });
 
   it("follows the shared action schema, and treats an object with no named fields as free-form JSON", () => {
@@ -65,7 +72,7 @@ describe("schemaToFields", () => {
   });
 
   it("gives every kind of widget a form with no field it cannot show", () => {
-    const kinds = new Set(["text", "longtext", "url", "number", "integer", "boolean", "choice", "widgets", "action", "group", "list", "json"]);
+    const kinds = new Set(["text", "longtext", "url", "number", "integer", "boolean", "choice", "widgets", "action", "group", "list", "json", "colour", "value"]);
     const check = (fields: any[]) => fields.forEach((f) => { expect(kinds.has(f.kind), f.key).toBe(true); check(f.fields ?? []); if (f.item) check([f.item]); });
     for (const listing of listWidgets()) check(schemaToFields(widgetDataSchema(listing.type, 1)!));
   });

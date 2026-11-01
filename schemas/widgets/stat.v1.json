@@ -21,6 +21,15 @@
         "down",
         "flat"
       ]
+    },
+    "icon": {
+      "$ref": "../common/tokens.json#/$defs/icon"
+    },
+    "prefix": {
+      "type": "string"
+    },
+    "suffix": {
+      "type": "string"
     }
   },
   "required": [

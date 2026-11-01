@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'icons.dart';
 import 'model.dart';
 import 'render.dart';
+import 'theme.dart';
 
 final _emailPattern = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
 
@@ -49,6 +51,23 @@ class _SduiFormState extends State<_SduiForm> {
     if (text.isEmpty) return field['required'] == true ? 'Please fill this in.' : null;
     if (field['type'] == 'email' && !_emailPattern.hasMatch(text)) return 'Enter a valid email address.';
     if (field['type'] == 'number' && double.tryParse(text) == null) return 'Enter a number.';
+    final minLength = field['minLength'];
+    if (minLength is int && text.length < minLength) return 'Enter at least $minLength characters.';
+    final maxLength = field['maxLength'];
+    if (maxLength is int && text.length > maxLength) return 'Enter no more than $maxLength characters.';
+    final number = double.tryParse(text);
+    final least = field['min'];
+    if (field['type'] == 'number' && least is num && number != null && number < least) return 'Enter $least or more.';
+    final most = field['max'];
+    if (field['type'] == 'number' && most is num && number != null && number > most) return 'Enter $most or less.';
+    final pattern = field['pattern'];
+    if (pattern is String) {
+      try {
+        if (!RegExp(pattern).hasMatch(text)) return field['patternMessage'] is String ? field['patternMessage'] as String : 'This is not in the right format.';
+      } catch (_) {
+        // A pattern that is not a valid expression is ignored rather than blocking the form.
+      }
+    }
     return null;
   }
 
@@ -64,19 +83,26 @@ class _SduiFormState extends State<_SduiForm> {
     final fieldBorderColor = tokens.color(fieldLook['borderColor']);
     final fieldBorderWidth = fieldLook['borderWidth'] is num ? (fieldLook['borderWidth'] as num).toDouble() : null;
     final fieldText = widget.render.partTextStyle(context, widget.node, 'field');
+    final variant = widget.node.string('fieldVariant');
+    final iconName = field['icon'] is String ? field['icon'] as String : null;
     final decoration = InputDecoration(
       labelText: _labelOf(field),
       labelStyle: widget.render.partTextStyle(context, widget.node, 'label'),
       hintText: placeholder,
-      filled: fieldColor != null,
+      helperText: field['helperText'] is String ? field['helperText'] as String : null,
+      prefixIcon: iconName == null ? null : Icon(sduiIcon(iconName)),
+      filled: fieldColor != null || variant == 'filled',
       fillColor: fieldColor,
       border: (fieldRadius != null || fieldBorderColor != null || fieldBorderWidth != null)
           ? OutlineInputBorder(
               borderRadius: BorderRadius.circular(fieldRadius ?? 4),
               borderSide: BorderSide(color: fieldBorderColor ?? const Color(0xFF79747E), width: fieldBorderWidth ?? 1),
             )
-          : null,
+          : (variant == 'underline' || variant == 'filled' ? const UnderlineInputBorder() : null),
     );
+    final readOnly = field['readOnly'] == true;
+    final initial = field['initialValue'] is String ? field['initialValue'] as String : null;
+    final maxLength = field['maxLength'] is int ? field['maxLength'] as int : null;
     // A value left empty is simply not sent, rather than sent as an empty text.
     void saveText(String? value) {
       final text = (value ?? '').trim();
@@ -92,6 +118,11 @@ class _SduiFormState extends State<_SduiForm> {
       case 'password':
         return TextFormField(
           style: fieldText,
+          initialValue: initial,
+          readOnly: readOnly,
+          maxLength: maxLength,
+          // The character counter is left out; the check on the field already says if the text is too long.
+          buildCounter: (context, {required currentLength, required isFocused, maxLength}) => null,
           decoration: decoration,
           keyboardType: switch (type) {
             'email' => TextInputType.emailAddress,
@@ -100,12 +131,12 @@ class _SduiFormState extends State<_SduiForm> {
             _ => TextInputType.text,
           },
           obscureText: type == 'password',
-          maxLines: type == 'password' ? 1 : (type == 'multiline' ? 4 : 1),
+          maxLines: type == 'password' ? 1 : (type == 'multiline' ? (field['rows'] is int ? field['rows'] as int : 4) : 1),
           validator: (value) => _checkText(field, value),
           onSaved: saveText,
         );
       case 'date':
-        final controller = _dateControllers.putIfAbsent(name, TextEditingController.new);
+        final controller = _dateControllers.putIfAbsent(name, () => TextEditingController(text: initial));
         return TextFormField(
           style: fieldText,
           controller: controller,
@@ -187,12 +218,26 @@ class _SduiFormState extends State<_SduiForm> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          for (final field in widget.fields) Padding(padding: const EdgeInsets.only(bottom: 12), child: _fieldFor(field)),
-          widget.render.partButton(
-            context,
-            widget.node,
-            'button',
-            (style) => FilledButton(style: style, onPressed: _submit, child: Text(widget.submitLabel)),
+          for (final field in widget.fields)
+            Padding(padding: EdgeInsets.only(bottom: context.sduiTokens.space(widget.node.data['spacing']) ?? 12), child: _fieldFor(field)),
+          Row(
+            children: [
+              Expanded(
+                flex: widget.node.boolean('submitFullWidth') == true ? 1 : 0,
+                child: widget.render.partButton(
+                  context,
+                  widget.node,
+                  'button',
+                  (style) => widget.node.string('submitIcon') == null
+                      ? FilledButton(style: style, onPressed: _submit, child: Text(widget.submitLabel))
+                      : FilledButton.icon(style: style, onPressed: _submit, icon: Icon(sduiIcon(widget.node.string('submitIcon'))), label: Text(widget.submitLabel)),
+                ),
+              ),
+              if (widget.node.string('resetLabel') != null) ...[
+                const SizedBox(width: 8),
+                TextButton(onPressed: () => _formKey.currentState!.reset(), child: Text(widget.node.string('resetLabel')!)),
+              ],
+            ],
           ),
         ],
       ),

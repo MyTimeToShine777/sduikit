@@ -47,6 +47,8 @@ A line or paragraph of text. (version 1)
 |---|---|---|
 | `text` | text | **required** |
 | `maxLines` | whole number (1 to …) |  |
+| `selectable` | true or false |  |
+| `semanticsLabel` | text |  |
 
 ### `image`
 
@@ -59,7 +61,13 @@ Parts you can style one by one with `style.parts`: `image`.
 | `url` | web address | **required** |
 | `alt` | text |  |
 | `aspectRatio` | number (0 to …) |  |
-| `fit` | `cover` or `contain` |  |
+| `fit` | see schema |  |
+| `alignment` | see schema |  |
+| `repeat` | `noRepeat` or `repeat` or `repeatX` or `repeatY` |  |
+| `placeholderColor` | see schema |  |
+| `showLoader` | true or false |  |
+| `errorText` | text |  |
+| `grayscale` | true or false |  |
 
 ### `button`
 
@@ -70,7 +78,14 @@ Parts you can style one by one with `style.parts`: `button`.
 | Field | Holds | |
 |---|---|---|
 | `label` | text | **required** |
-| `variant` | `filled` or `outline` or `text` |  |
+| `variant` | `filled` or `outline` or `text` or `tonal` or `elevated` |  |
+| `icon` | icon name |  |
+| `iconPosition` | `start` or `end` |  |
+| `size` | `small` or `medium` or `large` |  |
+| `fullWidth` | true or false |  |
+| `enabled` | true or false |  |
+| `loading` | true or false |  |
+| `tooltip` | text |  |
 
 ### `spacer`
 
@@ -78,7 +93,9 @@ Empty space between things. (version 1)
 
 | Field | Holds | |
 |---|---|---|
-| `size` | spacing name | **required** |
+| `size` | see schema |  |
+| `width` | see schema |  |
+| `height` | see schema |  |
 
 ### `divider`
 
@@ -86,7 +103,14 @@ A thin line between things. (version 1)
 
 Parts you can style one by one with `style.parts`: `line`.
 
-No fields.
+| Field | Holds | |
+|---|---|---|
+| `thickness` | number (0 to 20) |  |
+| `indent` | see schema |  |
+| `endIndent` | see schema |  |
+| `color` | see schema |  |
+| `vertical` | true or false |  |
+| `space` | see schema |  |
 
 ### `rich_text`
 
@@ -94,7 +118,8 @@ A sentence with bold, italic or coloured parts. (version 1)
 
 | Field | Holds | |
 |---|---|---|
-| `spans` | list of object with `text`, `bold`, `italic`, `underline`, `color`, `size`, at least 1 | **required** |
+| `spans` | list of object with `text`, `bold`, `italic`, `underline`, `color`, `size`, `strikethrough`, `background`, `action`, `weight`, `letterSpacing`, at least 1 | **required** |
+| `selectable` | true or false |  |
 
 ### `icon`
 
@@ -103,7 +128,14 @@ A single icon. (version 1)
 | Field | Holds | |
 |---|---|---|
 | `name` | icon name | **required** |
-| `size` | size name |  |
+| `size` | see schema |  |
+| `color` | see schema |  |
+| `rotation` | number (-360 to 360) |  |
+| `flipX` | true or false |  |
+| `background` | see schema |  |
+| `shape` | `none` or `circle` or `square` or `rounded` |  |
+| `padding` | see schema |  |
+| `tooltip` | text |  |
 
 ### `badge`
 
@@ -113,6 +145,11 @@ A small coloured label such as New or Sale. (version 1)
 |---|---|---|
 | `label` | text | **required** |
 | `tone` | tone name |  |
+| `icon` | icon name |  |
+| `size` | `small` or `medium` or `large` |  |
+| `variant` | `soft` or `solid` or `outline` |  |
+| `shape` | `pill` or `rounded` or `square` |  |
+| `dot` | true or false |  |
 
 ## Layout
 
@@ -127,6 +164,11 @@ Parts you can style one by one with `style.parts`: `title`, `subtitle`, `action`
 | `title` | text | **required** |
 | `subtitle` | text |  |
 | `actionLabel` | text |  |
+| `icon` | icon name |  |
+| `actionIcon` | icon name |  |
+| `showDivider` | true or false |  |
+| `titleMaxLines` | whole number (1 to 10) |  |
+| `uppercase` | true or false |  |
 
 ### `card`
 
@@ -140,6 +182,12 @@ Parts you can style one by one with `style.parts`: `image`, `title`, `subtitle`,
 | `subtitle` | text |  |
 | `imageUrl` | web address |  |
 | `children` | list of a widget |  |
+| `elevation` | number (0 to 24) |  |
+| `outlined` | true or false |  |
+| `imageHeight` | number (0 to 1000) |  |
+| `imageAspectRatio` | number (0 to 20) |  |
+| `imageFit` | see schema |  |
+| `imagePosition` | `top` or `bottom` |  |
 
 ### `carousel`
 
@@ -152,6 +200,14 @@ Parts you can style one by one with `style.parts`: `item`.
 | `items` | list of a widget, at least 1 | **required** |
 | `autoplay` | true or false |  |
 | `viewportFraction` | number (0.3 to 1) |  |
+| `height` | number (40 to 1200) |  |
+| `autoplayInterval` | number (1 to 60) |  |
+| `showDots` | true or false |  |
+| `spacing` | see schema |  |
+| `enlargeCenter` | true or false |  |
+| `initialIndex` | whole number (0 to 1000) |  |
+| `loop` | true or false |  |
+| `animationDuration` | whole number (50 to 5000) |  |
 
 ### `list`
 
@@ -163,6 +219,11 @@ Parts you can style one by one with `style.parts`: `item`, `divider`.
 |---|---|---|
 | `items` | list of a widget, at least 1 | **required** |
 | `dividers` | true or false |  |
+| `spacing` | see schema |  |
+| `height` | number (0 to 5000) |  |
+| `reverse` | true or false |  |
+| `dividerIndent` | see schema |  |
+| `dividerThickness` | number (0 to 10) |  |
 
 ### `grid`
 
@@ -174,6 +235,9 @@ Parts you can style one by one with `style.parts`: `item`.
 |---|---|---|
 | `columns` | whole number (1 to 6) | **required** |
 | `items` | list of a widget, at least 1 | **required** |
+| `mainAxisSpacing` | see schema |  |
+| `crossAxisSpacing` | see schema |  |
+| `childAspectRatio` | number (0 to 20) |  |
 
 ### `tabs`
 
@@ -183,7 +247,11 @@ Parts you can style one by one with `style.parts`: `tab`, `content`.
 
 | Field | Holds | |
 |---|---|---|
-| `tabs` | list of object with `id`, `label`, `widgets`, at least 1 | **required** |
+| `tabs` | list of object with `id`, `label`, `widgets`, `icon`, at least 1 | **required** |
+| `initialIndex` | whole number (0 to 50) |  |
+| `variant` | `chips` or `underline` or `segmented` |  |
+| `scrollable` | true or false |  |
+| `tabAlignment` | `start` or `center` or `end` or `stretch` |  |
 
 ### `accordion`
 
@@ -193,8 +261,11 @@ Parts you can style one by one with `style.parts`: `header`, `content`.
 
 | Field | Holds | |
 |---|---|---|
-| `items` | list of object with `title`, `widgets`, at least 1 | **required** |
+| `items` | list of object with `title`, `widgets`, `subtitle`, `icon`, at least 1 | **required** |
 | `allowMultiple` | true or false |  |
+| `initiallyOpen` | list of whole number (0 to 200) |  |
+| `dividers` | true or false |  |
+| `iconPosition` | `start` or `end` |  |
 
 ### `container`
 
@@ -205,6 +276,9 @@ Puts other widgets in a row or a column. (version 1)
 | `children` | list of a widget, at least 1 | **required** |
 | `direction` | `vertical` or `horizontal` |  |
 | `gap` | spacing name |  |
+| `mainAxisAlignment` | see schema |  |
+| `crossAxisAlignment` | see schema |  |
+| `wrap` | true or false |  |
 
 ## Media
 
@@ -212,13 +286,19 @@ Puts other widgets in a row or a column. (version 1)
 
 A wide picture with a title on top. (version 1)
 
-Parts you can style one by one with `style.parts`: `image`, `title`, `subtitle`.
+Parts you can style one by one with `style.parts`: `image`, `title`, `subtitle`, `overlay`, `button`.
 
 | Field | Holds | |
 |---|---|---|
 | `imageUrl` | web address | **required** |
 | `title` | text |  |
 | `subtitle` | text |  |
+| `height` | number (40 to 800) |  |
+| `overlayColor` | see schema |  |
+| `overlayOpacity` | number (0 to 1) |  |
+| `contentAlignment` | see schema |  |
+| `imageFit` | see schema |  |
+| `ctaLabel` | text |  |
 
 ### `gallery`
 
@@ -228,9 +308,15 @@ Parts you can style one by one with `style.parts`: `image`, `dots`.
 
 | Field | Holds | |
 |---|---|---|
-| `images` | list of object with `url`, `alt`, at least 1 | **required** |
+| `images` | list of object with `url`, `alt`, `caption`, at least 1 | **required** |
 | `aspectRatio` | number (0 to …) |  |
 | `showDots` | true or false |  |
+| `viewportFraction` | number (0.3 to 1) |  |
+| `autoplay` | true or false |  |
+| `autoplayInterval` | number (1 to 60) |  |
+| `fit` | see schema |  |
+| `showCounter` | true or false |  |
+| `loop` | true or false |  |
 
 ### `video_card`
 
@@ -243,12 +329,17 @@ Parts you can style one by one with `style.parts`: `image`, `title`, `duration`,
 | `thumbnailUrl` | web address | **required** |
 | `title` | text |  |
 | `duration` | text |  |
+| `aspectRatio` | number (0 to 10) |  |
+| `subtitle` | text |  |
+| `badge` | text |  |
+| `showPlay` | true or false |  |
+| `overlayOpacity` | number (0 to 1) |  |
 
 ### `hero`
 
 A big picture with a headline and a button. (version 1)
 
-Parts you can style one by one with `style.parts`: `image`, `title`, `subtitle`, `button`.
+Parts you can style one by one with `style.parts`: `image`, `title`, `subtitle`, `button`, `overlay`.
 
 | Field | Holds | |
 |---|---|---|
@@ -256,6 +347,11 @@ Parts you can style one by one with `style.parts`: `image`, `title`, `subtitle`,
 | `title` | text | **required** |
 | `subtitle` | text |  |
 | `ctaLabel` | text |  |
+| `height` | number (40 to 1200) |  |
+| `overlayColor` | see schema |  |
+| `overlayOpacity` | number (0 to 1) |  |
+| `contentAlignment` | see schema |  |
+| `imageFit` | see schema |  |
 
 ## Content
 
@@ -271,6 +367,12 @@ Parts you can style one by one with `style.parts`: `text`, `author`, `avatar`.
 | `author` | text |  |
 | `role` | text |  |
 | `avatarUrl` | web address |  |
+| `showBar` | true or false |  |
+| `barColor` | see schema |  |
+| `barWidth` | number (0 to 20) |  |
+| `italic` | true or false |  |
+| `avatarSize` | number (16 to 120) |  |
+| `showQuoteMark` | true or false |  |
 
 ### `avatar`
 
@@ -282,7 +384,13 @@ Parts you can style one by one with `style.parts`: `initials`.
 |---|---|---|
 | `imageUrl` | web address |  |
 | `initials` | text |  |
-| `size` | size name |  |
+| `size` | see schema |  |
+| `shape` | `circle` or `rounded` or `square` |  |
+| `backgroundColor` | see schema |  |
+| `foregroundColor` | see schema |  |
+| `status` | `none` or `online` or `offline` or `busy` or `away` |  |
+| `borderColor` | see schema |  |
+| `borderWidth` | number (0 to 10) |  |
 
 ### `alert`
 
@@ -295,6 +403,11 @@ Parts you can style one by one with `style.parts`: `icon`, `title`, `message`.
 | `message` | text | **required** |
 | `title` | text |  |
 | `tone` | tone name |  |
+| `icon` | icon name |  |
+| `showIcon` | true or false |  |
+| `variant` | `soft` or `solid` or `outline` or `accent` |  |
+| `dismissible` | true or false |  |
+| `actionLabel` | text |  |
 
 ### `progress`
 
@@ -304,9 +417,14 @@ Parts you can style one by one with `style.parts`: `label`, `track`, `fill`.
 
 | Field | Holds | |
 |---|---|---|
-| `value` | number (0 to 1) | **required** |
+| `value` | number (0 to 1) |  |
 | `label` | text |  |
 | `shape` | `linear` or `circular` |  |
+| `indeterminate` | true or false |  |
+| `strokeWidth` | number (1 to 40) |  |
+| `size` | number (16 to 300) |  |
+| `showPercent` | true or false |  |
+| `rounded` | true or false |  |
 
 ### `stat`
 
@@ -320,6 +438,9 @@ Parts you can style one by one with `style.parts`: `label`, `value`, `delta`.
 | `value` | text | **required** |
 | `delta` | text |  |
 | `trend` | `up` or `down` or `flat` |  |
+| `icon` | icon name |  |
+| `prefix` | text |  |
+| `suffix` | text |  |
 
 ### `key_value`
 
@@ -329,7 +450,11 @@ Parts you can style one by one with `style.parts`: `row`, `label`, `value`.
 
 | Field | Holds | |
 |---|---|---|
-| `rows` | list of object with `label`, `value`, at least 1 | **required** |
+| `rows` | list of object with `label`, `value`, `icon`, at least 1 | **required** |
+| `dividers` | true or false |  |
+| `layout` | `sideBySide` or `stacked` |  |
+| `valueAlign` | `start` or `end` |  |
+| `labelFraction` | number (0.1 to 0.9) |  |
 
 ### `list_item`
 
@@ -345,6 +470,14 @@ Parts you can style one by one with `style.parts`: `image`, `icon`, `title`, `su
 | `imageUrl` | web address |  |
 | `trailingText` | text |  |
 | `chevron` | true or false |  |
+| `dense` | true or false |  |
+| `selected` | true or false |  |
+| `trailingIcon` | icon name |  |
+| `imageSize` | number (16 to 120) |  |
+| `imageShape` | `circle` or `rounded` or `square` |  |
+| `titleMaxLines` | whole number (1 to 10) |  |
+| `subtitleMaxLines` | whole number (1 to 10) |  |
+| `badge` | text |  |
 
 ### `empty_state`
 
@@ -358,6 +491,9 @@ Parts you can style one by one with `style.parts`: `icon`, `title`, `message`, `
 | `message` | text |  |
 | `icon` | icon name |  |
 | `actionLabel` | text |  |
+| `imageUrl` | web address |  |
+| `iconSize` | number (16 to 200) |  |
+| `compact` | true or false |  |
 
 ### `steps`
 
@@ -367,7 +503,10 @@ Parts you can style one by one with `style.parts`: `dot`, `title`, `description`
 
 | Field | Holds | |
 |---|---|---|
-| `steps` | list of object with `title`, `description`, `state`, at least 1 | **required** |
+| `steps` | list of object with `title`, `description`, `state`, `icon`, at least 1 | **required** |
+| `direction` | `vertical` or `horizontal` |  |
+| `showConnector` | true or false |  |
+| `numbered` | true or false |  |
 
 ### `table`
 
@@ -379,6 +518,12 @@ Parts you can style one by one with `style.parts`: `header`, `cell`.
 |---|---|---|
 | `columns` | list of text, at least 1 | **required** |
 | `rows` | list of list of text | **required** |
+| `striped` | true or false |  |
+| `border` | `none` or `all` or `horizontal` |  |
+| `columnAlign` | list of `start` or `center` or `end` |  |
+| `columnWidths` | list of number (0.05 to 20) |  |
+| `dense` | true or false |  |
+| `firstColumnBold` | true or false |  |
 
 ### `countdown`
 
@@ -389,6 +534,11 @@ Time left until a date. (version 1)
 | `until` | date and time (UTC) | **required** |
 | `label` | text |  |
 | `endedText` | text |  |
+| `format` | `compact` or `long` or `clock` |  |
+| `showSeconds` | true or false |  |
+| `hideWhenEnded` | true or false |  |
+| `prefix` | text |  |
+| `suffix` | text |  |
 
 ### `pricing_card`
 
@@ -404,6 +554,11 @@ Parts you can style one by one with `style.parts`: `name`, `price`, `period`, `f
 | `features` | list of text |  |
 | `highlighted` | true or false |  |
 | `ctaLabel` | text |  |
+| `badge` | text |  |
+| `originalPrice` | text |  |
+| `description` | text |  |
+| `featureIcon` | icon name |  |
+| `disabledFeatures` | list of text |  |
 
 ### `rating`
 
@@ -413,9 +568,16 @@ Parts you can style one by one with `style.parts`: `stars`, `text`.
 
 | Field | Holds | |
 |---|---|---|
-| `value` | number (0 to 5) | **required** |
+| `value` | number (0 to 10) | **required** |
 | `count` | whole number (0 to …) |  |
 | `label` | text |  |
+| `max` | whole number (1 to 10) |  |
+| `size` | number (8 to 64) |  |
+| `icon` | `star` or `heart` or `thumb` or `circle` |  |
+| `color` | see schema |  |
+| `emptyColor` | see schema |  |
+| `showValue` | true or false |  |
+| `showCount` | true or false |  |
 
 ## Interactive
 
@@ -428,6 +590,10 @@ Parts you can style one by one with `style.parts`: `field`.
 | Field | Holds | |
 |---|---|---|
 | `placeholder` | text | **required** |
+| `leadingIcon` | icon name |  |
+| `trailingIcon` | icon name |  |
+| `filled` | true or false |  |
+| `height` | number (24 to 120) |  |
 
 ### `chips`
 
@@ -437,7 +603,12 @@ Parts you can style one by one with `style.parts`: `chip`.
 
 | Field | Holds | |
 |---|---|---|
-| `chips` | list of object with `label`, `selected`, `action`, at least 1 | **required** |
+| `chips` | list of object with `label`, `selected`, `action`, `icon`, `avatarUrl`, `disabled`, at least 1 | **required** |
+| `variant` | `filter` or `choice` or `input` or `assist` |  |
+| `spacing` | see schema |  |
+| `runSpacing` | see schema |  |
+| `scrollable` | true or false |  |
+| `alignment` | see schema |  |
 
 ### `quick_actions`
 
@@ -447,8 +618,14 @@ Parts you can style one by one with `style.parts`: `item`, `icon`, `label`.
 
 | Field | Holds | |
 |---|---|---|
-| `items` | list of object with `label`, `icon`, `action`, at least 1 | **required** |
+| `items` | list of object with `label`, `icon`, `action`, `badge`, at least 1 | **required** |
 | `columns` | whole number (2 to 6) |  |
+| `shape` | `circle` or `rounded` or `square` |  |
+| `iconSize` | number (12 to 100) |  |
+| `size` | number (24 to 120) |  |
+| `showLabels` | true or false |  |
+| `spacing` | see schema |  |
+| `labelMaxLines` | whole number (1 to 5) |  |
 
 ### `form`
 
@@ -458,8 +635,13 @@ Parts you can style one by one with `style.parts`: `label`, `field`, `button`.
 
 | Field | Holds | |
 |---|---|---|
-| `fields` | list of object with `name`, `type`, `label`, `required`, `placeholder`, `options`, at least 1 | **required** |
+| `fields` | list of object with `name`, `type`, `label`, `required`, `placeholder`, `options`, `helperText`, `initialValue`, `minLength`, `maxLength`, `min`, `max`, `pattern`, `patternMessage`, `rows`, `readOnly`, `icon`, at least 1 | **required** |
 | `submitLabel` | text | **required** |
+| `spacing` | see schema |  |
+| `fieldVariant` | `outlined` or `filled` or `underline` |  |
+| `submitFullWidth` | true or false |  |
+| `submitIcon` | icon name |  |
+| `resetLabel` | text |  |
 
 ## Live data
 
@@ -478,6 +660,13 @@ Parts you can style one by one with `style.parts`: `item`.
 | `layout` | `list` or `carousel` or `grid` |  |
 | `columns` | whole number (1 to 6) |  |
 | `emptyText` | text |  |
+| `spacing` | see schema |  |
+| `dividers` | true or false |  |
+| `loadingRows` | whole number (0 to 10) |  |
+| `errorText` | text |  |
+| `retryLabel` | text |  |
+| `itemWidth` | number (0.1 to 1) |  |
+| `height` | number (0 to 5000) |  |
 
 ## Building blocks
 

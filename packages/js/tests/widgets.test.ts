@@ -46,7 +46,7 @@ const cases: Array<[string, unknown, unknown]> = [
   ["search_bar", { placeholder: "Search" }, {}],
   ["chips", { chips: [{ label: "A" }] }, { chips: [{ selected: true }] }],
   ["quick_actions", { items: [{ label: "A", icon: "home" }] }, { items: [{ label: "A", icon: "nope" }] }],
-  ["rating", { value: 4.5, count: 10 }, { value: 6 }],
+  ["rating", { value: 4.5, count: 10 }, { value: 11 }],
   ["container", { children: [sampleText], direction: "horizontal" }, { children: [] }],
   // Building blocks (named after Flutter's own widgets)
   ["row", { children: [sampleText], mainAxisAlignment: "spaceBetween", crossAxisAlignment: "center", spacing: 12 }, { children: [sampleText], mainAxisAlignment: "middle" }],

@@ -27,6 +27,24 @@
     },
     "ctaLabel": {
       "type": "string"
+    },
+    "badge": {
+      "type": "string"
+    },
+    "originalPrice": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "featureIcon": {
+      "$ref": "../common/tokens.json#/$defs/icon"
+    },
+    "disabledFeatures": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
     }
   },
   "required": [

@@ -14,7 +14,37 @@
       "maxLength": 3
     },
     "size": {
-      "$ref": "../common/tokens.json#/$defs/size"
+      "$ref": "../common/layout.json#/$defs/iconSize"
+    },
+    "shape": {
+      "enum": [
+        "circle",
+        "rounded",
+        "square"
+      ]
+    },
+    "backgroundColor": {
+      "$ref": "../common/style.json#/$defs/colour"
+    },
+    "foregroundColor": {
+      "$ref": "../common/style.json#/$defs/colour"
+    },
+    "status": {
+      "enum": [
+        "none",
+        "online",
+        "offline",
+        "busy",
+        "away"
+      ]
+    },
+    "borderColor": {
+      "$ref": "../common/style.json#/$defs/colour"
+    },
+    "borderWidth": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 10
     }
   },
   "additionalProperties": false,

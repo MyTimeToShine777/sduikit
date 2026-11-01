@@ -433,7 +433,9 @@ export const schemaFiles: Record<string, unknown> = {
         "parts": [
           "image",
           "title",
-          "subtitle"
+          "subtitle",
+          "overlay",
+          "button"
         ]
       },
       "carousel": {
@@ -788,7 +790,8 @@ export const schemaFiles: Record<string, unknown> = {
           "image",
           "title",
           "subtitle",
-          "button"
+          "button",
+          "overlay"
         ]
       },
       "pricing_card": {
@@ -1547,6 +1550,27 @@ export const schemaFiles: Record<string, unknown> = {
           }
         },
         "additionalProperties": false
+      },
+      "iconSize": {
+        "type": [
+          "string",
+          "number"
+        ],
+        "if": {
+          "type": "string"
+        },
+        "then": {
+          "enum": [
+            "small",
+            "medium",
+            "large"
+          ]
+        },
+        "else": {
+          "minimum": 8,
+          "maximum": 300
+        },
+        "description": "A size name (small, medium, large) or a number of pixels."
       }
     }
   },
@@ -2552,6 +2576,12 @@ export const schemaFiles: Record<string, unknown> = {
               "items": {
                 "$ref": "../common/widget.json"
               }
+            },
+            "subtitle": {
+              "type": "string"
+            },
+            "icon": {
+              "$ref": "../common/tokens.json#/$defs/icon"
             }
           },
           "required": [
@@ -2564,6 +2594,23 @@ export const schemaFiles: Record<string, unknown> = {
       },
       "allowMultiple": {
         "type": "boolean"
+      },
+      "initiallyOpen": {
+        "type": "array",
+        "items": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 200
+        }
+      },
+      "dividers": {
+        "type": "boolean"
+      },
+      "iconPosition": {
+        "enum": [
+          "start",
+          "end"
+        ]
       }
     },
     "required": [
@@ -2586,6 +2633,26 @@ export const schemaFiles: Record<string, unknown> = {
       },
       "tone": {
         "$ref": "../common/tokens.json#/$defs/tone"
+      },
+      "icon": {
+        "$ref": "../common/tokens.json#/$defs/icon"
+      },
+      "showIcon": {
+        "type": "boolean"
+      },
+      "variant": {
+        "enum": [
+          "soft",
+          "solid",
+          "outline",
+          "accent"
+        ]
+      },
+      "dismissible": {
+        "type": "boolean"
+      },
+      "actionLabel": {
+        "type": "string"
       }
     },
     "required": [
@@ -2665,7 +2732,37 @@ export const schemaFiles: Record<string, unknown> = {
         "maxLength": 3
       },
       "size": {
-        "$ref": "../common/tokens.json#/$defs/size"
+        "$ref": "../common/layout.json#/$defs/iconSize"
+      },
+      "shape": {
+        "enum": [
+          "circle",
+          "rounded",
+          "square"
+        ]
+      },
+      "backgroundColor": {
+        "$ref": "../common/style.json#/$defs/colour"
+      },
+      "foregroundColor": {
+        "$ref": "../common/style.json#/$defs/colour"
+      },
+      "status": {
+        "enum": [
+          "none",
+          "online",
+          "offline",
+          "busy",
+          "away"
+        ]
+      },
+      "borderColor": {
+        "$ref": "../common/style.json#/$defs/colour"
+      },
+      "borderWidth": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 10
       }
     },
     "additionalProperties": false,
@@ -2704,6 +2801,33 @@ export const schemaFiles: Record<string, unknown> = {
       },
       "tone": {
         "$ref": "../common/tokens.json#/$defs/tone"
+      },
+      "icon": {
+        "$ref": "../common/tokens.json#/$defs/icon"
+      },
+      "size": {
+        "enum": [
+          "small",
+          "medium",
+          "large"
+        ]
+      },
+      "variant": {
+        "enum": [
+          "soft",
+          "solid",
+          "outline"
+        ]
+      },
+      "shape": {
+        "enum": [
+          "pill",
+          "rounded",
+          "square"
+        ]
+      },
+      "dot": {
+        "type": "boolean"
       }
     },
     "required": [
@@ -2725,6 +2849,28 @@ export const schemaFiles: Record<string, unknown> = {
         "type": "string"
       },
       "subtitle": {
+        "type": "string"
+      },
+      "height": {
+        "type": "number",
+        "minimum": 40,
+        "maximum": 800
+      },
+      "overlayColor": {
+        "$ref": "../common/style.json#/$defs/colour"
+      },
+      "overlayOpacity": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 1
+      },
+      "contentAlignment": {
+        "$ref": "../common/layout.json#/$defs/alignment"
+      },
+      "imageFit": {
+        "$ref": "../common/layout.json#/$defs/boxFit"
+      },
+      "ctaLabel": {
         "type": "string"
       }
     },
@@ -2815,8 +2961,38 @@ export const schemaFiles: Record<string, unknown> = {
         "enum": [
           "filled",
           "outline",
-          "text"
+          "text",
+          "tonal",
+          "elevated"
         ]
+      },
+      "icon": {
+        "$ref": "../common/tokens.json#/$defs/icon"
+      },
+      "iconPosition": {
+        "enum": [
+          "start",
+          "end"
+        ]
+      },
+      "size": {
+        "enum": [
+          "small",
+          "medium",
+          "large"
+        ]
+      },
+      "fullWidth": {
+        "type": "boolean"
+      },
+      "enabled": {
+        "type": "boolean"
+      },
+      "loading": {
+        "type": "boolean"
+      },
+      "tooltip": {
+        "type": "string"
       }
     },
     "required": [
@@ -2846,6 +3022,33 @@ export const schemaFiles: Record<string, unknown> = {
         "items": {
           "$ref": "../common/widget.json"
         }
+      },
+      "elevation": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 24
+      },
+      "outlined": {
+        "type": "boolean"
+      },
+      "imageHeight": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 1000
+      },
+      "imageAspectRatio": {
+        "type": "number",
+        "exclusiveMinimum": 0,
+        "maximum": 20
+      },
+      "imageFit": {
+        "$ref": "../common/layout.json#/$defs/boxFit"
+      },
+      "imagePosition": {
+        "enum": [
+          "top",
+          "bottom"
+        ]
       }
     },
     "minProperties": 1,
@@ -2871,6 +3074,38 @@ export const schemaFiles: Record<string, unknown> = {
         "type": "number",
         "minimum": 0.3,
         "maximum": 1
+      },
+      "height": {
+        "type": "number",
+        "minimum": 40,
+        "maximum": 1200
+      },
+      "autoplayInterval": {
+        "type": "number",
+        "minimum": 1,
+        "maximum": 60
+      },
+      "showDots": {
+        "type": "boolean"
+      },
+      "spacing": {
+        "$ref": "../common/style.json#/$defs/space"
+      },
+      "enlargeCenter": {
+        "type": "boolean"
+      },
+      "initialIndex": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 1000
+      },
+      "loop": {
+        "type": "boolean"
+      },
+      "animationDuration": {
+        "type": "integer",
+        "minimum": 50,
+        "maximum": 5000
       }
     },
     "required": [
@@ -2914,6 +3149,16 @@ export const schemaFiles: Record<string, unknown> = {
             },
             "action": {
               "$ref": "../common/action.json"
+            },
+            "icon": {
+              "$ref": "../common/tokens.json#/$defs/icon"
+            },
+            "avatarUrl": {
+              "type": "string",
+              "format": "uri"
+            },
+            "disabled": {
+              "type": "boolean"
             }
           },
           "required": [
@@ -2922,6 +3167,26 @@ export const schemaFiles: Record<string, unknown> = {
           "additionalProperties": false
         },
         "minItems": 1
+      },
+      "variant": {
+        "enum": [
+          "filter",
+          "choice",
+          "input",
+          "assist"
+        ]
+      },
+      "spacing": {
+        "$ref": "../common/style.json#/$defs/space"
+      },
+      "runSpacing": {
+        "$ref": "../common/style.json#/$defs/space"
+      },
+      "scrollable": {
+        "type": "boolean"
+      },
+      "alignment": {
+        "$ref": "../common/layout.json#/$defs/mainAxisAlignment"
       }
     },
     "required": [
@@ -3037,6 +3302,15 @@ export const schemaFiles: Record<string, unknown> = {
       },
       "gap": {
         "$ref": "../common/tokens.json#/$defs/spacing"
+      },
+      "mainAxisAlignment": {
+        "$ref": "../common/layout.json#/$defs/mainAxisAlignment"
+      },
+      "crossAxisAlignment": {
+        "$ref": "../common/layout.json#/$defs/crossAxisAlignment"
+      },
+      "wrap": {
+        "type": "boolean"
       }
     },
     "required": [
@@ -3058,6 +3332,25 @@ export const schemaFiles: Record<string, unknown> = {
         "type": "string"
       },
       "endedText": {
+        "type": "string"
+      },
+      "format": {
+        "enum": [
+          "compact",
+          "long",
+          "clock"
+        ]
+      },
+      "showSeconds": {
+        "type": "boolean"
+      },
+      "hideWhenEnded": {
+        "type": "boolean"
+      },
+      "prefix": {
+        "type": "string"
+      },
+      "suffix": {
         "type": "string"
       }
     },
@@ -3111,6 +3404,33 @@ export const schemaFiles: Record<string, unknown> = {
       },
       "emptyText": {
         "type": "string"
+      },
+      "spacing": {
+        "$ref": "../common/style.json#/$defs/space"
+      },
+      "dividers": {
+        "type": "boolean"
+      },
+      "loadingRows": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 10
+      },
+      "errorText": {
+        "type": "string"
+      },
+      "retryLabel": {
+        "type": "string"
+      },
+      "itemWidth": {
+        "type": "number",
+        "minimum": 0.1,
+        "maximum": 1
+      },
+      "height": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 5000
       }
     },
     "required": [
@@ -3124,7 +3444,28 @@ export const schemaFiles: Record<string, unknown> = {
     "$id": "https://sduikit.dev/schemas/widgets/divider.v1.json",
     "title": "divider (v1) data",
     "type": "object",
-    "properties": {},
+    "properties": {
+      "thickness": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 20
+      },
+      "indent": {
+        "$ref": "../common/style.json#/$defs/space"
+      },
+      "endIndent": {
+        "$ref": "../common/style.json#/$defs/space"
+      },
+      "color": {
+        "$ref": "../common/style.json#/$defs/colour"
+      },
+      "vertical": {
+        "type": "boolean"
+      },
+      "space": {
+        "$ref": "../common/style.json#/$defs/space"
+      }
+    },
     "additionalProperties": false
   },
   "widgets/empty_state.v1.json": {
@@ -3145,6 +3486,18 @@ export const schemaFiles: Record<string, unknown> = {
       },
       "actionLabel": {
         "type": "string"
+      },
+      "imageUrl": {
+        "type": "string",
+        "format": "uri"
+      },
+      "iconSize": {
+        "type": "number",
+        "minimum": 16,
+        "maximum": 200
+      },
+      "compact": {
+        "type": "boolean"
       }
     },
     "required": [
@@ -3289,6 +3642,45 @@ export const schemaFiles: Record<string, unknown> = {
                 "additionalProperties": false
               },
               "minItems": 1
+            },
+            "helperText": {
+              "type": "string"
+            },
+            "initialValue": {
+              "type": "string"
+            },
+            "minLength": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10000
+            },
+            "maxLength": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 10000
+            },
+            "min": {
+              "type": "number"
+            },
+            "max": {
+              "type": "number"
+            },
+            "pattern": {
+              "type": "string"
+            },
+            "patternMessage": {
+              "type": "string"
+            },
+            "rows": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 12
+            },
+            "readOnly": {
+              "type": "boolean"
+            },
+            "icon": {
+              "$ref": "../common/tokens.json#/$defs/icon"
             }
           },
           "required": [
@@ -3303,6 +3695,25 @@ export const schemaFiles: Record<string, unknown> = {
       "submitLabel": {
         "type": "string",
         "minLength": 1
+      },
+      "spacing": {
+        "$ref": "../common/style.json#/$defs/space"
+      },
+      "fieldVariant": {
+        "enum": [
+          "outlined",
+          "filled",
+          "underline"
+        ]
+      },
+      "submitFullWidth": {
+        "type": "boolean"
+      },
+      "submitIcon": {
+        "$ref": "../common/tokens.json#/$defs/icon"
+      },
+      "resetLabel": {
+        "type": "string"
       }
     },
     "required": [
@@ -3357,6 +3768,9 @@ export const schemaFiles: Record<string, unknown> = {
             },
             "alt": {
               "type": "string"
+            },
+            "caption": {
+              "type": "string"
             }
           },
           "required": [
@@ -3371,6 +3785,28 @@ export const schemaFiles: Record<string, unknown> = {
         "exclusiveMinimum": 0
       },
       "showDots": {
+        "type": "boolean"
+      },
+      "viewportFraction": {
+        "type": "number",
+        "minimum": 0.3,
+        "maximum": 1
+      },
+      "autoplay": {
+        "type": "boolean"
+      },
+      "autoplayInterval": {
+        "type": "number",
+        "minimum": 1,
+        "maximum": 60
+      },
+      "fit": {
+        "$ref": "../common/layout.json#/$defs/boxFit"
+      },
+      "showCounter": {
+        "type": "boolean"
+      },
+      "loop": {
         "type": "boolean"
       }
     },
@@ -3396,6 +3832,17 @@ export const schemaFiles: Record<string, unknown> = {
           "$ref": "../common/widget.json"
         },
         "minItems": 1
+      },
+      "mainAxisSpacing": {
+        "$ref": "../common/style.json#/$defs/space"
+      },
+      "crossAxisSpacing": {
+        "$ref": "../common/style.json#/$defs/space"
+      },
+      "childAspectRatio": {
+        "type": "number",
+        "exclusiveMinimum": 0,
+        "maximum": 20
       }
     },
     "required": [
@@ -3467,6 +3914,25 @@ export const schemaFiles: Record<string, unknown> = {
       },
       "ctaLabel": {
         "type": "string"
+      },
+      "height": {
+        "type": "number",
+        "minimum": 40,
+        "maximum": 1200
+      },
+      "overlayColor": {
+        "$ref": "../common/style.json#/$defs/colour"
+      },
+      "overlayOpacity": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 1
+      },
+      "contentAlignment": {
+        "$ref": "../common/layout.json#/$defs/alignment"
+      },
+      "imageFit": {
+        "$ref": "../common/layout.json#/$defs/boxFit"
       }
     },
     "required": [
@@ -3485,7 +3951,35 @@ export const schemaFiles: Record<string, unknown> = {
         "$ref": "../common/tokens.json#/$defs/icon"
       },
       "size": {
-        "$ref": "../common/tokens.json#/$defs/size"
+        "$ref": "../common/layout.json#/$defs/iconSize"
+      },
+      "color": {
+        "$ref": "../common/style.json#/$defs/colour"
+      },
+      "rotation": {
+        "type": "number",
+        "minimum": -360,
+        "maximum": 360
+      },
+      "flipX": {
+        "type": "boolean"
+      },
+      "background": {
+        "$ref": "../common/style.json#/$defs/colour"
+      },
+      "shape": {
+        "enum": [
+          "none",
+          "circle",
+          "square",
+          "rounded"
+        ]
+      },
+      "padding": {
+        "$ref": "../common/style.json#/$defs/space"
+      },
+      "tooltip": {
+        "type": "string"
       }
     },
     "required": [
@@ -3511,10 +4005,30 @@ export const schemaFiles: Record<string, unknown> = {
         "exclusiveMinimum": 0
       },
       "fit": {
+        "$ref": "../common/layout.json#/$defs/boxFit"
+      },
+      "alignment": {
+        "$ref": "../common/layout.json#/$defs/alignment"
+      },
+      "repeat": {
         "enum": [
-          "cover",
-          "contain"
+          "noRepeat",
+          "repeat",
+          "repeatX",
+          "repeatY"
         ]
+      },
+      "placeholderColor": {
+        "$ref": "../common/style.json#/$defs/colour"
+      },
+      "showLoader": {
+        "type": "boolean"
+      },
+      "errorText": {
+        "type": "string"
+      },
+      "grayscale": {
+        "type": "boolean"
       }
     },
     "required": [
@@ -3584,6 +4098,9 @@ export const schemaFiles: Record<string, unknown> = {
             },
             "value": {
               "type": "string"
+            },
+            "icon": {
+              "$ref": "../common/tokens.json#/$defs/icon"
             }
           },
           "required": [
@@ -3593,6 +4110,26 @@ export const schemaFiles: Record<string, unknown> = {
           "additionalProperties": false
         },
         "minItems": 1
+      },
+      "dividers": {
+        "type": "boolean"
+      },
+      "layout": {
+        "enum": [
+          "sideBySide",
+          "stacked"
+        ]
+      },
+      "valueAlign": {
+        "enum": [
+          "start",
+          "end"
+        ]
+      },
+      "labelFraction": {
+        "type": "number",
+        "minimum": 0.1,
+        "maximum": 0.9
       }
     },
     "required": [
@@ -3615,6 +4152,25 @@ export const schemaFiles: Record<string, unknown> = {
       },
       "dividers": {
         "type": "boolean"
+      },
+      "spacing": {
+        "$ref": "../common/style.json#/$defs/space"
+      },
+      "height": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 5000
+      },
+      "reverse": {
+        "type": "boolean"
+      },
+      "dividerIndent": {
+        "$ref": "../common/style.json#/$defs/space"
+      },
+      "dividerThickness": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 10
       }
     },
     "required": [
@@ -3647,6 +4203,40 @@ export const schemaFiles: Record<string, unknown> = {
       },
       "chevron": {
         "type": "boolean"
+      },
+      "dense": {
+        "type": "boolean"
+      },
+      "selected": {
+        "type": "boolean"
+      },
+      "trailingIcon": {
+        "$ref": "../common/tokens.json#/$defs/icon"
+      },
+      "imageSize": {
+        "type": "number",
+        "minimum": 16,
+        "maximum": 120
+      },
+      "imageShape": {
+        "enum": [
+          "circle",
+          "rounded",
+          "square"
+        ]
+      },
+      "titleMaxLines": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 10
+      },
+      "subtitleMaxLines": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 10
+      },
+      "badge": {
+        "type": "string"
       }
     },
     "required": [
@@ -3800,6 +4390,24 @@ export const schemaFiles: Record<string, unknown> = {
       },
       "ctaLabel": {
         "type": "string"
+      },
+      "badge": {
+        "type": "string"
+      },
+      "originalPrice": {
+        "type": "string"
+      },
+      "description": {
+        "type": "string"
+      },
+      "featureIcon": {
+        "$ref": "../common/tokens.json#/$defs/icon"
+      },
+      "disabledFeatures": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
       }
     },
     "required": [
@@ -3827,11 +4435,27 @@ export const schemaFiles: Record<string, unknown> = {
           "linear",
           "circular"
         ]
+      },
+      "indeterminate": {
+        "type": "boolean"
+      },
+      "strokeWidth": {
+        "type": "number",
+        "minimum": 1,
+        "maximum": 40
+      },
+      "size": {
+        "type": "number",
+        "minimum": 16,
+        "maximum": 300
+      },
+      "showPercent": {
+        "type": "boolean"
+      },
+      "rounded": {
+        "type": "boolean"
       }
     },
-    "required": [
-      "value"
-    ],
     "additionalProperties": false
   },
   "widgets/quick_actions.v1.json": {
@@ -3854,6 +4478,9 @@ export const schemaFiles: Record<string, unknown> = {
             },
             "action": {
               "$ref": "../common/action.json"
+            },
+            "badge": {
+              "type": "string"
             }
           },
           "required": [
@@ -3868,6 +4495,34 @@ export const schemaFiles: Record<string, unknown> = {
         "type": "integer",
         "minimum": 2,
         "maximum": 6
+      },
+      "shape": {
+        "enum": [
+          "circle",
+          "rounded",
+          "square"
+        ]
+      },
+      "iconSize": {
+        "type": "number",
+        "minimum": 12,
+        "maximum": 100
+      },
+      "size": {
+        "type": "number",
+        "minimum": 24,
+        "maximum": 120
+      },
+      "showLabels": {
+        "type": "boolean"
+      },
+      "spacing": {
+        "$ref": "../common/style.json#/$defs/space"
+      },
+      "labelMaxLines": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 5
       }
     },
     "required": [
@@ -3894,6 +4549,28 @@ export const schemaFiles: Record<string, unknown> = {
       "avatarUrl": {
         "type": "string",
         "format": "uri"
+      },
+      "showBar": {
+        "type": "boolean"
+      },
+      "barColor": {
+        "$ref": "../common/style.json#/$defs/colour"
+      },
+      "barWidth": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 20
+      },
+      "italic": {
+        "type": "boolean"
+      },
+      "avatarSize": {
+        "type": "number",
+        "minimum": 16,
+        "maximum": 120
+      },
+      "showQuoteMark": {
+        "type": "boolean"
       }
     },
     "required": [
@@ -3910,7 +4587,7 @@ export const schemaFiles: Record<string, unknown> = {
       "value": {
         "type": "number",
         "minimum": 0,
-        "maximum": 5
+        "maximum": 10
       },
       "count": {
         "type": "integer",
@@ -3918,6 +4595,36 @@ export const schemaFiles: Record<string, unknown> = {
       },
       "label": {
         "type": "string"
+      },
+      "max": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 10
+      },
+      "size": {
+        "type": "number",
+        "minimum": 8,
+        "maximum": 64
+      },
+      "icon": {
+        "enum": [
+          "star",
+          "heart",
+          "thumb",
+          "circle"
+        ]
+      },
+      "color": {
+        "$ref": "../common/style.json#/$defs/colour"
+      },
+      "emptyColor": {
+        "$ref": "../common/style.json#/$defs/colour"
+      },
+      "showValue": {
+        "type": "boolean"
+      },
+      "showCount": {
+        "type": "boolean"
       }
     },
     "required": [
@@ -3950,10 +4657,31 @@ export const schemaFiles: Record<string, unknown> = {
               "type": "boolean"
             },
             "color": {
-              "$ref": "../common/tokens.json#/$defs/color"
+              "$ref": "../common/style.json#/$defs/colour"
             },
             "size": {
-              "$ref": "../common/tokens.json#/$defs/textSize"
+              "$ref": "../common/style.json#/$defs/textSize"
+            },
+            "strikethrough": {
+              "type": "boolean"
+            },
+            "background": {
+              "$ref": "../common/style.json#/$defs/colour"
+            },
+            "action": {
+              "$ref": "../common/action.json"
+            },
+            "weight": {
+              "enum": [
+                "normal",
+                "medium",
+                "bold"
+              ]
+            },
+            "letterSpacing": {
+              "type": "number",
+              "minimum": -5,
+              "maximum": 50
             }
           },
           "required": [
@@ -3962,6 +4690,9 @@ export const schemaFiles: Record<string, unknown> = {
           "additionalProperties": false
         },
         "minItems": 1
+      },
+      "selectable": {
+        "type": "boolean"
       }
     },
     "required": [
@@ -4063,6 +4794,20 @@ export const schemaFiles: Record<string, unknown> = {
       "placeholder": {
         "type": "string",
         "minLength": 1
+      },
+      "leadingIcon": {
+        "$ref": "../common/tokens.json#/$defs/icon"
+      },
+      "trailingIcon": {
+        "$ref": "../common/tokens.json#/$defs/icon"
+      },
+      "filled": {
+        "type": "boolean"
+      },
+      "height": {
+        "type": "number",
+        "minimum": 24,
+        "maximum": 120
       }
     },
     "required": [
@@ -4085,6 +4830,23 @@ export const schemaFiles: Record<string, unknown> = {
       },
       "actionLabel": {
         "type": "string"
+      },
+      "icon": {
+        "$ref": "../common/tokens.json#/$defs/icon"
+      },
+      "actionIcon": {
+        "$ref": "../common/tokens.json#/$defs/icon"
+      },
+      "showDivider": {
+        "type": "boolean"
+      },
+      "titleMaxLines": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 10
+      },
+      "uppercase": {
+        "type": "boolean"
       }
     },
     "required": [
@@ -4150,12 +4912,15 @@ export const schemaFiles: Record<string, unknown> = {
     "type": "object",
     "properties": {
       "size": {
-        "$ref": "../common/tokens.json#/$defs/spacing"
+        "$ref": "../common/style.json#/$defs/space"
+      },
+      "width": {
+        "$ref": "../common/style.json#/$defs/space"
+      },
+      "height": {
+        "$ref": "../common/style.json#/$defs/space"
       }
     },
-    "required": [
-      "size"
-    ],
     "additionalProperties": false
   },
   "widgets/stack.v1.json": {
@@ -4217,6 +4982,15 @@ export const schemaFiles: Record<string, unknown> = {
           "down",
           "flat"
         ]
+      },
+      "icon": {
+        "$ref": "../common/tokens.json#/$defs/icon"
+      },
+      "prefix": {
+        "type": "string"
+      },
+      "suffix": {
+        "type": "string"
       }
     },
     "required": [
@@ -4249,6 +5023,9 @@ export const schemaFiles: Record<string, unknown> = {
                 "current",
                 "todo"
               ]
+            },
+            "icon": {
+              "$ref": "../common/tokens.json#/$defs/icon"
             }
           },
           "required": [
@@ -4257,6 +5034,18 @@ export const schemaFiles: Record<string, unknown> = {
           "additionalProperties": false
         },
         "minItems": 1
+      },
+      "direction": {
+        "enum": [
+          "vertical",
+          "horizontal"
+        ]
+      },
+      "showConnector": {
+        "type": "boolean"
+      },
+      "numbered": {
+        "type": "boolean"
       }
     },
     "required": [
@@ -4286,6 +5075,40 @@ export const schemaFiles: Record<string, unknown> = {
             "type": "string"
           }
         }
+      },
+      "striped": {
+        "type": "boolean"
+      },
+      "border": {
+        "enum": [
+          "none",
+          "all",
+          "horizontal"
+        ]
+      },
+      "columnAlign": {
+        "type": "array",
+        "items": {
+          "enum": [
+            "start",
+            "center",
+            "end"
+          ]
+        }
+      },
+      "columnWidths": {
+        "type": "array",
+        "items": {
+          "type": "number",
+          "minimum": 0.05,
+          "maximum": 20
+        }
+      },
+      "dense": {
+        "type": "boolean"
+      },
+      "firstColumnBold": {
+        "type": "boolean"
       }
     },
     "required": [
@@ -4319,6 +5142,9 @@ export const schemaFiles: Record<string, unknown> = {
               "items": {
                 "$ref": "../common/widget.json"
               }
+            },
+            "icon": {
+              "$ref": "../common/tokens.json#/$defs/icon"
             }
           },
           "required": [
@@ -4328,6 +5154,29 @@ export const schemaFiles: Record<string, unknown> = {
           ],
           "additionalProperties": false
         }
+      },
+      "initialIndex": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 50
+      },
+      "variant": {
+        "enum": [
+          "chips",
+          "underline",
+          "segmented"
+        ]
+      },
+      "scrollable": {
+        "type": "boolean"
+      },
+      "tabAlignment": {
+        "enum": [
+          "start",
+          "center",
+          "end",
+          "stretch"
+        ]
       }
     },
     "required": [
@@ -4348,6 +5197,12 @@ export const schemaFiles: Record<string, unknown> = {
       "maxLines": {
         "type": "integer",
         "minimum": 1
+      },
+      "selectable": {
+        "type": "boolean"
+      },
+      "semanticsLabel": {
+        "type": "string"
       }
     },
     "required": [
@@ -4418,6 +5273,25 @@ export const schemaFiles: Record<string, unknown> = {
       },
       "duration": {
         "type": "string"
+      },
+      "aspectRatio": {
+        "type": "number",
+        "exclusiveMinimum": 0,
+        "maximum": 10
+      },
+      "subtitle": {
+        "type": "string"
+      },
+      "badge": {
+        "type": "string"
+      },
+      "showPlay": {
+        "type": "boolean"
+      },
+      "overlayOpacity": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 1
       }
     },
     "required": [

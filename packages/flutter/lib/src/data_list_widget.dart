@@ -7,6 +7,7 @@ import 'layout.dart';
 import 'model.dart';
 import 'render.dart';
 import 'template.dart';
+import 'theme.dart';
 
 /// The `data_list` widget: asks the app's data loader for rows and draws the template once per row.
 Widget buildDataList(BuildContext context, SduiNode node, SduiRender render) {
@@ -37,6 +38,13 @@ Widget buildDataList(BuildContext context, SduiNode node, SduiRender render) {
       layout: node.string('layout') ?? 'list',
       columns: node.integer('columns') ?? 2,
       emptyText: node.string('emptyText'),
+      spacing: context.sduiTokens.space(node.data['spacing']) ?? 0,
+      dividers: node.boolean('dividers') ?? false,
+      loadingRows: node.integer('loadingRows') ?? 3,
+      errorText: node.string('errorText'),
+      retryLabel: node.string('retryLabel'),
+      itemWidth: node.number('itemWidth') ?? 0.85,
+      height: node.number('height'),
       loader: loader,
       render: render,
       node: node,
@@ -53,6 +61,13 @@ class _SduiDataList extends StatefulWidget {
     required this.layout,
     required this.columns,
     required this.emptyText,
+    required this.spacing,
+    required this.dividers,
+    required this.loadingRows,
+    required this.errorText,
+    required this.retryLabel,
+    required this.itemWidth,
+    required this.height,
     required this.loader,
     required this.render,
     required this.node,
@@ -64,6 +79,13 @@ class _SduiDataList extends StatefulWidget {
   final String layout;
   final int columns;
   final String? emptyText;
+  final double spacing; // space between rows
+  final bool dividers; // a line between rows
+  final int loadingRows; // how many grey rows show while loading
+  final String? errorText; // shown when the rows could not be loaded
+  final String? retryLabel; // the retry button's words
+  final double itemWidth; // in the carousel layout, how much of the width one row takes
+  final double? height; // gives the list a fixed height that scrolls
   final SduiDataLoader loader;
   final SduiRender render;
   final SduiNode node;
@@ -104,9 +126,9 @@ class _SduiDataListState extends State<_SduiDataList> {
 
   @override
   Widget build(BuildContext context) {
-    if (_failed) return _InlineRetry(onRetry: _retry);
+    if (_failed) return _InlineRetry(onRetry: _retry, text: widget.errorText, retryLabel: widget.retryLabel);
     final rows = _rows;
-    if (rows == null) return const _LoadingRows();
+    if (rows == null) return _LoadingRows(count: widget.loadingRows);
 
     if (rows.isEmpty) {
       final text = widget.emptyText;
@@ -123,26 +145,40 @@ class _SduiDataListState extends State<_SduiDataList> {
       items.add(widget.render.part(context, widget.node, 'item', widget.render.build(context, node)));
     }
 
-    switch (widget.layout) {
-      case 'carousel':
-        final width = MediaQuery.sizeOf(context).width * 0.85;
-        return SingleChildScrollView(
+    final Widget list = switch (widget.layout) {
+      'carousel' => SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [for (final item in items) SizedBox(width: width, child: item)],
+            children: [
+              for (var index = 0; index < items.length; index++) ...[
+                if (index > 0 && widget.spacing > 0) SizedBox(width: widget.spacing),
+                SizedBox(width: MediaQuery.sizeOf(context).width * widget.itemWidth, child: items[index]),
+              ],
+            ],
           ),
-        );
-      case 'grid':
-        return SduiGridRows(columns: widget.columns, children: items);
-      default:
-        return Column(crossAxisAlignment: CrossAxisAlignment.start, children: items);
-    }
+        ),
+      'grid' => SduiGridRows(columns: widget.columns, gap: widget.spacing > 0 ? widget.spacing : 8, children: items),
+      _ => Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            for (var index = 0; index < items.length; index++) ...[
+              if (index > 0 && widget.dividers) Divider(height: widget.spacing > 0 ? widget.spacing : null) else if (index > 0 && widget.spacing > 0) SizedBox(height: widget.spacing),
+              items[index],
+            ],
+          ],
+        ),
+    };
+    // With a `height`, the list scrolls inside that height.
+    final height = widget.height;
+    return height == null || widget.layout == 'carousel' ? list : SizedBox(height: height, child: SingleChildScrollView(child: list));
   }
 }
 
 class _LoadingRows extends StatelessWidget {
-  const _LoadingRows();
+  const _LoadingRows({this.count = 3});
+
+  final int count;
 
   @override
   Widget build(BuildContext context) {
@@ -152,7 +188,7 @@ class _LoadingRows extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Column(
         children: [
-          for (var i = 0; i < 3; i++)
+          for (var i = 0; i < count; i++)
             Container(
               height: 64,
               margin: const EdgeInsets.only(bottom: 8),
@@ -165,9 +201,11 @@ class _LoadingRows extends StatelessWidget {
 }
 
 class _InlineRetry extends StatelessWidget {
-  const _InlineRetry({required this.onRetry});
+  const _InlineRetry({required this.onRetry, this.text, this.retryLabel});
 
   final VoidCallback onRetry;
+  final String? text;
+  final String? retryLabel;
 
   @override
   Widget build(BuildContext context) {
@@ -175,8 +213,8 @@ class _InlineRetry extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       child: Column(
         children: [
-          const Text('We could not load this list.'),
-          TextButton(onPressed: onRetry, child: const Text('Try again')),
+          Text(text ?? 'We could not load this list.'),
+          TextButton(onPressed: onRetry, child: Text(retryLabel ?? 'Try again')),
         ],
       ),
     );

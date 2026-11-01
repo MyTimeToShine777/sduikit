@@ -13,6 +13,25 @@
     },
     "duration": {
       "type": "string"
+    },
+    "aspectRatio": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "maximum": 10
+    },
+    "subtitle": {
+      "type": "string"
+    },
+    "badge": {
+      "type": "string"
+    },
+    "showPlay": {
+      "type": "boolean"
+    },
+    "overlayOpacity": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
     }
   },
   "required": [

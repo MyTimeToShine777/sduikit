@@ -4,8 +4,15 @@
   "title": "spacer (v1) data",
   "type": "object",
   "properties": {
-    "size": { "$ref": "../common/tokens.json#/$defs/spacing" }
+    "size": {
+      "$ref": "../common/style.json#/$defs/space"
+    },
+    "width": {
+      "$ref": "../common/style.json#/$defs/space"
+    },
+    "height": {
+      "$ref": "../common/style.json#/$defs/space"
+    }
   },
-  "required": ["size"],
   "additionalProperties": false
 }

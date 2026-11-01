@@ -4,11 +4,46 @@
   "title": "image (v1) data",
   "type": "object",
   "properties": {
-    "url": { "type": "string", "format": "uri" },
-    "alt": { "type": "string" },
-    "aspectRatio": { "type": "number", "exclusiveMinimum": 0 },
-    "fit": { "enum": ["cover", "contain"] }
+    "url": {
+      "type": "string",
+      "format": "uri"
+    },
+    "alt": {
+      "type": "string"
+    },
+    "aspectRatio": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "fit": {
+      "$ref": "../common/layout.json#/$defs/boxFit"
+    },
+    "alignment": {
+      "$ref": "../common/layout.json#/$defs/alignment"
+    },
+    "repeat": {
+      "enum": [
+        "noRepeat",
+        "repeat",
+        "repeatX",
+        "repeatY"
+      ]
+    },
+    "placeholderColor": {
+      "$ref": "../common/style.json#/$defs/colour"
+    },
+    "showLoader": {
+      "type": "boolean"
+    },
+    "errorText": {
+      "type": "string"
+    },
+    "grayscale": {
+      "type": "boolean"
+    }
   },
-  "required": ["url"],
+  "required": [
+    "url"
+  ],
   "additionalProperties": false
 }

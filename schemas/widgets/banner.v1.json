@@ -4,10 +4,41 @@
   "title": "banner (v1) data",
   "type": "object",
   "properties": {
-    "imageUrl": { "type": "string", "format": "uri" },
-    "title": { "type": "string" },
-    "subtitle": { "type": "string" }
+    "imageUrl": {
+      "type": "string",
+      "format": "uri"
+    },
+    "title": {
+      "type": "string"
+    },
+    "subtitle": {
+      "type": "string"
+    },
+    "height": {
+      "type": "number",
+      "minimum": 40,
+      "maximum": 800
+    },
+    "overlayColor": {
+      "$ref": "../common/style.json#/$defs/colour"
+    },
+    "overlayOpacity": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "contentAlignment": {
+      "$ref": "../common/layout.json#/$defs/alignment"
+    },
+    "imageFit": {
+      "$ref": "../common/layout.json#/$defs/boxFit"
+    },
+    "ctaLabel": {
+      "type": "string"
+    }
   },
-  "required": ["imageUrl"],
+  "required": [
+    "imageUrl"
+  ],
   "additionalProperties": false
 }

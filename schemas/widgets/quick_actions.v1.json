@@ -18,6 +18,9 @@
           },
           "action": {
             "$ref": "../common/action.json"
+          },
+          "badge": {
+            "type": "string"
           }
         },
         "required": [
@@ -32,6 +35,34 @@
       "type": "integer",
       "minimum": 2,
       "maximum": 6
+    },
+    "shape": {
+      "enum": [
+        "circle",
+        "rounded",
+        "square"
+      ]
+    },
+    "iconSize": {
+      "type": "number",
+      "minimum": 12,
+      "maximum": 100
+    },
+    "size": {
+      "type": "number",
+      "minimum": 24,
+      "maximum": 120
+    },
+    "showLabels": {
+      "type": "boolean"
+    },
+    "spacing": {
+      "$ref": "../common/style.json#/$defs/space"
+    },
+    "labelMaxLines": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 5
     }
   },
   "required": [

@@ -4,9 +4,23 @@
   "title": "text (v1) data",
   "type": "object",
   "properties": {
-    "text": { "type": "string", "minLength": 1 },
-    "maxLines": { "type": "integer", "minimum": 1 }
+    "text": {
+      "type": "string",
+      "minLength": 1
+    },
+    "maxLines": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "selectable": {
+      "type": "boolean"
+    },
+    "semanticsLabel": {
+      "type": "string"
+    }
   },
-  "required": ["text"],
+  "required": [
+    "text"
+  ],
   "additionalProperties": false
 }

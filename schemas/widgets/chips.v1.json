@@ -18,6 +18,16 @@
           },
           "action": {
             "$ref": "../common/action.json"
+          },
+          "icon": {
+            "$ref": "../common/tokens.json#/$defs/icon"
+          },
+          "avatarUrl": {
+            "type": "string",
+            "format": "uri"
+          },
+          "disabled": {
+            "type": "boolean"
           }
         },
         "required": [
@@ -26,6 +36,26 @@
         "additionalProperties": false
       },
       "minItems": 1
+    },
+    "variant": {
+      "enum": [
+        "filter",
+        "choice",
+        "input",
+        "assist"
+      ]
+    },
+    "spacing": {
+      "$ref": "../common/style.json#/$defs/space"
+    },
+    "runSpacing": {
+      "$ref": "../common/style.json#/$defs/space"
+    },
+    "scrollable": {
+      "type": "boolean"
+    },
+    "alignment": {
+      "$ref": "../common/layout.json#/$defs/mainAxisAlignment"
     }
   },
   "required": [

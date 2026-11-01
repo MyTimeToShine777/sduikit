@@ -20,6 +20,8 @@ const ALIGN: Record<string, [string, string]> = {
   bottomLeft: ["flex-start", "flex-end"], bottomCenter: ["center", "flex-end"], bottomRight: ["flex-end", "flex-end"],
 };
 const alignOf = (value: unknown, fallback = "topLeft"): [string, string] => ALIGN[typeof value === "string" && ALIGN[value] ? value : fallback];
+/** Where something sits, as flex placement: [across, down]. Used by widgets that put text on a picture. */
+export const alignmentFlex = (value: unknown, fallback = "bottomLeft"): [string, string] => alignOf(value, fallback);
 // Where an alignment is, as x and y from -1 to 1 (used for gradient direction and transform origin).
 const POINT = (value: unknown, fallback: string): [number, number] => {
   const name = typeof value === "string" && ALIGN[value] ? value : fallback;

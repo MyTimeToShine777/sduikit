@@ -23,6 +23,40 @@
     },
     "chevron": {
       "type": "boolean"
+    },
+    "dense": {
+      "type": "boolean"
+    },
+    "selected": {
+      "type": "boolean"
+    },
+    "trailingIcon": {
+      "$ref": "../common/tokens.json#/$defs/icon"
+    },
+    "imageSize": {
+      "type": "number",
+      "minimum": 16,
+      "maximum": 120
+    },
+    "imageShape": {
+      "enum": [
+        "circle",
+        "rounded",
+        "square"
+      ]
+    },
+    "titleMaxLines": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 10
+    },
+    "subtitleMaxLines": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 10
+    },
+    "badge": {
+      "type": "string"
     }
   },
   "required": [

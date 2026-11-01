@@ -4,10 +4,50 @@
   "title": "card (v1) data",
   "type": "object",
   "properties": {
-    "title": { "type": "string", "minLength": 1 },
-    "subtitle": { "type": "string" },
-    "imageUrl": { "type": "string", "format": "uri" },
-    "children": { "type": "array", "items": { "$ref": "../common/widget.json" } }
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "subtitle": {
+      "type": "string"
+    },
+    "imageUrl": {
+      "type": "string",
+      "format": "uri"
+    },
+    "children": {
+      "type": "array",
+      "items": {
+        "$ref": "../common/widget.json"
+      }
+    },
+    "elevation": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 24
+    },
+    "outlined": {
+      "type": "boolean"
+    },
+    "imageHeight": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1000
+    },
+    "imageAspectRatio": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "maximum": 20
+    },
+    "imageFit": {
+      "$ref": "../common/layout.json#/$defs/boxFit"
+    },
+    "imagePosition": {
+      "enum": [
+        "top",
+        "bottom"
+      ]
+    }
   },
   "minProperties": 1,
   "additionalProperties": false

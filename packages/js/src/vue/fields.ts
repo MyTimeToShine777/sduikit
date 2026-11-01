@@ -12,6 +12,8 @@ export type FieldKind =
   | "action" // what happens on tap
   | "group" // a set of named fields (an object)
   | "list" // a list the user can add to, remove from and reorder
+  | "colour" // a colour: a picker, a #RRGGBB code, or a theme colour name
+  | "value" // a number, or a name from the theme (a size, a space...)
   | "json"; // anything with no fixed shape (a box for JSON)
 
 // One input in an edit form, worked out from a widget's data schema.
@@ -27,6 +29,7 @@ export interface Field {
   item?: Field; // for kind "list": what one entry looks like
   minItems?: number;
   maxItems?: number;
+  presets?: string[]; // for kind "value": the names that can be typed instead of a number
 }
 
 export function humanize(key: string): string {
@@ -36,11 +39,22 @@ export function humanize(key: string): string {
 
 const LONG_TEXT_KEYS = /^(text|body|description|message|content|answer)$/i;
 
-// A value in a schema may point at the shared token list or at the shared action schema; follow it.
+// A value in a schema may point at a shared definition (the token lists, or the shared style and layout values).
 function resolveRef(ref: string): Record<string, any> | undefined {
-  const token = /tokens\.json#\/\$defs\/(\w+)$/.exec(ref);
-  if (token) return (schemaFiles["common/tokens.json"] as any).$defs[token[1]];
-  return undefined;
+  const match = /(tokens|style|layout)\.json#\/\$defs\/(\w+)$/.exec(ref);
+  if (!match) return undefined;
+  return (schemaFiles[`common/${match[1]}.json`] as any)?.$defs?.[match[2]];
+}
+
+// The names a "name or number" value accepts: the enum in its `then`, or the token list that `then` points at.
+function presetsOf(definition: Record<string, any>): string[] {
+  const then = definition.then;
+  if (Array.isArray(then?.enum)) return then.enum.map(String);
+  if (typeof then?.$ref === "string") {
+    const target = resolveRef(then.$ref);
+    if (Array.isArray(target?.enum)) return target.enum.map(String);
+  }
+  return [];
 }
 
 function fieldFor(key: string, input: Record<string, any>, required: boolean): Field {
@@ -52,9 +66,17 @@ function fieldFor(key: string, input: Record<string, any>, required: boolean): F
     if (property.$ref.endsWith("widget.json")) return { ...base, kind: "widgets" };
     const resolved = resolveRef(property.$ref);
     if (!resolved) return { ...base, kind: "json" };
-    property = { ...resolved, ...property };
+    if (property.$ref.endsWith("/colour")) return { ...base, kind: "colour" };
+    const { $ref: _ref, ...rest } = property;
+    property = { ...resolved, ...rest };
   }
   if (Array.isArray(property.enum)) return { ...base, kind: "choice", choices: property.enum.map(String) };
+
+  // "A name or a number" (a space, a size, a corner): one box that takes either.
+  if (Array.isArray(property.type) && property.type.includes("number")) {
+    const range = property.else ?? {};
+    return { ...base, kind: "value", presets: presetsOf(property), min: range.minimum, max: range.maximum };
+  }
 
   switch (property.type) {
     case "string":
@@ -108,6 +130,10 @@ export function blankFor(field: Field): unknown {
       return field.min ?? 0;
     case "choice":
       return field.choices?.[0] ?? "";
+    case "colour":
+      return "#000000";
+    case "value":
+      return field.min ?? 0;
     case "json":
       return {};
     case "action":

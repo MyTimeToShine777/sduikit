@@ -7,6 +7,19 @@ and the packages use [semantic versioning](https://semver.org/). The format itse
 
 ## [Unreleased]
 
+### Added (every widget's own options)
+- **Every original widget now has the full set of options its Flutter counterpart has**, all optional so old pages keep working.
+  A few examples: `button` (icon and where it goes, size, full width, disabled, loading, tonal and elevated looks), `image` (every fit,
+  alignment, repeat, grayscale, loading and error looks), `card` (elevation, outline, picture size and place), `banner` and `hero`
+  (height, overlay colour and strength, where the text sits, picture fit), `carousel` (height, dots, space, centre enlarged,
+  timing), `tabs` (start tab, underline or segmented look, icons), `accordion` (open to begin, arrow side, subtitles),
+  `table` (stripes, borders, column widths and alignment), `steps` (numbers, connecting line, horizontal), `rating` (any number
+  of marks, symbol, colours), `countdown` (clock or long form, seconds), `form` (helper text, limits, patterns, field looks), and
+  many more. The full list is in `docs/widgets.md`.
+- A size can now be a name or any number (`spacer`, `icon`, `avatar`), and colours inside widgets can be any `#RRGGBB`.
+- The edit form draws the new kinds of option (colour picker, name-or-number box).
+- Tests check that every option of every widget is accepted by the schema, drawn by the preview, and read by the Flutter code.
+
 ### Added (every widget, every piece)
 - **`style.parts`: a look for each named piece of a widget.** A card's `title`, `subtitle`, `image` and `body`, a button's `button`,
   an alert's `icon`, `title` and `message`, a stat's `value`... (31 widgets, listed in `docs/widgets.md` and in
