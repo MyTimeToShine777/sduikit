@@ -1,0 +1,9 @@
+- generic [ref=e4]:
+  - generic [ref=e5]:
+    - tablist [ref=e6]:
+      - tab "Pages" [ref=e7] [cursor=pointer]
+      - tab "Screens" [ref=e8] [cursor=pointer]
+    - button "+ New page" [ref=e9] [cursor=pointer]
+    - button "Refresh" [ref=e10] [cursor=pointer]
+    - 'button "Server: http://localhost:3100/ignored/sduikit" [ref=e11] [cursor=pointer]'
+  - paragraph [ref=e13]: No pages yet. Click "New page" to make the first one.

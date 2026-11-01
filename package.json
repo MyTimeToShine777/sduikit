@@ -2,10 +2,14 @@
   "name": "sduikit-workspace",
   "private": true,
   "license": "MIT",
-  "workspaces": ["packages/js", "examples/server"],
+  "workspaces": [
+    "packages/js",
+    "examples/server"
+  ],
   "scripts": {
     "schemas": "node scripts/generate-schemas.mjs",
     "test": "npm run test --workspace sduikit --",
-    "test:example": "npm run test --workspace sduikit-example-server"
+    "test:example": "npm run test --workspace sduikit-example-server",
+    "docs": "node scripts/generate-widget-docs.mjs"
   }
 }
