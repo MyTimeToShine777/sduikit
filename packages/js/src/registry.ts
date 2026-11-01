@@ -9,7 +9,11 @@ export const SCHEMA_BASE = "https://sduikit.dev/schemas/";
 interface CatalogueFile {
   types: Record<
     string,
-    { versions: Record<string, { since: string; schema: string; children: string[]; templates?: string[] }> }
+    {
+      group?: string; // which heading the dashboard files it under
+      description?: string; // one plain line about what it is
+      versions: Record<string, { since: string; schema: string; children: string[]; templates?: string[] }>;
+    }
   >;
 }
 

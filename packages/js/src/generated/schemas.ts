@@ -322,6 +322,8 @@ export const schemaFiles: Record<string, unknown> = {
     "$comment": "Lists every built-in widget type and version. 'since' is the first package version that supports it. 'children' says where the widget's data holds other widgets, for example \"tabs[].widgets\".",
     "types": {
       "text": {
+        "group": "Basics",
+        "description": "A line or paragraph of text.",
         "versions": {
           "1": {
             "since": "0.1.0",
@@ -331,6 +333,8 @@ export const schemaFiles: Record<string, unknown> = {
         }
       },
       "image": {
+        "group": "Basics",
+        "description": "A picture from a web address.",
         "versions": {
           "1": {
             "since": "0.1.0",
@@ -340,6 +344,8 @@ export const schemaFiles: Record<string, unknown> = {
         }
       },
       "button": {
+        "group": "Basics",
+        "description": "A button that runs an action.",
         "versions": {
           "1": {
             "since": "0.1.0",
@@ -349,6 +355,8 @@ export const schemaFiles: Record<string, unknown> = {
         }
       },
       "spacer": {
+        "group": "Basics",
+        "description": "Empty space between things.",
         "versions": {
           "1": {
             "since": "0.1.0",
@@ -358,6 +366,8 @@ export const schemaFiles: Record<string, unknown> = {
         }
       },
       "divider": {
+        "group": "Basics",
+        "description": "A thin line between things.",
         "versions": {
           "1": {
             "since": "0.1.0",
@@ -367,6 +377,8 @@ export const schemaFiles: Record<string, unknown> = {
         }
       },
       "section_header": {
+        "group": "Layout",
+        "description": "A heading with an optional subtitle and a link on the right.",
         "versions": {
           "1": {
             "since": "0.1.0",
@@ -376,6 +388,8 @@ export const schemaFiles: Record<string, unknown> = {
         }
       },
       "card": {
+        "group": "Layout",
+        "description": "A framed box with a picture, text and other widgets.",
         "versions": {
           "1": {
             "since": "0.1.0",
@@ -387,6 +401,8 @@ export const schemaFiles: Record<string, unknown> = {
         }
       },
       "banner": {
+        "group": "Media",
+        "description": "A wide picture with a title on top.",
         "versions": {
           "1": {
             "since": "0.1.0",
@@ -396,6 +412,8 @@ export const schemaFiles: Record<string, unknown> = {
         }
       },
       "carousel": {
+        "group": "Layout",
+        "description": "Widgets side by side that you swipe through (can move by itself).",
         "versions": {
           "1": {
             "since": "0.1.0",
@@ -407,6 +425,8 @@ export const schemaFiles: Record<string, unknown> = {
         }
       },
       "list": {
+        "group": "Layout",
+        "description": "Widgets one under another, with optional lines between.",
         "versions": {
           "1": {
             "since": "0.1.0",
@@ -418,6 +438,8 @@ export const schemaFiles: Record<string, unknown> = {
         }
       },
       "grid": {
+        "group": "Layout",
+        "description": "Widgets in rows with a set number of columns.",
         "versions": {
           "1": {
             "since": "0.1.0",
@@ -429,6 +451,8 @@ export const schemaFiles: Record<string, unknown> = {
         }
       },
       "tabs": {
+        "group": "Layout",
+        "description": "Switch between groups of widgets.",
         "versions": {
           "1": {
             "since": "0.1.0",
@@ -440,6 +464,8 @@ export const schemaFiles: Record<string, unknown> = {
         }
       },
       "data_list": {
+        "group": "Live data",
+        "description": "A list filled with rows from your own API, using a template.",
         "versions": {
           "1": {
             "since": "0.2.0",
@@ -454,6 +480,8 @@ export const schemaFiles: Record<string, unknown> = {
         }
       },
       "rich_text": {
+        "group": "Basics",
+        "description": "A sentence with bold, italic or coloured parts.",
         "versions": {
           "1": {
             "since": "0.2.0",
@@ -463,6 +491,8 @@ export const schemaFiles: Record<string, unknown> = {
         }
       },
       "quote": {
+        "group": "Content",
+        "description": "A quote with the name of who said it.",
         "versions": {
           "1": {
             "since": "0.2.0",
@@ -472,6 +502,8 @@ export const schemaFiles: Record<string, unknown> = {
         }
       },
       "icon": {
+        "group": "Basics",
+        "description": "A single icon.",
         "versions": {
           "1": {
             "since": "0.2.0",
@@ -481,6 +513,8 @@ export const schemaFiles: Record<string, unknown> = {
         }
       },
       "avatar": {
+        "group": "Content",
+        "description": "A round picture of a person, or their initials.",
         "versions": {
           "1": {
             "since": "0.2.0",
@@ -490,6 +524,8 @@ export const schemaFiles: Record<string, unknown> = {
         }
       },
       "badge": {
+        "group": "Basics",
+        "description": "A small coloured label such as New or Sale.",
         "versions": {
           "1": {
             "since": "0.2.0",
@@ -499,6 +535,8 @@ export const schemaFiles: Record<string, unknown> = {
         }
       },
       "alert": {
+        "group": "Content",
+        "description": "A coloured notice: info, success, warning or error.",
         "versions": {
           "1": {
             "since": "0.2.0",
@@ -508,6 +546,8 @@ export const schemaFiles: Record<string, unknown> = {
         }
       },
       "progress": {
+        "group": "Content",
+        "description": "A progress bar or ring.",
         "versions": {
           "1": {
             "since": "0.2.0",
@@ -517,6 +557,8 @@ export const schemaFiles: Record<string, unknown> = {
         }
       },
       "stat": {
+        "group": "Content",
+        "description": "A big number with a label and a change (up or down).",
         "versions": {
           "1": {
             "since": "0.2.0",
@@ -526,6 +568,8 @@ export const schemaFiles: Record<string, unknown> = {
         }
       },
       "key_value": {
+        "group": "Content",
+        "description": "Rows of label and value, like order details.",
         "versions": {
           "1": {
             "since": "0.2.0",
@@ -535,6 +579,8 @@ export const schemaFiles: Record<string, unknown> = {
         }
       },
       "list_item": {
+        "group": "Content",
+        "description": "A row with an icon or picture, a title, a subtitle and an arrow.",
         "versions": {
           "1": {
             "since": "0.2.0",
@@ -544,6 +590,8 @@ export const schemaFiles: Record<string, unknown> = {
         }
       },
       "empty_state": {
+        "group": "Content",
+        "description": "A friendly message for when there is nothing to show.",
         "versions": {
           "1": {
             "since": "0.2.0",
@@ -553,6 +601,8 @@ export const schemaFiles: Record<string, unknown> = {
         }
       },
       "steps": {
+        "group": "Content",
+        "description": "A list of steps: done, current and still to do.",
         "versions": {
           "1": {
             "since": "0.2.0",
@@ -562,6 +612,8 @@ export const schemaFiles: Record<string, unknown> = {
         }
       },
       "accordion": {
+        "group": "Layout",
+        "description": "Titles that open and close to show widgets.",
         "versions": {
           "1": {
             "since": "0.2.0",
@@ -573,6 +625,8 @@ export const schemaFiles: Record<string, unknown> = {
         }
       },
       "table": {
+        "group": "Content",
+        "description": "A simple table of text.",
         "versions": {
           "1": {
             "since": "0.2.0",
@@ -582,6 +636,8 @@ export const schemaFiles: Record<string, unknown> = {
         }
       },
       "countdown": {
+        "group": "Content",
+        "description": "Time left until a date.",
         "versions": {
           "1": {
             "since": "0.2.0",
@@ -591,6 +647,8 @@ export const schemaFiles: Record<string, unknown> = {
         }
       },
       "gallery": {
+        "group": "Media",
+        "description": "Pictures you swipe through, with dots.",
         "versions": {
           "1": {
             "since": "0.2.0",
@@ -600,6 +658,8 @@ export const schemaFiles: Record<string, unknown> = {
         }
       },
       "video_card": {
+        "group": "Media",
+        "description": "A video picture with a play button (the app opens the video).",
         "versions": {
           "1": {
             "since": "0.2.0",
@@ -609,6 +669,8 @@ export const schemaFiles: Record<string, unknown> = {
         }
       },
       "hero": {
+        "group": "Media",
+        "description": "A big picture with a headline and a button.",
         "versions": {
           "1": {
             "since": "0.2.0",
@@ -618,6 +680,8 @@ export const schemaFiles: Record<string, unknown> = {
         }
       },
       "pricing_card": {
+        "group": "Content",
+        "description": "A plan with a price, a list of features and a button.",
         "versions": {
           "1": {
             "since": "0.2.0",
@@ -627,6 +691,8 @@ export const schemaFiles: Record<string, unknown> = {
         }
       },
       "search_bar": {
+        "group": "Interactive",
+        "description": "Looks like a search box; tapping it runs an action.",
         "versions": {
           "1": {
             "since": "0.2.0",
@@ -636,6 +702,8 @@ export const schemaFiles: Record<string, unknown> = {
         }
       },
       "chips": {
+        "group": "Interactive",
+        "description": "Small choice buttons, for filters.",
         "versions": {
           "1": {
             "since": "0.2.0",
@@ -645,6 +713,8 @@ export const schemaFiles: Record<string, unknown> = {
         }
       },
       "quick_actions": {
+        "group": "Interactive",
+        "description": "A grid of round icons with labels.",
         "versions": {
           "1": {
             "since": "0.2.0",
@@ -654,6 +724,8 @@ export const schemaFiles: Record<string, unknown> = {
         }
       },
       "rating": {
+        "group": "Content",
+        "description": "Stars with a number and a count.",
         "versions": {
           "1": {
             "since": "0.2.0",
@@ -663,6 +735,8 @@ export const schemaFiles: Record<string, unknown> = {
         }
       },
       "container": {
+        "group": "Layout",
+        "description": "Puts other widgets in a row or a column.",
         "versions": {
           "1": {
             "since": "0.2.0",
@@ -674,6 +748,8 @@ export const schemaFiles: Record<string, unknown> = {
         }
       },
       "form": {
+        "group": "Interactive",
+        "description": "Fields people fill in and a button that sends them.",
         "versions": {
           "1": {
             "since": "0.2.0",

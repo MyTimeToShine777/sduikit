@@ -2,6 +2,8 @@
   "$comment": "Lists every built-in widget type and version. 'since' is the first package version that supports it. 'children' says where the widget's data holds other widgets, for example \"tabs[].widgets\".",
   "types": {
     "text": {
+      "group": "Basics",
+      "description": "A line or paragraph of text.",
       "versions": {
         "1": {
           "since": "0.1.0",
@@ -11,6 +13,8 @@
       }
     },
     "image": {
+      "group": "Basics",
+      "description": "A picture from a web address.",
       "versions": {
         "1": {
           "since": "0.1.0",
@@ -20,6 +24,8 @@
       }
     },
     "button": {
+      "group": "Basics",
+      "description": "A button that runs an action.",
       "versions": {
         "1": {
           "since": "0.1.0",
@@ -29,6 +35,8 @@
       }
     },
     "spacer": {
+      "group": "Basics",
+      "description": "Empty space between things.",
       "versions": {
         "1": {
           "since": "0.1.0",
@@ -38,6 +46,8 @@
       }
     },
     "divider": {
+      "group": "Basics",
+      "description": "A thin line between things.",
       "versions": {
         "1": {
           "since": "0.1.0",
@@ -47,6 +57,8 @@
       }
     },
     "section_header": {
+      "group": "Layout",
+      "description": "A heading with an optional subtitle and a link on the right.",
       "versions": {
         "1": {
           "since": "0.1.0",
@@ -56,6 +68,8 @@
       }
     },
     "card": {
+      "group": "Layout",
+      "description": "A framed box with a picture, text and other widgets.",
       "versions": {
         "1": {
           "since": "0.1.0",
@@ -67,6 +81,8 @@
       }
     },
     "banner": {
+      "group": "Media",
+      "description": "A wide picture with a title on top.",
       "versions": {
         "1": {
           "since": "0.1.0",
@@ -76,6 +92,8 @@
       }
     },
     "carousel": {
+      "group": "Layout",
+      "description": "Widgets side by side that you swipe through (can move by itself).",
       "versions": {
         "1": {
           "since": "0.1.0",
@@ -87,6 +105,8 @@
       }
     },
     "list": {
+      "group": "Layout",
+      "description": "Widgets one under another, with optional lines between.",
       "versions": {
         "1": {
           "since": "0.1.0",
@@ -98,6 +118,8 @@
       }
     },
     "grid": {
+      "group": "Layout",
+      "description": "Widgets in rows with a set number of columns.",
       "versions": {
         "1": {
           "since": "0.1.0",
@@ -109,6 +131,8 @@
       }
     },
     "tabs": {
+      "group": "Layout",
+      "description": "Switch between groups of widgets.",
       "versions": {
         "1": {
           "since": "0.1.0",
@@ -120,6 +144,8 @@
       }
     },
     "data_list": {
+      "group": "Live data",
+      "description": "A list filled with rows from your own API, using a template.",
       "versions": {
         "1": {
           "since": "0.2.0",
@@ -134,6 +160,8 @@
       }
     },
     "rich_text": {
+      "group": "Basics",
+      "description": "A sentence with bold, italic or coloured parts.",
       "versions": {
         "1": {
           "since": "0.2.0",
@@ -143,6 +171,8 @@
       }
     },
     "quote": {
+      "group": "Content",
+      "description": "A quote with the name of who said it.",
       "versions": {
         "1": {
           "since": "0.2.0",
@@ -152,6 +182,8 @@
       }
     },
     "icon": {
+      "group": "Basics",
+      "description": "A single icon.",
       "versions": {
         "1": {
           "since": "0.2.0",
@@ -161,6 +193,8 @@
       }
     },
     "avatar": {
+      "group": "Content",
+      "description": "A round picture of a person, or their initials.",
       "versions": {
         "1": {
           "since": "0.2.0",
@@ -170,6 +204,8 @@
       }
     },
     "badge": {
+      "group": "Basics",
+      "description": "A small coloured label such as New or Sale.",
       "versions": {
         "1": {
           "since": "0.2.0",
@@ -179,6 +215,8 @@
       }
     },
     "alert": {
+      "group": "Content",
+      "description": "A coloured notice: info, success, warning or error.",
       "versions": {
         "1": {
           "since": "0.2.0",
@@ -188,6 +226,8 @@
       }
     },
     "progress": {
+      "group": "Content",
+      "description": "A progress bar or ring.",
       "versions": {
         "1": {
           "since": "0.2.0",
@@ -197,6 +237,8 @@
       }
     },
     "stat": {
+      "group": "Content",
+      "description": "A big number with a label and a change (up or down).",
       "versions": {
         "1": {
           "since": "0.2.0",
@@ -206,6 +248,8 @@
       }
     },
     "key_value": {
+      "group": "Content",
+      "description": "Rows of label and value, like order details.",
       "versions": {
         "1": {
           "since": "0.2.0",
@@ -215,6 +259,8 @@
       }
     },
     "list_item": {
+      "group": "Content",
+      "description": "A row with an icon or picture, a title, a subtitle and an arrow.",
       "versions": {
         "1": {
           "since": "0.2.0",
@@ -224,6 +270,8 @@
       }
     },
     "empty_state": {
+      "group": "Content",
+      "description": "A friendly message for when there is nothing to show.",
       "versions": {
         "1": {
           "since": "0.2.0",
@@ -233,6 +281,8 @@
       }
     },
     "steps": {
+      "group": "Content",
+      "description": "A list of steps: done, current and still to do.",
       "versions": {
         "1": {
           "since": "0.2.0",
@@ -242,6 +292,8 @@
       }
     },
     "accordion": {
+      "group": "Layout",
+      "description": "Titles that open and close to show widgets.",
       "versions": {
         "1": {
           "since": "0.2.0",
@@ -253,6 +305,8 @@
       }
     },
     "table": {
+      "group": "Content",
+      "description": "A simple table of text.",
       "versions": {
         "1": {
           "since": "0.2.0",
@@ -262,6 +316,8 @@
       }
     },
     "countdown": {
+      "group": "Content",
+      "description": "Time left until a date.",
       "versions": {
         "1": {
           "since": "0.2.0",
@@ -271,6 +327,8 @@
       }
     },
     "gallery": {
+      "group": "Media",
+      "description": "Pictures you swipe through, with dots.",
       "versions": {
         "1": {
           "since": "0.2.0",
@@ -280,6 +338,8 @@
       }
     },
     "video_card": {
+      "group": "Media",
+      "description": "A video picture with a play button (the app opens the video).",
       "versions": {
         "1": {
           "since": "0.2.0",
@@ -289,6 +349,8 @@
       }
     },
     "hero": {
+      "group": "Media",
+      "description": "A big picture with a headline and a button.",
       "versions": {
         "1": {
           "since": "0.2.0",
@@ -298,6 +360,8 @@
       }
     },
     "pricing_card": {
+      "group": "Content",
+      "description": "A plan with a price, a list of features and a button.",
       "versions": {
         "1": {
           "since": "0.2.0",
@@ -307,6 +371,8 @@
       }
     },
     "search_bar": {
+      "group": "Interactive",
+      "description": "Looks like a search box; tapping it runs an action.",
       "versions": {
         "1": {
           "since": "0.2.0",
@@ -316,6 +382,8 @@
       }
     },
     "chips": {
+      "group": "Interactive",
+      "description": "Small choice buttons, for filters.",
       "versions": {
         "1": {
           "since": "0.2.0",
@@ -325,6 +393,8 @@
       }
     },
     "quick_actions": {
+      "group": "Interactive",
+      "description": "A grid of round icons with labels.",
       "versions": {
         "1": {
           "since": "0.2.0",
@@ -334,6 +404,8 @@
       }
     },
     "rating": {
+      "group": "Content",
+      "description": "Stars with a number and a count.",
       "versions": {
         "1": {
           "since": "0.2.0",
@@ -343,6 +415,8 @@
       }
     },
     "container": {
+      "group": "Layout",
+      "description": "Puts other widgets in a row or a column.",
       "versions": {
         "1": {
           "since": "0.2.0",
@@ -354,6 +428,8 @@
       }
     },
     "form": {
+      "group": "Interactive",
+      "description": "Fields people fill in and a button that sends them.",
       "versions": {
         "1": {
           "since": "0.2.0",
