@@ -7,7 +7,10 @@ import { schemaFiles } from "./generated/schemas.js";
 export const SCHEMA_BASE = "https://sduikit.dev/schemas/";
 
 interface CatalogueFile {
-  types: Record<string, { versions: Record<string, { since: string; schema: string; children: string[] }> }>;
+  types: Record<
+    string,
+    { versions: Record<string, { since: string; schema: string; children: string[]; templates?: string[] }> }
+  >;
 }
 
 export const builtInCatalogue = schemaFiles["catalogue.json"] as CatalogueFile;
@@ -15,6 +18,8 @@ export const builtInCatalogue = schemaFiles["catalogue.json"] as CatalogueFile;
 export interface WidgetInfo {
   // Where this widget's `data` holds other widgets, e.g. ["items"] or ["tabs[].widgets"].
   children: string[];
+  // Which of those child lists are templates repeated for live data. They may contain {{placeholders}}.
+  templates: string[];
   // Checks the widget's `data` object against its own schema.
   validateData: ValidateFunction;
 }
@@ -28,6 +33,7 @@ export interface Registry {
 interface WidgetEntry {
   schemaKey: string;
   children: string[];
+  templates: string[];
 }
 
 export interface WidgetDefinition {
@@ -35,6 +41,8 @@ export interface WidgetDefinition {
   schema: Record<string, unknown>;
   // Where the data holds other widgets, same notation as the catalogue: "items" or "tabs[].widgets".
   children?: string[];
+  // Which of the `children` lists are templates for live data (they may contain {{placeholders}}).
+  templates?: string[];
 }
 
 // Widget type name -> version number -> definition.
@@ -54,7 +62,11 @@ export function createRegistry(extraWidgets: ExtraWidgets = {}): Registry {
   for (const [type, entry] of Object.entries(builtInCatalogue.types)) {
     const versions = new Map<number, WidgetEntry>();
     for (const [version, info] of Object.entries(entry.versions)) {
-      versions.set(Number(version), { schemaKey: SCHEMA_BASE + info.schema, children: info.children });
+      versions.set(Number(version), {
+        schemaKey: SCHEMA_BASE + info.schema,
+        children: info.children,
+        templates: info.templates ?? [],
+      });
     }
     widgetTypes.set(type, versions);
   }
@@ -67,7 +79,11 @@ export function createRegistry(extraWidgets: ExtraWidgets = {}): Registry {
     for (const [version, definition] of Object.entries(versionDefinitions)) {
       const schemaKey = `${SCHEMA_BASE}custom/${type}.v${version}.json`;
       ajv.addSchema({ ...definition.schema, $id: schemaKey }, schemaKey);
-      versions.set(Number(version), { schemaKey, children: definition.children ?? [] });
+      versions.set(Number(version), {
+        schemaKey,
+        children: definition.children ?? [],
+        templates: definition.templates ?? [],
+      });
     }
     widgetTypes.set(type, versions);
   }
@@ -85,7 +101,7 @@ export function createRegistry(extraWidgets: ExtraWidgets = {}): Registry {
       if (!entry) return undefined;
       const validateData = ajv.getSchema(entry.schemaKey);
       if (!validateData) throw new Error(`The schema ${entry.schemaKey} is listed but was not loaded`);
-      return { children: entry.children, validateData };
+      return { children: entry.children, templates: entry.templates, validateData };
     },
     knownVersions(type) {
       return [...(widgetTypes.get(type)?.keys() ?? [])].sort((a, b) => a - b);

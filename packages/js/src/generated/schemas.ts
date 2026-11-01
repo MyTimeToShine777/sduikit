@@ -438,6 +438,20 @@ export const schemaFiles: Record<string, unknown> = {
             ]
           }
         }
+      },
+      "data_list": {
+        "versions": {
+          "1": {
+            "since": "0.2.0",
+            "schema": "widgets/data_list.v1.json",
+            "children": [
+              "template"
+            ],
+            "templates": [
+              "template"
+            ]
+          }
+        }
       }
     }
   },
@@ -1314,6 +1328,59 @@ export const schemaFiles: Record<string, unknown> = {
     },
     "required": [
       "items"
+    ],
+    "additionalProperties": false
+  },
+  "widgets/data_list.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/data_list.v1.json",
+    "title": "data_list (v1) data",
+    "description": "A list filled with live data. The app asks its own API for rows (`source.name` is a name the app understands, like \"doctors_nearby\") and repeats `template` once per row. Inside the template, {{field}} is replaced by that row's value. Placeholders work in text, URLs and action params.",
+    "type": "object",
+    "properties": {
+      "source": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "params": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false
+      },
+      "template": {
+        "type": "array",
+        "items": {
+          "$ref": "../common/widget.json"
+        },
+        "minItems": 1,
+        "maxItems": 1
+      },
+      "layout": {
+        "enum": [
+          "list",
+          "carousel",
+          "grid"
+        ]
+      },
+      "columns": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 6
+      },
+      "emptyText": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "source",
+      "template"
     ],
     "additionalProperties": false
   },

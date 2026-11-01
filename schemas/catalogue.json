@@ -12,6 +12,7 @@
     "carousel": { "versions": { "1": { "since": "0.1.0", "schema": "widgets/carousel.v1.json", "children": ["items"] } } },
     "list": { "versions": { "1": { "since": "0.1.0", "schema": "widgets/list.v1.json", "children": ["items"] } } },
     "grid": { "versions": { "1": { "since": "0.1.0", "schema": "widgets/grid.v1.json", "children": ["items"] } } },
-    "tabs": { "versions": { "1": { "since": "0.1.0", "schema": "widgets/tabs.v1.json", "children": ["tabs[].widgets"] } } }
+    "tabs": { "versions": { "1": { "since": "0.1.0", "schema": "widgets/tabs.v1.json", "children": ["tabs[].widgets"] } } },
+    "data_list": { "versions": { "1": { "since": "0.2.0", "schema": "widgets/data_list.v1.json", "children": ["template"], "templates": ["template"] } } }
   }
 }

@@ -1,6 +1,7 @@
 import { issuesFromAjv, type ValidationIssue } from "./messages.js";
 import { appendPath } from "./paths.js";
 import type { Registry } from "./registry.js";
+import { withSamplePlaceholders } from "./templates.js";
 import { isObject } from "./util.js";
 import { findWidgetLists } from "./widgetTree.js";
 
@@ -78,7 +79,14 @@ function visitBlock(block: unknown, path: string, visit: WidgetVisitor): void {
   }
 }
 
-function checkWidget(registry: Registry, widget: unknown, path: string, errors: ValidationIssue[]): void {
+// `inTemplate` is true inside a data_list template, where {{placeholders}} stand for live values.
+function checkWidget(
+  registry: Registry,
+  widget: unknown,
+  path: string,
+  errors: ValidationIssue[],
+  inTemplate = false,
+): void {
   // If the outer shape is broken, step 1 already reported it.
   if (!isObject(widget) || typeof widget.type !== "string" || !Number.isInteger(widget.v)) return;
 
@@ -98,12 +106,16 @@ function checkWidget(registry: Registry, widget: unknown, path: string, errors: 
 
   if (isObject(widget.data)) {
     const dataPath = appendPath(path, "data");
-    if (!info.validateData(widget.data)) errors.push(...issuesFromAjv(info.validateData.errors ?? [], dataPath));
+    const dataToCheck = inTemplate ? withSamplePlaceholders(widget.data) : widget.data;
+    if (!info.validateData(dataToCheck)) errors.push(...issuesFromAjv(info.validateData.errors ?? [], dataPath));
     // Widgets inside this widget (card children, carousel items, tab contents...) get the same checks.
     for (const slot of findWidgetLists(widget.data, info.children, dataPath)) {
-      slot.widgets.forEach((child, index) => checkWidget(registry, child, `${slot.path}[${index}]`, errors));
+      const childrenAreTemplate = inTemplate || info.templates.includes(slot.spec);
+      slot.widgets.forEach((child, index) =>
+        checkWidget(registry, child, `${slot.path}[${index}]`, errors, childrenAreTemplate),
+      );
     }
   }
 
-  if (isObject(widget.fallback)) checkWidget(registry, widget.fallback, appendPath(path, "fallback"), errors);
+  if (isObject(widget.fallback)) checkWidget(registry, widget.fallback, appendPath(path, "fallback"), errors, inTemplate);
 }

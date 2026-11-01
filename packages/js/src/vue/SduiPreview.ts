@@ -116,6 +116,14 @@ function renderWidget(widget: Widget, theme: Theme): VNode {
       );
     case "tabs":
       return h("div", { ...attrs, style }, [h(TabsPreview, { tabs: data.tabs ?? [], theme })]);
+    case "data_list": {
+      // The preview has no access to the app's data, so it shows the template once, placeholders and all.
+      const source = data.source as { name?: string } | undefined;
+      return h("div", { ...attrs, style: { ...style, border: "1px dashed #999", padding: "8px" } }, [
+        h("small", `Live data: ${source?.name ?? "?"}`),
+        ...items(data.template).slice(0, 1).map((child) => renderWidget(child, theme)),
+      ]);
+    }
     default:
       // A widget this preview does not know (for example an app's own widget).
       return h("div", { ...attrs, class: "sdui-unknown", style: { border: "1px dashed #999", padding: "8px" } }, `${widget.type} (v${widget.v})`);

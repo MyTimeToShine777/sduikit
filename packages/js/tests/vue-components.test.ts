@@ -72,6 +72,8 @@ describe("SduiPreview", () => {
     expect(text).toContain("Book a visit"); // button
     expect(text).toContain("No upcoming visits"); // first tab
     expect(text).not.toContain("No past visits");
+    expect(text).toContain("Live data: doctors_nearby"); // data_list shows its source and template
+    expect(text).toContain("{{name}}");
   });
 
   it("switches tab when clicked", async () => {

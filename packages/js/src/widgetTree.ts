@@ -7,17 +7,18 @@ export interface WidgetSlot {
   key: string; // the list's name inside `owner`
   path: string; // readable path of the list, for error messages
   widgets: unknown[]; // owner[key]
+  spec: string; // the catalogue path that found it, e.g. "tabs[].widgets"
 }
 
 // Finds the lists of child widgets inside `data`.
 // Each spec is a dotted path such as "items" or "tabs[].widgets"; "[]" means "do this for every entry".
 export function findWidgetLists(data: unknown, specs: string[], basePath: string): WidgetSlot[] {
   const slots: WidgetSlot[] = [];
-  for (const spec of specs) collect(data, spec.split("."), basePath, slots);
+  for (const spec of specs) collect(data, spec.split("."), basePath, slots, spec);
   return slots;
 }
 
-function collect(value: unknown, parts: string[], path: string, slots: WidgetSlot[]): void {
+function collect(value: unknown, parts: string[], path: string, slots: WidgetSlot[], spec: string): void {
   if (!isObject(value) || parts.length === 0) return;
   const [head, ...rest] = parts;
   const forEveryEntry = head.endsWith("[]");
@@ -26,10 +27,10 @@ function collect(value: unknown, parts: string[], path: string, slots: WidgetSlo
   const nextPath = appendPath(path, key);
 
   if (forEveryEntry) {
-    if (Array.isArray(next)) next.forEach((entry, index) => collect(entry, rest, `${nextPath}[${index}]`, slots));
+    if (Array.isArray(next)) next.forEach((entry, index) => collect(entry, rest, `${nextPath}[${index}]`, slots, spec));
   } else if (rest.length === 0) {
-    if (Array.isArray(next)) slots.push({ owner: value, key, path: nextPath, widgets: next });
+    if (Array.isArray(next)) slots.push({ owner: value, key, path: nextPath, widgets: next, spec });
   } else {
-    collect(next, rest, nextPath, slots);
+    collect(next, rest, nextPath, slots, spec);
   }
 }

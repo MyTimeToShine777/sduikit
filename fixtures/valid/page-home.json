@@ -76,6 +76,35 @@
       ]
     },
     {
+      "id": "doctors",
+      "title": "Doctors near you",
+      "widgets": [
+        {
+          "id": "w_doctors_1",
+          "type": "data_list",
+          "v": 1,
+          "data": {
+            "source": { "name": "doctors_nearby", "params": { "city": "Dubai" } },
+            "layout": "list",
+            "emptyText": "No doctors found nearby",
+            "template": [
+              {
+                "id": "w_doctor_row",
+                "type": "card",
+                "v": 1,
+                "data": {
+                  "title": "{{name}}",
+                  "subtitle": "{{specialty}} · {{fee}} AED",
+                  "imageUrl": "{{photoUrl}}"
+                },
+                "action": { "type": "open_native", "name": "doctor_profile", "params": { "doctorId": "{{id}}" } }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
       "id": "more",
       "widgets": [
         {

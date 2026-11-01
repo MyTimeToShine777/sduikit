@@ -19,6 +19,11 @@ const cases: Array<[string, unknown, unknown]> = [
   ["list", { items: [sampleText], dividers: true }, {}],
   ["grid", { columns: 2, items: [sampleText] }, { items: [sampleText] }],
   ["tabs", { tabs: [{ id: "a", label: "A", widgets: [sampleText] }] }, { tabs: [] }],
+  [
+    "data_list",
+    { source: { name: "doctors_nearby", params: { city: "Dubai" } }, template: [sampleText], layout: "grid", columns: 2 },
+    { source: { name: "doctors_nearby" }, template: [sampleText, sampleText] }, // only one template allowed
+  ],
 ];
 
 describe("widget schemas", () => {
