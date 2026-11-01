@@ -56,7 +56,27 @@ class _SduiFormState extends State<_SduiForm> {
     final name = field['name'] as String;
     final type = field['type'] as String;
     final placeholder = field['placeholder'] is String ? field['placeholder'] as String : null;
-    final decoration = InputDecoration(labelText: _labelOf(field), hintText: placeholder);
+    // The piece "label" styles the caption of a field, and the piece "field" styles the box you type in.
+    final tokens = context.sduiTokens;
+    final fieldLook = widget.render.partLook(widget.node, 'field');
+    final fieldRadius = tokens.radius(fieldLook['radius']);
+    final fieldColor = tokens.color(fieldLook['color']);
+    final fieldBorderColor = tokens.color(fieldLook['borderColor']);
+    final fieldBorderWidth = fieldLook['borderWidth'] is num ? (fieldLook['borderWidth'] as num).toDouble() : null;
+    final fieldText = widget.render.partTextStyle(context, widget.node, 'field');
+    final decoration = InputDecoration(
+      labelText: _labelOf(field),
+      labelStyle: widget.render.partTextStyle(context, widget.node, 'label'),
+      hintText: placeholder,
+      filled: fieldColor != null,
+      fillColor: fieldColor,
+      border: (fieldRadius != null || fieldBorderColor != null || fieldBorderWidth != null)
+          ? OutlineInputBorder(
+              borderRadius: BorderRadius.circular(fieldRadius ?? 4),
+              borderSide: BorderSide(color: fieldBorderColor ?? const Color(0xFF79747E), width: fieldBorderWidth ?? 1),
+            )
+          : null,
+    );
     // A value left empty is simply not sent, rather than sent as an empty text.
     void saveText(String? value) {
       final text = (value ?? '').trim();
@@ -71,6 +91,7 @@ class _SduiFormState extends State<_SduiForm> {
       case 'multiline':
       case 'password':
         return TextFormField(
+          style: fieldText,
           decoration: decoration,
           keyboardType: switch (type) {
             'email' => TextInputType.emailAddress,
@@ -86,6 +107,7 @@ class _SduiFormState extends State<_SduiForm> {
       case 'date':
         final controller = _dateControllers.putIfAbsent(name, TextEditingController.new);
         return TextFormField(
+          style: fieldText,
           controller: controller,
           readOnly: true,
           decoration: decoration.copyWith(suffixIcon: const Icon(Icons.calendar_today_outlined)),
@@ -109,6 +131,7 @@ class _SduiFormState extends State<_SduiForm> {
             if (raw is Map && raw['value'] is String && raw['label'] is String) raw,
         ];
         return DropdownButtonFormField<String>(
+          style: fieldText,
           decoration: decoration,
           items: [for (final option in options) DropdownMenuItem(value: option['value'] as String, child: Text(option['label'] as String))],
           onChanged: (_) {},
@@ -125,8 +148,8 @@ class _SduiFormState extends State<_SduiForm> {
           onSaved: (value) => _values[name] = value ?? false,
           builder: (state) {
             final tile = type == 'checkbox'
-                ? CheckboxListTile(contentPadding: EdgeInsets.zero, controlAffinity: ListTileControlAffinity.leading, title: Text(_labelOf(field)), value: state.value, onChanged: state.didChange)
-                : SwitchListTile(contentPadding: EdgeInsets.zero, title: Text(_labelOf(field)), value: state.value ?? false, onChanged: state.didChange);
+                ? CheckboxListTile(contentPadding: EdgeInsets.zero, controlAffinity: ListTileControlAffinity.leading, title: widget.render.partText(context, widget.node, 'label', _labelOf(field)), value: state.value, onChanged: state.didChange)
+                : SwitchListTile(contentPadding: EdgeInsets.zero, title: widget.render.partText(context, widget.node, 'label', _labelOf(field)), value: state.value ?? false, onChanged: state.didChange);
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -165,7 +188,12 @@ class _SduiFormState extends State<_SduiForm> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           for (final field in widget.fields) Padding(padding: const EdgeInsets.only(bottom: 12), child: _fieldFor(field)),
-          FilledButton(onPressed: _submit, child: Text(widget.submitLabel)),
+          widget.render.partButton(
+            context,
+            widget.node,
+            'button',
+            (style) => FilledButton(style: style, onPressed: _submit, child: Text(widget.submitLabel)),
+          ),
         ],
       ),
     );

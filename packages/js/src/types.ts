@@ -12,7 +12,8 @@ export type Space = SpacingToken | number;
 export type Sides = { top?: Space; right?: Space; bottom?: Space; left?: Space };
 export type Colour = ColorToken | string; // a ColorToken or "#RRGGBB" / "#RRGGBBAA"
 
-export interface Style {
+/** One look: everything a widget (or one part of a widget) can be told about how it is drawn. */
+export interface StyleLook {
   spacing?: Space;
   padding?: Sides;
   margin?: Sides;
@@ -22,6 +23,13 @@ export interface Style {
   textSize?: TextSizeToken | number;
   fontWeight?: "normal" | "medium" | "bold";
   italic?: boolean;
+  textDecoration?: "none" | "underline" | "lineThrough" | "overline";
+  letterSpacing?: number;
+  lineHeight?: number;
+  maxLines?: number;
+  textOverflow?: "clip" | "ellipsis" | "fade" | "visible";
+  softWrap?: boolean;
+  overflow?: "visible" | "hidden";
   align?: AlignToken;
   width?: number | "fill";
   height?: number | "fill";
@@ -29,6 +37,11 @@ export interface Style {
   borderColor?: Colour;
   shadow?: "none" | "small" | "medium" | "large";
   opacity?: number;
+}
+
+/** A widget's style: its own look, plus a look for each named part inside it (`parts: { title: { textSize: 20 } }`). */
+export interface Style extends StyleLook {
+  parts?: Record<string, StyleLook>;
 }
 
 export type Action =

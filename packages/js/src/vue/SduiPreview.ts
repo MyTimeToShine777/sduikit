@@ -2,7 +2,7 @@ import { computed, defineComponent, h, nextTick, onBeforeUnmount, onMounted, onU
 import { renderBuildingBlock } from "./blocksPreview.js";
 import { attachCanvasEditing, markDraggable, quoteId } from "./canvasEditing.js";
 import { fillTemplate } from "../templates.js";
-import type { Block, Manifest, Sides, Space, Style, Widget } from "../types.js";
+import type { Block, Manifest, Sides, Space, Style, StyleLook, Widget } from "../types.js";
 
 type Theme = Manifest["theme"];
 
@@ -145,7 +145,7 @@ const SHADOWS = {
 };
 const WEIGHTS = { normal: "400", medium: "500", bold: "700" };
 
-export function styleCss(style: Style | undefined, theme: Theme, dark: boolean): Record<string, string> {
+export function styleCss(style: StyleLook | undefined, theme: Theme, dark: boolean): Record<string, string> {
   const css: Record<string, string> = {};
   if (!style) return css;
   const p = paletteOf(theme, dark);
@@ -171,6 +171,31 @@ export function styleCss(style: Style | undefined, theme: Theme, dark: boolean):
   if (style.textSize !== undefined) css.fontSize = `${typeof style.textSize === "number" ? style.textSize : theme.textSizes[style.textSize]}px`;
   if (style.fontWeight) css.fontWeight = WEIGHTS[style.fontWeight];
   if (style.italic) css.fontStyle = "italic";
+  if (style.textDecoration) css.textDecorationLine = { none: "none", underline: "underline", lineThrough: "line-through", overline: "overline" }[style.textDecoration];
+  if (style.letterSpacing !== undefined) css.letterSpacing = `${style.letterSpacing}px`;
+  if (style.lineHeight !== undefined) css.lineHeight = String(style.lineHeight);
+
+  // Lines and overflow: how many lines show, and what happens to the rest.
+  const ending = style.textOverflow ?? (style.maxLines !== undefined ? "ellipsis" : undefined);
+  if (style.softWrap === false) css.whiteSpace = "nowrap";
+  if (style.maxLines === 1) {
+    css.whiteSpace = "nowrap";
+    css.overflow = "hidden";
+  } else if (style.maxLines !== undefined && ending !== "visible") {
+    if (ending === "ellipsis") Object.assign(css, { display: "-webkit-box", WebkitLineClamp: String(style.maxLines), WebkitBoxOrient: "vertical", overflow: "hidden" });
+    else Object.assign(css, { overflow: "hidden", maxHeight: `${style.maxLines * (style.lineHeight ?? 1.4)}em` });
+  }
+  if (ending === "ellipsis" && (style.maxLines === 1 || style.softWrap === false)) {
+    css.textOverflow = "ellipsis";
+    css.overflow = "hidden";
+  } else if (ending === "clip" && style.softWrap === false) {
+    css.overflow = "hidden";
+  } else if (ending === "fade" && (style.maxLines !== undefined || style.softWrap === false)) {
+    css.overflow = "hidden";
+    css.maskImage = "linear-gradient(to right, #000 80%, transparent)";
+    css.WebkitMaskImage = css.maskImage;
+  }
+  if (style.overflow) css.overflow = style.overflow;
   if (style.align) css.textAlign = style.align === "start" ? "start" : style.align === "end" ? "end" : "center";
   if (style.width !== undefined) css.width = style.width === "fill" ? "100%" : `${style.width}px`;
   if (style.height !== undefined) css.height = style.height === "fill" ? "100%" : `${style.height}px`;
@@ -226,22 +251,22 @@ const SpImage = defineComponent({
 
 const SpTabs = defineComponent({
   name: "SpTabs",
-  props: { tabs: { type: Array as PropType<Array<{ id: string; label: string; widgets: Widget[] }>>, required: true }, ctx: { type: Object as PropType<Context>, required: true } },
+  props: { tabs: { type: Array as PropType<Array<{ id: string; label: string; widgets: Widget[] }>>, required: true }, ctx: { type: Object as PropType<Context>, required: true }, part: { type: Function as PropType<Part>, required: true } },
   setup(props) {
     const open = ref(0);
     return () =>
       h("div", {}, [
         h("div", { class: "sp-wrap", style: { padding: "0 0 8px" } }, props.tabs.map((tab, index) =>
-          h("button", { type: "button", "data-tab": tab.id, class: ["sp-chip", index === open.value ? "sp-chip--on" : ""], style: { font: "inherit", color: "inherit", cursor: "default" }, onClick: () => (open.value = index) }, tab.label),
+          h("button", props.part("tab", { type: "button", "data-tab": tab.id, class: ["sp-chip", index === open.value ? "sp-chip--on" : ""], style: { font: "inherit", color: "inherit", cursor: "default" }, onClick: () => (open.value = index) }), tab.label),
         )),
-        ...(props.tabs[open.value]?.widgets ?? []).map((widget) => renderWidget(props.ctx, widget)),
+        h("div", props.part("content"), (props.tabs[open.value]?.widgets ?? []).map((widget) => renderWidget(props.ctx, widget))),
       ]);
   },
 });
 
 const SpAccordion = defineComponent({
   name: "SpAccordion",
-  props: { items: { type: Array as PropType<Array<{ title: string; widgets: Widget[] }>>, required: true }, multiple: Boolean, ctx: { type: Object as PropType<Context>, required: true } },
+  props: { items: { type: Array as PropType<Array<{ title: string; widgets: Widget[] }>>, required: true }, multiple: Boolean, ctx: { type: Object as PropType<Context>, required: true }, part: { type: Function as PropType<Part>, required: true } },
   setup(props) {
     const open = ref<number[]>([]);
     const toggle = (index: number) => {
@@ -250,15 +275,15 @@ const SpAccordion = defineComponent({
     };
     return () =>
       h("div", {}, props.items.flatMap((item, index) => [
-        h("div", { class: "sp-acc", "data-accordion": item.title, onClick: () => toggle(index) }, [h("span", item.title), h("span", { class: `sp-chev${open.value.includes(index) ? " sp-chev--open" : ""}` })]),
-        ...(open.value.includes(index) ? item.widgets.map((widget) => renderWidget(props.ctx, widget)) : []),
+        h("div", props.part("header", { class: "sp-acc", "data-accordion": item.title, onClick: () => toggle(index) }), [h("span", item.title), h("span", { class: `sp-chev${open.value.includes(index) ? " sp-chev--open" : ""}` })]),
+        ...(open.value.includes(index) ? [h("div", props.part("content"), item.widgets.map((widget) => renderWidget(props.ctx, widget)))] : []),
       ]));
   },
 });
 
 const SpGallery = defineComponent({
   name: "SpGallery",
-  props: { images: { type: Array as PropType<Array<{ url: string; alt?: string }>>, required: true }, ratio: { type: Number, default: 16 / 9 }, dots: { type: Boolean, default: true } },
+  props: { images: { type: Array as PropType<Array<{ url: string; alt?: string }>>, required: true }, ratio: { type: Number, default: 16 / 9 }, dots: { type: Boolean, default: true }, part: { type: Function as PropType<Part>, required: true } },
   setup(props) {
     const page = ref(0);
     return () =>
@@ -270,14 +295,14 @@ const SpGallery = defineComponent({
             const element = event.target as HTMLElement;
             page.value = Math.round(element.scrollLeft / Math.max(element.clientWidth, 1));
           },
-        }, props.images.map((image) => h("div", { style: { width: "100%", height: "100%" } }, [h(SpImage, { url: image.url, alt: image.alt, fill: true, fit: "cover" })]))),
-        props.dots && props.images.length > 1 ? h("div", { class: "sp-dots" }, props.images.map((_, index) => h("i", { class: index === page.value ? "on" : "" }))) : null,
+        }, props.images.map((image) => h("div", props.part("image", { style: { width: "100%", height: "100%" } }), [h(SpImage, { url: image.url, alt: image.alt, fill: true, fit: "cover" })]))),
+        props.dots && props.images.length > 1 ? h("div", props.part("dots", { class: "sp-dots" }), props.images.map((_, index) => h("i", { class: index === page.value ? "on" : "" }))) : null,
       ]);
   },
 });
 
 // ── Rows for live data: the template is drawn once per example row, like the app does it ──
-function renderDataList(ctx: Context, widget: Widget, tag: Record<string, unknown>): VNode {
+function renderDataList(ctx: Context, widget: Widget, tag: Record<string, unknown>, part: Part): VNode {
   const data = widget.data as Record<string, any>;
   const name: string | undefined = data.source?.name;
   const template = Array.isArray(data.template) ? data.template[0] : undefined;
@@ -296,7 +321,8 @@ function renderDataList(ctx: Context, widget: Widget, tag: Record<string, unknow
   } else {
     const items = rows.map((row) => {
       const filled = fillTemplate(template, row as Record<string, unknown>) as Widget | undefined;
-      return filled ? renderWidget(ctx, filled) : null;
+      const drawn = filled ? renderWidget(ctx, filled) : null;
+      return drawn ? h("div", part("item"), [drawn]) : null;
     });
     content = layout === "grid"
       ? h("div", { class: "sp-gridrows", style: { gridTemplateColumns: `repeat(${data.columns ?? 2}, 1fr)` } }, items)
@@ -318,6 +344,19 @@ function renderOnPage(ctx: Context, widget: Widget): VNode | null {
   return h("div", { class: FULL_BLEED_WIDGETS.has(widget.type) ? "sp-bleed" : "sp-item" }, [drawn]);
 }
 
+// ── Named pieces inside a widget (a card's title, a button's label...) ──
+// `style.parts.title` is a whole look for that piece. The piece is marked with data-part so it can be found
+// (and clicked) on its own, and the look is added to whatever the preview already gives it.
+type Part = (name: string, props?: Record<string, any>) => Record<string, any>;
+function makePart(ctx: Context, widget: Widget): Part {
+  const looks = (widget.style?.parts ?? {}) as Record<string, StyleLook>;
+  return (name, props = {}) => ({
+    ...props,
+    "data-part": name,
+    style: { ...(props.style ?? {}), ...(looks[name] ? styleCss(looks[name], ctx.theme, ctx.dark) : {}) },
+  });
+}
+
 // ── One widget ──
 function renderWidget(ctx: Context, widget: Widget): VNode | null {
   if (!widget || typeof widget !== "object") return null;
@@ -326,100 +365,101 @@ function renderWidget(ctx: Context, widget: Widget): VNode | null {
   const list = (value: unknown): Widget[] => (Array.isArray(value) ? (value as Widget[]) : []);
   const kids = (value: unknown) => list(value).map((child) => renderWidget(ctx, child));
   const p = paletteOf(ctx.theme, ctx.dark);
+  const part = makePart(ctx, widget);
 
   switch (widget.type) {
     case "text":
-      return h("p", { ...tag, style: { ...tag.style, ...(data.maxLines ? { display: "-webkit-box", WebkitLineClamp: String(data.maxLines), WebkitBoxOrient: "vertical", overflow: "hidden" } : {}) } }, data.text);
+      return h("p", { ...tag, style: { ...tag.style, ...(data.maxLines && widget.style?.maxLines === undefined ? { display: "-webkit-box", WebkitLineClamp: String(data.maxLines), WebkitBoxOrient: "vertical", overflow: "hidden" } : {}) } }, data.text);
     case "image":
-      return h("div", tag, [h(SpImage, { url: data.url, alt: data.alt, ratio: data.aspectRatio, fit: data.fit === "contain" ? "contain" : "cover" })]);
+      return h("div", tag, [h("div", part("image"), [h(SpImage, { url: data.url, alt: data.alt, ratio: data.aspectRatio, fit: data.fit === "contain" ? "contain" : "cover" })])]);
     case "button": {
       const variant = data.variant === "outline" ? " sp-btn--outline" : data.variant === "text" ? " sp-btn--text" : "";
-      return h("div", tag, [h("button", { type: "button", class: `sp-btn${variant}` }, data.label)]);
+      return h("div", tag, [h("button", part("button", { type: "button", class: `sp-btn${variant}` }), data.label)]);
     }
     case "spacer": {
       const size = ctx.theme.spacing[data.size as keyof Theme["spacing"]] ?? 0;
-      return h("div", { ...tag, style: { ...tag.style, width: `${size}px`, height: `${size}px` } });
+      return h("div", { ...tag, style: { width: `${size}px`, height: `${size}px`, ...tag.style } });
     }
     case "divider":
-      return h("div", tag, [h("hr", { class: "sp-line" })]);
+      return h("div", tag, [h("hr", part("line", { class: "sp-line" }))]);
     case "section_header":
       return h("div", { ...tag, class: "sp-row" }, [
-        h("div", { class: "sp-grow" }, [h("p", { class: "sp-medium" }, data.title), data.subtitle ? h("p", { class: "sp-muted sp-small" }, data.subtitle) : null]),
-        data.actionLabel ? h("span", { class: "sp-btn sp-btn--text" }, data.actionLabel) : null,
+        h("div", { class: "sp-grow" }, [h("p", part("title", { class: "sp-medium" }), data.title), data.subtitle ? h("p", part("subtitle", { class: "sp-muted sp-small" }), data.subtitle) : null]),
+        data.actionLabel ? h("span", part("action", { class: "sp-btn sp-btn--text" }), data.actionLabel) : null,
       ]);
     case "card":
       return h("div", { ...tag, class: "sp-card" }, [
-        data.imageUrl ? h(SpImage, { url: data.imageUrl, height: 120 }) : null,
-        h("div", { class: "sp-card-body" }, [
-          data.title ? h("p", { class: "sp-medium" }, data.title) : null,
-          data.subtitle ? h("p", { class: "sp-muted sp-small" }, data.subtitle) : null,
+        data.imageUrl ? h("div", part("image"), [h(SpImage, { url: data.imageUrl, height: 120 })]) : null,
+        h("div", part("body", { class: "sp-card-body" }), [
+          data.title ? h("p", part("title", { class: "sp-medium" }), data.title) : null,
+          data.subtitle ? h("p", part("subtitle", { class: "sp-muted sp-small" }), data.subtitle) : null,
           ...kids(data.children),
         ]),
       ]);
     case "banner":
-      return h("div", { ...tag, class: "sp-over", style: { ...tag.style, height: "160px" } }, [
-        h(SpImage, { url: data.imageUrl, height: 160 }),
+      return h("div", { ...tag, class: "sp-over", style: { height: "160px", ...tag.style } }, [
+        h("div", part("image"), [h(SpImage, { url: data.imageUrl, height: 160 })]),
         h("div", { class: "sp-shade" }),
-        data.title || data.subtitle ? h("div", { class: "sp-over-text" }, [data.title ? h("strong", data.title) : null, data.subtitle ? h("span", data.subtitle) : null]) : null,
+        data.title || data.subtitle ? h("div", { class: "sp-over-text" }, [data.title ? h("strong", part("title"), data.title) : null, data.subtitle ? h("span", part("subtitle"), data.subtitle) : null]) : null,
       ]);
     case "hero":
-      return h("div", { ...tag, class: "sp-over", style: { ...tag.style, height: "240px" } }, [
-        h(SpImage, { url: data.imageUrl, height: 240 }),
+      return h("div", { ...tag, class: "sp-over", style: { height: "240px", ...tag.style } }, [
+        h("div", part("image"), [h(SpImage, { url: data.imageUrl, height: 240 })]),
         h("div", { class: "sp-shade" }),
         h("div", { class: "sp-over-text" }, [
-          h("strong", { style: { fontSize: "26px" } }, data.title),
-          data.subtitle ? h("span", { style: { fontSize: "16px", display: "block" } }, data.subtitle) : null,
-          data.ctaLabel ? h("span", { class: "sp-btn", style: { marginTop: "12px" } }, data.ctaLabel) : null,
+          h("strong", part("title", { style: { fontSize: "26px" } }), data.title),
+          data.subtitle ? h("span", part("subtitle", { style: { fontSize: "16px", display: "block" } }), data.subtitle) : null,
+          data.ctaLabel ? h("span", part("button", { class: "sp-btn", style: { marginTop: "12px" } }), data.ctaLabel) : null,
         ]),
       ]);
     case "carousel": {
       const width = `${Math.round((data.viewportFraction ?? 0.85) * 100)}%`;
-      return h("div", { ...tag, class: "sp-scroll" }, kids(data.items).map((item) => h("div", { style: { width } }, [item])));
+      return h("div", { ...tag, class: "sp-scroll" }, kids(data.items).map((item) => h("div", part("item", { style: { width } }), [item])));
     }
     case "list":
-      return h("div", tag, kids(data.items).flatMap((item, index) => [index > 0 && data.dividers ? h("hr", { class: "sp-line" }) : null, item]));
+      return h("div", tag, kids(data.items).flatMap((item, index) => [index > 0 && data.dividers ? h("hr", part("divider", { class: "sp-line" })) : null, h("div", part("item"), [item])]));
     case "grid":
-      return h("div", { ...tag, class: "sp-gridrows", style: { ...tag.style, gridTemplateColumns: `repeat(${data.columns ?? 2}, 1fr)` } }, kids(data.items));
+      return h("div", { ...tag, class: "sp-gridrows", style: { gridTemplateColumns: `repeat(${data.columns ?? 2}, 1fr)`, ...tag.style } }, kids(data.items).map((item) => h("div", part("item"), [item])));
     case "container":
-      return h("div", { ...tag, style: { ...tag.style, display: "flex", flexDirection: data.direction === "horizontal" ? "row" : "column", gap: `${ctx.theme.spacing[data.gap as keyof Theme["spacing"]] ?? 0}px` } }, kids(data.children));
+      return h("div", { ...tag, style: { display: "flex", flexDirection: data.direction === "horizontal" ? "row" : "column", gap: `${ctx.theme.spacing[data.gap as keyof Theme["spacing"]] ?? 0}px`, ...tag.style } }, kids(data.children));
     case "tabs":
-      return h("div", tag, [h(SpTabs, { tabs: Array.isArray(data.tabs) ? data.tabs : [], ctx })]);
+      return h("div", tag, [h(SpTabs, { tabs: Array.isArray(data.tabs) ? data.tabs : [], ctx, part })]);
     case "accordion":
-      return h("div", tag, [h(SpAccordion, { items: Array.isArray(data.items) ? data.items : [], multiple: data.allowMultiple === true, ctx })]);
+      return h("div", tag, [h(SpAccordion, { items: Array.isArray(data.items) ? data.items : [], multiple: data.allowMultiple === true, ctx, part })]);
     case "data_list":
-      return renderDataList(ctx, widget, tag);
+      return renderDataList(ctx, widget, tag, part);
     case "rich_text":
       return h("p", tag, list(data.spans).map((span: any) =>
         h("span", { style: { fontWeight: span.bold ? "700" : undefined, fontStyle: span.italic ? "italic" : undefined, textDecoration: span.underline ? "underline" : undefined, color: span.color ? p[span.color as keyof typeof p] : undefined, fontSize: span.size ? `${ctx.theme.textSizes[span.size as keyof Theme["textSizes"]]}px` : undefined } }, span.text),
       ));
     case "quote":
-      return h("div", { ...tag, style: { ...tag.style, borderInlineStart: `4px solid ${p.primary}`, paddingInlineStart: "12px" } }, [
-        h("p", { style: { fontStyle: "italic", fontSize: "16px" } }, data.text),
+      return h("div", { ...tag, style: { borderInlineStart: `4px solid ${p.primary}`, paddingInlineStart: "12px", ...tag.style } }, [
+        h("p", part("text", { style: { fontStyle: "italic", fontSize: "16px" } }), data.text),
         data.author || data.role || data.avatarUrl ? h("div", { class: "sp-row", style: { marginTop: "8px" } }, [
-          data.avatarUrl ? h("div", { style: { width: "28px", height: "28px", borderRadius: "50%", overflow: "hidden" } }, [h(SpImage, { url: data.avatarUrl, height: 28 })]) : null,
-          h("span", { class: "sp-small" }, [data.author, data.role].filter(Boolean).join(", ")),
+          data.avatarUrl ? h("div", part("avatar", { style: { width: "28px", height: "28px", borderRadius: "50%", overflow: "hidden" } }), [h(SpImage, { url: data.avatarUrl, height: 28 })]) : null,
+          h("span", part("author", { class: "sp-small" }), [data.author, data.role].filter(Boolean).join(", ")),
         ]) : null,
       ]);
     case "icon": {
       const size = data.size === "small" ? 16 : data.size === "large" ? 40 : 24;
-      return h("span", { ...tag, style: { ...tag.style, fontSize: `${size}px`, display: "inline-block", lineHeight: "1" } }, iconSymbol(data.name));
+      return h("span", { ...tag, style: { fontSize: `${size}px`, display: "inline-block", lineHeight: "1", ...tag.style } }, iconSymbol(data.name));
     }
     case "avatar": {
       const size = data.size === "small" ? 32 : data.size === "large" ? 80 : 48;
-      return h("div", { ...tag, style: { ...tag.style, width: `${size}px`, height: `${size}px`, borderRadius: "50%", overflow: "hidden", position: "relative", background: tint(p.primary, 20), display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "700" } }, [
-        data.initials ? h("span", data.initials) : null,
+      return h("div", { ...tag, style: { width: `${size}px`, height: `${size}px`, borderRadius: "50%", overflow: "hidden", position: "relative", background: tint(p.primary, 20), display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "700", ...tag.style } }, [
+        data.initials ? h("span", part("initials"), data.initials) : null,
         data.imageUrl ? h("div", { style: { position: "absolute", inset: "0" } }, [h(SpImage, { url: data.imageUrl, height: size })]) : null,
       ]);
     }
     case "badge": {
       const color = toneColor(ctx, data.tone);
-      return h("span", { ...tag, class: "sp-badge", style: { ...tag.style, background: tint(color, 15), color } }, data.label);
+      return h("span", { ...tag, class: "sp-badge", style: { background: tint(color, 15), color, ...tag.style } }, data.label);
     }
     case "alert": {
       const color = toneColor(ctx, data.tone);
-      return h("div", { ...tag, class: "sp-alert", style: { ...tag.style, background: tint(color, 12) } }, [
-        h("span", { style: { color, fontSize: "20px" } }, data.tone === "success" ? "✓" : data.tone === "warning" ? "⚠" : data.tone === "error" ? "⛔" : "ⓘ"),
-        h("div", {}, [data.title ? h("p", { style: { fontWeight: "500" } }, data.title) : null, h("p", data.message)]),
+      return h("div", { ...tag, class: "sp-alert", style: { background: tint(color, 12), ...tag.style } }, [
+        h("span", part("icon", { style: { color, fontSize: "20px" } }), data.tone === "success" ? "✓" : data.tone === "warning" ? "⚠" : data.tone === "error" ? "⛔" : "ⓘ"),
+        h("div", {}, [data.title ? h("p", part("title", { style: { fontWeight: "500" } }), data.title) : null, h("p", part("message"), data.message)]),
       ]);
     }
     case "progress": {
@@ -430,58 +470,58 @@ function renderWidget(ctx: Context, widget: Widget): VNode | null {
             h("circle", { cx: 18, cy: 18, r: 15.9, fill: "none", stroke: "var(--sp-outline)", "stroke-width": 3 }),
             h("circle", { cx: 18, cy: 18, r: 15.9, fill: "none", stroke: "var(--sp-primary)", "stroke-width": 3, "stroke-dasharray": `${value * 100} 100`, "stroke-linecap": "round" }),
           ]),
-          h("span", `${Math.round(value * 100)}%`),
+          h("span", part("label"), `${Math.round(value * 100)}%`),
         ]);
       }
-      return h("div", tag, [data.label ? h("p", { style: { marginBottom: "4px" } }, data.label) : null, h("div", { class: "sp-bar" }, [h("i", { style: { width: `${value * 100}%` } })])]);
+      return h("div", tag, [data.label ? h("p", part("label", { style: { marginBottom: "4px" } }), data.label) : null, h("div", part("track", { class: "sp-bar" }), [h("i", part("fill", { style: { width: `${value * 100}%` } }))])]);
     }
     case "stat": {
       const trend = data.trend as string | undefined;
       const color = trend === "up" ? p.success : trend === "down" ? p.error : p.muted;
       return h("div", tag, [
-        h("p", { class: "sp-muted sp-small" }, data.label),
-        h("p", { style: { fontSize: "24px" } }, data.value),
-        data.delta ? h("p", { class: "sp-small", style: { color } }, `${trend === "up" ? "↑ " : trend === "down" ? "↓ " : ""}${data.delta}`) : null,
+        h("p", part("label", { class: "sp-muted sp-small" }), data.label),
+        h("p", part("value", { style: { fontSize: "24px" } }), data.value),
+        data.delta ? h("p", part("delta", { class: "sp-small", style: { color } }), `${trend === "up" ? "↑ " : trend === "down" ? "↓ " : ""}${data.delta}`) : null,
       ]);
     }
     case "key_value":
-      return h("div", tag, list(data.rows).map((row: any) => h("div", { class: "sp-kv" }, [h("span", { class: "sp-muted" }, row.label), h("strong", String(row.value ?? ""))])));
+      return h("div", tag, list(data.rows).map((row: any) => h("div", part("row", { class: "sp-kv" }), [h("span", part("label", { class: "sp-muted" }), row.label), h("strong", part("value"), String(row.value ?? ""))])));
     case "list_item":
-      return h("div", { ...tag, class: "sp-row", style: { ...tag.style, padding: tag.style.padding ?? "8px 0" } }, [
-        data.imageUrl ? h("div", { style: { width: "40px", height: "40px", borderRadius: "8px", overflow: "hidden", flexShrink: "0" } }, [h(SpImage, { url: data.imageUrl, height: 40 })]) : data.icon ? h("span", { style: { fontSize: "22px", width: "40px", textAlign: "center" } }, iconSymbol(data.icon)) : null,
-        h("div", { class: "sp-grow" }, [h("p", { class: "sp-medium", style: { fontSize: "16px" } }, data.title), data.subtitle ? h("p", { class: "sp-muted sp-small" }, data.subtitle) : null]),
-        data.trailingText ? h("span", { class: "sp-muted" }, data.trailingText) : null,
+      return h("div", { ...tag, class: "sp-row", style: { padding: "8px 0", ...tag.style } }, [
+        data.imageUrl ? h("div", part("image", { style: { width: "40px", height: "40px", borderRadius: "8px", overflow: "hidden", flexShrink: "0" } }), [h(SpImage, { url: data.imageUrl, height: 40 })]) : data.icon ? h("span", part("icon", { style: { fontSize: "22px", width: "40px", textAlign: "center" } }), iconSymbol(data.icon)) : null,
+        h("div", { class: "sp-grow" }, [h("p", part("title", { class: "sp-medium", style: { fontSize: "16px" } }), data.title), data.subtitle ? h("p", part("subtitle", { class: "sp-muted sp-small" }), data.subtitle) : null]),
+        data.trailingText ? h("span", part("trailing", { class: "sp-muted" }), data.trailingText) : null,
         data.chevron ? h("span", { class: "sp-muted" }, "›") : null,
       ]);
     case "empty_state":
-      return h("div", { ...tag, style: { ...tag.style, padding: "24px", textAlign: "center" } }, [
-        data.icon ? h("div", { style: { fontSize: "48px", color: p.muted } }, iconSymbol(data.icon)) : null,
-        h("p", { class: "sp-medium", style: { marginTop: "12px" } }, data.title),
-        data.message ? h("p", { style: { marginTop: "4px" } }, data.message) : null,
-        data.actionLabel ? h("span", { class: "sp-btn", style: { marginTop: "16px" } }, data.actionLabel) : null,
+      return h("div", { ...tag, style: { padding: "24px", textAlign: "center", ...tag.style } }, [
+        data.icon ? h("div", part("icon", { style: { fontSize: "48px", color: p.muted } }), iconSymbol(data.icon)) : null,
+        h("p", part("title", { class: "sp-medium", style: { marginTop: "12px" } }), data.title),
+        data.message ? h("p", part("message", { style: { marginTop: "4px" } }), data.message) : null,
+        data.actionLabel ? h("span", part("button", { class: "sp-btn", style: { marginTop: "16px" } }), data.actionLabel) : null,
       ]);
     case "rating": {
       const value = Number(data.value) || 0;
       const stars = [1, 2, 3, 4, 5].map((star) => (value >= star ? "★" : value >= star - 0.5 ? "⯪" : "☆"));
       return h("div", { ...tag, class: "sp-row" }, [
-        h("span", { style: { color: "#FBBF24", letterSpacing: "1px", fontSize: "18px" } }, stars.join("")),
-        h("span", [value.toFixed(1), data.count !== undefined ? ` (${data.count})` : "", data.label ? ` ${data.label}` : ""].join("")),
+        h("span", part("stars", { style: { color: "#FBBF24", letterSpacing: "1px", fontSize: "18px" } }), stars.join("")),
+        h("span", part("text"), [value.toFixed(1), data.count !== undefined ? ` (${data.count})` : "", data.label ? ` ${data.label}` : ""].join("")),
       ]);
     }
     case "table": {
       const columns: string[] = list(data.columns) as unknown as string[];
-      return h("div", { ...tag, style: { ...tag.style, overflowX: "auto" } }, [
+      return h("div", { ...tag, style: { overflowX: "auto", ...tag.style } }, [
         h("table", { class: "sp-table" }, [
-          h("thead", [h("tr", columns.map((column) => h("th", column)))]),
-          h("tbody", (list(data.rows) as unknown as string[][]).map((row) => h("tr", columns.map((_, index) => h("td", row?.[index] ?? ""))))),
+          h("thead", [h("tr", columns.map((column) => h("th", part("header"), column)))]),
+          h("tbody", (list(data.rows) as unknown as string[][]).map((row) => h("tr", columns.map((_, index) => h("td", part("cell"), row?.[index] ?? ""))))),
         ]),
       ]);
     }
     case "steps":
       return h("div", tag, list(data.steps).map((step: any) =>
         h("div", { class: "sp-step" }, [
-          h("span", { class: `sp-dot${step.state === "done" ? " sp-dot--done" : step.state === "current" ? " sp-dot--current" : ""}` }, step.state === "done" ? "✓" : ""),
-          h("div", {}, [h("p", { style: { fontWeight: "500" } }, step.title), step.description ? h("p", { class: "sp-muted sp-small" }, step.description) : null]),
+          h("span", part("dot", { class: `sp-dot${step.state === "done" ? " sp-dot--done" : step.state === "current" ? " sp-dot--current" : ""}` }), step.state === "done" ? "✓" : ""),
+          h("div", {}, [h("p", part("title", { style: { fontWeight: "500" } }), step.title), step.description ? h("p", part("description", { class: "sp-muted sp-small" }), step.description) : null]),
         ]),
       ));
     case "countdown": {
@@ -493,38 +533,38 @@ function renderWidget(ctx: Context, widget: Widget): VNode | null {
       return h("p", { ...tag, class: "sp-medium" }, data.label ? `${data.label} ${text}` : text);
     }
     case "gallery":
-      return h("div", tag, [h(SpGallery, { images: Array.isArray(data.images) ? data.images : [], ratio: data.aspectRatio ?? 16 / 9, dots: data.showDots !== false })]);
+      return h("div", tag, [h(SpGallery, { images: Array.isArray(data.images) ? data.images : [], ratio: data.aspectRatio ?? 16 / 9, dots: data.showDots !== false, part })]);
     case "video_card":
-      return h("div", { ...tag, class: "sp-over", style: { ...tag.style, aspectRatio: "16 / 9" } }, [
-        h(SpImage, { url: data.thumbnailUrl }),
+      return h("div", { ...tag, class: "sp-over", style: { aspectRatio: "16 / 9", ...tag.style } }, [
+        h("div", part("image"), [h(SpImage, { url: data.thumbnailUrl })]),
         h("div", { class: "sp-shade" }),
-        h("div", { class: "sp-play" }, "▶"),
-        data.title ? h("div", { class: "sp-over-text", style: { right: "64px" } }, [h("strong", { style: { fontSize: "14px" } }, data.title)]) : null,
-        data.duration ? h("span", { style: { position: "absolute", right: "12px", bottom: "12px", textShadow: "0 1px 4px rgba(0,0,0,.6)" } }, data.duration) : null,
+        h("div", part("play", { class: "sp-play" }), "▶"),
+        data.title ? h("div", { class: "sp-over-text", style: { right: "64px" } }, [h("strong", part("title", { style: { fontSize: "14px" } }), data.title)]) : null,
+        data.duration ? h("span", part("duration", { style: { position: "absolute", right: "12px", bottom: "12px", textShadow: "0 1px 4px rgba(0,0,0,.6)" } }), data.duration) : null,
       ]);
     case "pricing_card":
       return h("div", { ...tag, class: `sp-price${data.highlighted ? " sp-price--on" : ""}` }, [
-        h("p", { class: "sp-medium" }, data.name),
-        h("p", { style: { fontSize: "28px" } }, [data.price, data.period ? h("span", { class: "sp-muted sp-small", style: { marginInlineStart: "6px" } }, data.period) : null]),
-        h("div", { style: { margin: "8px 0" } }, list(data.features).map((feature) => h("p", { style: { padding: "2px 0" } }, [h("span", { style: { color: p.primary } }, "✓ "), String(feature)]))),
-        data.ctaLabel ? h("span", { class: "sp-btn", style: { display: "flex", marginTop: "12px" } }, data.ctaLabel) : null,
+        h("p", part("name", { class: "sp-medium" }), data.name),
+        h("p", part("price", { style: { fontSize: "28px" } }), [data.price, data.period ? h("span", part("period", { class: "sp-muted sp-small", style: { marginInlineStart: "6px" } }), data.period) : null]),
+        h("div", { style: { margin: "8px 0" } }, list(data.features).map((feature) => h("p", part("feature", { style: { padding: "2px 0" } }), [h("span", { style: { color: p.primary } }, "✓ "), String(feature)]))),
+        data.ctaLabel ? h("span", part("button", { class: "sp-btn", style: { display: "flex", marginTop: "12px" } }), data.ctaLabel) : null,
       ]);
     case "search_bar":
-      return h("div", tag, [h("div", { class: "sp-search" }, [h("span", "⌕"), h("span", data.placeholder)])]);
+      return h("div", tag, [h("div", part("field", { class: "sp-search" }), [h("span", "⌕"), h("span", data.placeholder)])]);
     case "chips":
-      return h("div", { ...tag, class: "sp-wrap" }, list(data.chips).map((chip: any) => h("span", { class: `sp-chip${chip.selected ? " sp-chip--on" : ""}` }, [chip.selected ? h("span", "✓") : null, chip.label])));
+      return h("div", { ...tag, class: "sp-wrap" }, list(data.chips).map((chip: any) => h("span", part("chip", { class: `sp-chip${chip.selected ? " sp-chip--on" : ""}` }), [chip.selected ? h("span", "✓") : null, chip.label])));
     case "quick_actions":
-      return h("div", { ...tag, class: "sp-gridrows", style: { ...tag.style, gridTemplateColumns: `repeat(${data.columns ?? 4}, 1fr)` } }, list(data.items).map((item: any) =>
-        h("div", { class: "sp-quick" }, [h("i", iconSymbol(item.icon)), h("span", item.label)]),
+      return h("div", { ...tag, class: "sp-gridrows", style: { gridTemplateColumns: `repeat(${data.columns ?? 4}, 1fr)`, ...tag.style } }, list(data.items).map((item: any) =>
+        h("div", part("item", { class: "sp-quick" }), [h("i", part("icon"), iconSymbol(item.icon)), h("span", part("label"), item.label)]),
       ));
     case "form":
       return h("div", tag, [
         ...list(data.fields).map((field: any) =>
           field.type === "checkbox" || field.type === "switch"
-            ? h("div", { class: "sp-row sp-field" }, [h("span", field.type === "switch" ? "◐" : "☐"), h("span", `${field.label}${field.required ? " *" : ""}`)])
-            : h("div", { class: "sp-field" }, [h("label", `${field.label}${field.required ? " *" : ""}`), h("div", { class: "sp-input" }, field.type === "select" ? "Choose…  ⌄" : field.placeholder ?? (field.type === "date" ? "Choose a date  ▦" : ""))]),
+            ? h("div", { class: "sp-row sp-field" }, [h("span", field.type === "switch" ? "◐" : "☐"), h("span", part("label"), `${field.label}${field.required ? " *" : ""}`)])
+            : h("div", { class: "sp-field" }, [h("label", part("label"), `${field.label}${field.required ? " *" : ""}`), h("div", part("field", { class: "sp-input" }), field.type === "select" ? "Choose…  ⌄" : field.placeholder ?? (field.type === "date" ? "Choose a date  ▦" : ""))]),
         ),
-        h("span", { class: "sp-btn", style: { display: "flex" } }, data.submitLabel),
+        h("span", part("button", { class: "sp-btn", style: { display: "flex" } }), data.submitLabel),
       ]);
     default: {
       const block = renderBuildingBlock(widget.type, data, tag, {

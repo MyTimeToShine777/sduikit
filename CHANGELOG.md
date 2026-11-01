@@ -7,6 +7,15 @@ and the packages use [semantic versioning](https://semver.org/). The format itse
 
 ## [Unreleased]
 
+### Added (every widget, every piece)
+- **`style.parts`: a look for each named piece of a widget.** A card's `title`, `subtitle`, `image` and `body`, a button's `button`,
+  an alert's `icon`, `title` and `message`, a stat's `value`... (31 widgets, listed in `docs/widgets.md` and in
+  `listWidgets()[n].parts`). Each piece takes every style option. Drawn in the JavaScript preview and in Flutter.
+  The style editor has a "Change the look of" picker.
+- **Text options in the shared style:** `textDecoration`, `letterSpacing`, `lineHeight`, `maxLines`, `textOverflow` (clip, ellipsis,
+  fade, visible), `softWrap`, and `overflow` (visible or hidden) for content bigger than its widget.
+- The widget reference (`docs/widgets.md`) now lists all 66 widgets, the style options, and each widget's parts.
+
 ### Added (full control)
 - **Exact styling.** `style` still takes theme names, and now also exact values: any `#RRGGBB` or `#RRGGBBAA` colour, numbers for
   space, corners and text size, `padding` and `margin` per side, `width`, `height` (a number or `"fill"`), `borderWidth`,

@@ -51,6 +51,7 @@ Widget _text(BuildContext context, SduiNode node, SduiRender render) {
   Widget text = Text(
     node.requireString('text'),
     maxLines: maxLines,
+    // The widget's own `maxLines` ends with "..." unless the style says otherwise; the style's own limit is applied around it.
     overflow: maxLines == null ? null : TextOverflow.ellipsis,
     textAlign: align,
     style: TextStyle(
@@ -70,7 +71,7 @@ Widget _image(BuildContext context, SduiNode node, SduiRender render) {
     description: node.string('alt'),
   );
   final ratio = node.number('aspectRatio');
-  return render.wrapNode(context, node, ratio == null ? image : AspectRatio(aspectRatio: ratio, child: image));
+  return render.wrapNode(context, node, render.part(context, node, 'image', ratio == null ? image : AspectRatio(aspectRatio: ratio, child: image)));
 }
 
 Widget _button(BuildContext context, SduiNode node, SduiRender render) {
@@ -81,11 +82,16 @@ Widget _button(BuildContext context, SduiNode node, SduiRender render) {
         event: node.analyticsEvent,
         params: node.analyticsParams,
       );
-  final Widget button = switch (node.string('variant')) {
-    'outline' => OutlinedButton(onPressed: onPressed, child: Text(label)),
-    'text' => TextButton(onPressed: onPressed, child: Text(label)),
-    _ => FilledButton(onPressed: onPressed, child: Text(label)),
-  };
+  final Widget button = render.partButton(
+    context,
+    node,
+    'button',
+    (style) => switch (node.string('variant')) {
+      'outline' => OutlinedButton(style: style, onPressed: onPressed, child: Text(label)),
+      'text' => TextButton(style: style, onPressed: onPressed, child: Text(label)),
+      _ => FilledButton(style: style, onPressed: onPressed, child: Text(label)),
+    },
+  );
   return render.wrapNode(context, node, button, tappable: false);
 }
 
@@ -96,7 +102,18 @@ Widget _spacer(BuildContext context, SduiNode node, SduiRender render) {
 }
 
 Widget _divider(BuildContext context, SduiNode node, SduiRender render) {
-  return render.wrapNode(context, node, const Divider());
+  final line = render.partLook(node, 'line');
+  final tokens = context.sduiTokens;
+  return render.wrapNode(
+    context,
+    node,
+    Divider(
+      color: tokens.color(line['color']),
+      thickness: line['height'] is num ? (line['height'] as num).toDouble() : null,
+      indent: line['margin'] is Map ? tokens.space((line['margin'] as Map)['left']) : null,
+      endIndent: line['margin'] is Map ? tokens.space((line['margin'] as Map)['right']) : null,
+    ),
+  );
 }
 
 Widget _sectionHeader(BuildContext context, SduiNode node, SduiRender render) {
@@ -110,20 +127,26 @@ Widget _sectionHeader(BuildContext context, SduiNode node, SduiRender render) {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(title, style: theme.textTheme.titleMedium),
-            if (subtitle != null) Text(subtitle, style: theme.textTheme.bodySmall),
+            render.partText(context, node, 'title', title, style: theme.textTheme.titleMedium),
+            if (subtitle != null) render.partText(context, node, 'subtitle', subtitle, style: theme.textTheme.bodySmall),
           ],
         ),
       ),
       if (actionLabel != null)
-        TextButton(
-          onPressed: () => render.tap(
-            context,
-            action: node.action,
-            event: node.analyticsEvent,
-            params: node.analyticsParams,
+        render.partButton(
+          context,
+          node,
+          'action',
+          (style) => TextButton(
+            style: style,
+            onPressed: () => render.tap(
+              context,
+              action: node.action,
+              event: node.analyticsEvent,
+              params: node.analyticsParams,
+            ),
+            child: Text(actionLabel),
           ),
-          child: Text(actionLabel),
         ),
     ],
   );
@@ -149,17 +172,22 @@ Widget _card(BuildContext context, SduiNode node, SduiRender render) {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (imageUrl != null) sduiNetworkImage(imageUrl, height: 120),
-          Padding(
-            padding: const EdgeInsets.all(12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (title != null) Text(title, style: theme.textTheme.titleMedium),
-                if (subtitle != null) Text(subtitle, style: theme.textTheme.bodySmall),
-                ...render.children(context, inside),
-              ],
+          if (imageUrl != null) render.part(context, node, 'image', sduiNetworkImage(imageUrl, height: 120)),
+          render.part(
+            context,
+            node,
+            'body',
+            Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (title != null) render.partText(context, node, 'title', title, style: theme.textTheme.titleMedium),
+                  if (subtitle != null) render.partText(context, node, 'subtitle', subtitle, style: theme.textTheme.bodySmall),
+                  ...render.children(context, inside),
+                ],
+              ),
             ),
           ),
         ],
@@ -182,7 +210,7 @@ Widget _banner(BuildContext context, SduiNode node, SduiRender render) {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          sduiNetworkImage(imageUrl, height: 160),
+          render.part(context, node, 'image', sduiNetworkImage(imageUrl, height: 160)),
           if (title != null || subtitle != null)
             Positioned(
               left: 12,
@@ -193,8 +221,8 @@ Widget _banner(BuildContext context, SduiNode node, SduiRender render) {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   if (title != null)
-                    Text(title, style: onImage.copyWith(fontSize: 20, fontWeight: FontWeight.bold)),
-                  if (subtitle != null) Text(subtitle, style: onImage),
+                    render.partText(context, node, 'title', title, style: onImage.copyWith(fontSize: 20, fontWeight: FontWeight.bold)),
+                  if (subtitle != null) render.partText(context, node, 'subtitle', subtitle, style: onImage),
                 ],
               ),
             ),
@@ -209,7 +237,7 @@ Widget _carousel(BuildContext context, SduiNode node, SduiRender render) {
   if (items.isEmpty) throw SduiDataError(node, 'items');
   // Each card is a fraction of the screen wide, so the next one peeks in and invites a swipe.
   final cardWidth = MediaQuery.sizeOf(context).width * (node.number('viewportFraction') ?? 0.85);
-  final cards = render.children(context, items);
+  final cards = [for (final card in render.children(context, items)) render.part(context, node, 'item', card)];
   return render.wrapNode(
     context,
     node,
@@ -283,7 +311,7 @@ class _SduiCarouselState extends State<_SduiCarousel> {
 Widget _list(BuildContext context, SduiNode node, SduiRender render) {
   final items = node.list('items');
   if (items.isEmpty) throw SduiDataError(node, 'items');
-  final rows = render.children(context, items);
+  final rows = [for (final row in render.children(context, items)) render.part(context, node, 'item', row)];
   final withDividers = node.boolean('dividers') ?? false;
   return render.wrapNode(
     context,
@@ -292,7 +320,7 @@ Widget _list(BuildContext context, SduiNode node, SduiRender render) {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         for (var index = 0; index < rows.length; index++) ...[
-          if (index > 0 && withDividers) const Divider(),
+          if (index > 0 && withDividers) render.part(context, node, 'divider', const Divider()),
           rows[index],
         ],
       ],
@@ -308,7 +336,7 @@ Widget _grid(BuildContext context, SduiNode node, SduiRender render) {
   return render.wrapNode(
     context,
     node,
-    SduiGridRows(columns: columns, children: render.children(context, items)),
+    SduiGridRows(columns: columns, children: [for (final cell in render.children(context, items)) render.part(context, node, 'item', cell)]),
   );
 }
 
@@ -327,14 +355,15 @@ Widget _tabs(BuildContext context, SduiNode node, SduiRender render) {
     }
   }
   if (tabs.isEmpty) throw SduiDataError(node, 'tabs');
-  return render.wrapNode(context, node, _SduiTabs(tabs: tabs, render: render));
+  return render.wrapNode(context, node, _SduiTabs(tabs: tabs, render: render, node: node));
 }
 
 class _SduiTabs extends StatefulWidget {
-  const _SduiTabs({required this.tabs, required this.render});
+  const _SduiTabs({required this.tabs, required this.render, required this.node});
 
   final List<_TabData> tabs;
   final SduiRender render;
+  final SduiNode node;
 
   @override
   State<_SduiTabs> createState() => _SduiTabsState();
@@ -355,13 +384,18 @@ class _SduiTabsState extends State<_SduiTabs> {
           children: [
             for (var index = 0; index < tabs.length; index++)
               ChoiceChip(
-                label: Text(tabs[index].label),
+                label: widget.render.partText(context, widget.node, 'tab', tabs[index].label),
                 selected: index == selected,
                 onSelected: (_) => setState(() => _selected = index),
               ),
           ],
         ),
-        ...widget.render.children(context, tabs[selected].widgets),
+        widget.render.part(
+          context,
+          widget.node,
+          'content',
+          Column(crossAxisAlignment: CrossAxisAlignment.start, children: widget.render.children(context, tabs[selected].widgets)),
+        ),
       ],
     );
   }

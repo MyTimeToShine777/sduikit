@@ -45,9 +45,43 @@ function describe(schema) {
   }
 }
 
+// The look options every widget (and every part of a widget) takes.
+function styleSection() {
+  const style = readJson("schemas/common/style.json");
+  const rows = Object.entries(style.properties)
+    .filter(([key]) => key !== "parts")
+    .map(([key, property]) => `| \`${key}\` | ${styleHolds(property)} |`);
+  return [
+    "## Style (every widget)",
+    "",
+    "Any widget can have a `style`. A value is a name from the app's theme (follows dark mode and re-branding) or an exact value. `style.parts` gives the same options to named pieces inside the widget.",
+    "",
+    "| Option | Holds |",
+    "|---|---|",
+    ...rows,
+    "| `parts` | an object: part name, then any of the options above |",
+    "",
+  ];
+}
+
+function styleHolds(property) {
+  const ref = property.$ref ?? "";
+  if (property.enum) return property.enum.map((value) => `\`${value}\``).join(", ");
+  if (/\/(space|corner|textSize)$/.test(ref)) return "a theme name or a number";
+  if (ref.endsWith("/colour")) return "a theme colour name or `#RRGGBB` / `#RRGGBBAA`";
+  if (ref.endsWith("/sides")) return "`top`, `right`, `bottom`, `left` (each a theme name or a number)";
+  if (ref.endsWith("/length")) return "a number, or `fill`";
+  if (ref.includes("tokens.json")) return "a theme name";
+  const range = property.minimum !== undefined ? ` from ${property.minimum} to ${property.maximum}` : "";
+  if (property.type === "boolean") return "true or false";
+  if (property.type === "integer") return `a whole number${range}`;
+  if (property.type === "number") return `a number${range}`;
+  return "a value";
+}
+
 export function buildWidgetDocs() {
   const catalogue = readJson("schemas/catalogue.json");
-  const groupOrder = ["Basics", "Layout", "Media", "Content", "Interactive", "Live data"];
+  const groupOrder = ["Basics", "Layout", "Media", "Content", "Interactive", "Live data", "Building blocks"];
   const lines = [
     "# Widget reference",
     "",
@@ -58,6 +92,7 @@ export function buildWidgetDocs() {
     "the `data` of each widget. A field marked **required** must be there; the others may be left out.",
     "",
   ];
+  lines.push(...styleSection());
   for (const group of groupOrder) {
     const inGroup = Object.entries(catalogue.types).filter(([, entry]) => entry.group === group);
     if (!inGroup.length) continue;
@@ -69,6 +104,7 @@ export function buildWidgetDocs() {
       const required = new Set(schema.required ?? []);
       lines.push(`### \`${type}\``, "", `${entry.description} (version ${versions})`, "");
       if (schema.description) lines.push(schema.description, "");
+      if (entry.parts?.length) lines.push(`Parts you can style one by one with \`style.parts\`: ${entry.parts.map((part) => `\`${part}\``).join(", ")}.`, "");
       const properties = Object.entries(schema.properties ?? {});
       if (properties.length) {
         lines.push("| Field | Holds | |", "|---|---|---|");

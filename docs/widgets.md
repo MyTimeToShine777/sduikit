@@ -6,6 +6,37 @@ The built-in widgets (66), grouped by what they are for. Every widget has the sa
 (`id`, `type`, `v`, `data`, and the optional `style`, `action`, `analytics`, `rules`, `fallback`; see the README). The tables below describe
 the `data` of each widget. A field marked **required** must be there; the others may be left out.
 
+## Style (every widget)
+
+Any widget can have a `style`. A value is a name from the app's theme (follows dark mode and re-branding) or an exact value. `style.parts` gives the same options to named pieces inside the widget.
+
+| Option | Holds |
+|---|---|
+| `spacing` | a theme name or a number |
+| `padding` | `top`, `right`, `bottom`, `left` (each a theme name or a number) |
+| `margin` | `top`, `right`, `bottom`, `left` (each a theme name or a number) |
+| `radius` | a theme name or a number |
+| `color` | a theme colour name or `#RRGGBB` / `#RRGGBBAA` |
+| `textColor` | a theme colour name or `#RRGGBB` / `#RRGGBBAA` |
+| `textSize` | a theme name or a number |
+| `fontWeight` | `normal`, `medium`, `bold` |
+| `italic` | true or false |
+| `align` | a theme name |
+| `width` | a number, or `fill` |
+| `height` | a number, or `fill` |
+| `borderWidth` | a number from 0 to 20 |
+| `borderColor` | a theme colour name or `#RRGGBB` / `#RRGGBBAA` |
+| `shadow` | `none`, `small`, `medium`, `large` |
+| `opacity` | a number from 0 to 1 |
+| `textDecoration` | `none`, `underline`, `lineThrough`, `overline` |
+| `letterSpacing` | a number from -5 to 50 |
+| `lineHeight` | a number from 0.5 to 5 |
+| `maxLines` | a whole number from 1 to 100 |
+| `textOverflow` | `clip`, `ellipsis`, `fade`, `visible` |
+| `softWrap` | true or false |
+| `overflow` | `visible`, `hidden` |
+| `parts` | an object: part name, then any of the options above |
+
 ## Basics
 
 ### `text`
@@ -21,6 +52,8 @@ A line or paragraph of text. (version 1)
 
 A picture from a web address. (version 1)
 
+Parts you can style one by one with `style.parts`: `image`.
+
 | Field | Holds | |
 |---|---|---|
 | `url` | web address | **required** |
@@ -31,6 +64,8 @@ A picture from a web address. (version 1)
 ### `button`
 
 A button that runs an action. (version 1)
+
+Parts you can style one by one with `style.parts`: `button`.
 
 | Field | Holds | |
 |---|---|---|
@@ -48,6 +83,8 @@ Empty space between things. (version 1)
 ### `divider`
 
 A thin line between things. (version 1)
+
+Parts you can style one by one with `style.parts`: `line`.
 
 No fields.
 
@@ -83,6 +120,8 @@ A small coloured label such as New or Sale. (version 1)
 
 A heading with an optional subtitle and a link on the right. (version 1)
 
+Parts you can style one by one with `style.parts`: `title`, `subtitle`, `action`.
+
 | Field | Holds | |
 |---|---|---|
 | `title` | text | **required** |
@@ -92,6 +131,8 @@ A heading with an optional subtitle and a link on the right. (version 1)
 ### `card`
 
 A framed box with a picture, text and other widgets. (version 1)
+
+Parts you can style one by one with `style.parts`: `image`, `title`, `subtitle`, `body`.
 
 | Field | Holds | |
 |---|---|---|
@@ -104,6 +145,8 @@ A framed box with a picture, text and other widgets. (version 1)
 
 Widgets side by side that you swipe through (can move by itself). (version 1)
 
+Parts you can style one by one with `style.parts`: `item`.
+
 | Field | Holds | |
 |---|---|---|
 | `items` | list of a widget, at least 1 | **required** |
@@ -114,6 +157,8 @@ Widgets side by side that you swipe through (can move by itself). (version 1)
 
 Widgets one under another, with optional lines between. (version 1)
 
+Parts you can style one by one with `style.parts`: `item`, `divider`.
+
 | Field | Holds | |
 |---|---|---|
 | `items` | list of a widget, at least 1 | **required** |
@@ -122,6 +167,8 @@ Widgets one under another, with optional lines between. (version 1)
 ### `grid`
 
 Widgets in rows with a set number of columns. (version 1)
+
+Parts you can style one by one with `style.parts`: `item`.
 
 | Field | Holds | |
 |---|---|---|
@@ -132,6 +179,8 @@ Widgets in rows with a set number of columns. (version 1)
 
 Switch between groups of widgets. (version 1)
 
+Parts you can style one by one with `style.parts`: `tab`, `content`.
+
 | Field | Holds | |
 |---|---|---|
 | `tabs` | list of object with `id`, `label`, `widgets`, at least 1 | **required** |
@@ -139,6 +188,8 @@ Switch between groups of widgets. (version 1)
 ### `accordion`
 
 Titles that open and close to show widgets. (version 1)
+
+Parts you can style one by one with `style.parts`: `header`, `content`.
 
 | Field | Holds | |
 |---|---|---|
@@ -161,6 +212,8 @@ Puts other widgets in a row or a column. (version 1)
 
 A wide picture with a title on top. (version 1)
 
+Parts you can style one by one with `style.parts`: `image`, `title`, `subtitle`.
+
 | Field | Holds | |
 |---|---|---|
 | `imageUrl` | web address | **required** |
@@ -170,6 +223,8 @@ A wide picture with a title on top. (version 1)
 ### `gallery`
 
 Pictures you swipe through, with dots. (version 1)
+
+Parts you can style one by one with `style.parts`: `image`, `dots`.
 
 | Field | Holds | |
 |---|---|---|
@@ -181,6 +236,8 @@ Pictures you swipe through, with dots. (version 1)
 
 A video picture with a play button (the app opens the video). (version 1)
 
+Parts you can style one by one with `style.parts`: `image`, `title`, `duration`, `play`.
+
 | Field | Holds | |
 |---|---|---|
 | `thumbnailUrl` | web address | **required** |
@@ -190,6 +247,8 @@ A video picture with a play button (the app opens the video). (version 1)
 ### `hero`
 
 A big picture with a headline and a button. (version 1)
+
+Parts you can style one by one with `style.parts`: `image`, `title`, `subtitle`, `button`.
 
 | Field | Holds | |
 |---|---|---|
@@ -204,6 +263,8 @@ A big picture with a headline and a button. (version 1)
 
 A quote with the name of who said it. (version 1)
 
+Parts you can style one by one with `style.parts`: `text`, `author`, `avatar`.
+
 | Field | Holds | |
 |---|---|---|
 | `text` | text | **required** |
@@ -215,6 +276,8 @@ A quote with the name of who said it. (version 1)
 
 A round picture of a person, or their initials. (version 1)
 
+Parts you can style one by one with `style.parts`: `initials`.
+
 | Field | Holds | |
 |---|---|---|
 | `imageUrl` | web address |  |
@@ -224,6 +287,8 @@ A round picture of a person, or their initials. (version 1)
 ### `alert`
 
 A coloured notice: info, success, warning or error. (version 1)
+
+Parts you can style one by one with `style.parts`: `icon`, `title`, `message`.
 
 | Field | Holds | |
 |---|---|---|
@@ -235,6 +300,8 @@ A coloured notice: info, success, warning or error. (version 1)
 
 A progress bar or ring. (version 1)
 
+Parts you can style one by one with `style.parts`: `label`, `track`, `fill`.
+
 | Field | Holds | |
 |---|---|---|
 | `value` | number (0 to 1) | **required** |
@@ -244,6 +311,8 @@ A progress bar or ring. (version 1)
 ### `stat`
 
 A big number with a label and a change (up or down). (version 1)
+
+Parts you can style one by one with `style.parts`: `label`, `value`, `delta`.
 
 | Field | Holds | |
 |---|---|---|
@@ -256,6 +325,8 @@ A big number with a label and a change (up or down). (version 1)
 
 Rows of label and value, like order details. (version 1)
 
+Parts you can style one by one with `style.parts`: `row`, `label`, `value`.
+
 | Field | Holds | |
 |---|---|---|
 | `rows` | list of object with `label`, `value`, at least 1 | **required** |
@@ -263,6 +334,8 @@ Rows of label and value, like order details. (version 1)
 ### `list_item`
 
 A row with an icon or picture, a title, a subtitle and an arrow. (version 1)
+
+Parts you can style one by one with `style.parts`: `image`, `icon`, `title`, `subtitle`, `trailing`.
 
 | Field | Holds | |
 |---|---|---|
@@ -277,6 +350,8 @@ A row with an icon or picture, a title, a subtitle and an arrow. (version 1)
 
 A friendly message for when there is nothing to show. (version 1)
 
+Parts you can style one by one with `style.parts`: `icon`, `title`, `message`, `button`.
+
 | Field | Holds | |
 |---|---|---|
 | `title` | text | **required** |
@@ -288,6 +363,8 @@ A friendly message for when there is nothing to show. (version 1)
 
 A list of steps: done, current and still to do. (version 1)
 
+Parts you can style one by one with `style.parts`: `dot`, `title`, `description`.
+
 | Field | Holds | |
 |---|---|---|
 | `steps` | list of object with `title`, `description`, `state`, at least 1 | **required** |
@@ -295,6 +372,8 @@ A list of steps: done, current and still to do. (version 1)
 ### `table`
 
 A simple table of text. (version 1)
+
+Parts you can style one by one with `style.parts`: `header`, `cell`.
 
 | Field | Holds | |
 |---|---|---|
@@ -315,6 +394,8 @@ Time left until a date. (version 1)
 
 A plan with a price, a list of features and a button. (version 1)
 
+Parts you can style one by one with `style.parts`: `name`, `price`, `period`, `feature`, `button`.
+
 | Field | Holds | |
 |---|---|---|
 | `name` | text | **required** |
@@ -328,6 +409,8 @@ A plan with a price, a list of features and a button. (version 1)
 
 Stars with a number and a count. (version 1)
 
+Parts you can style one by one with `style.parts`: `stars`, `text`.
+
 | Field | Holds | |
 |---|---|---|
 | `value` | number (0 to 5) | **required** |
@@ -340,6 +423,8 @@ Stars with a number and a count. (version 1)
 
 Looks like a search box; tapping it runs an action. (version 1)
 
+Parts you can style one by one with `style.parts`: `field`.
+
 | Field | Holds | |
 |---|---|---|
 | `placeholder` | text | **required** |
@@ -347,6 +432,8 @@ Looks like a search box; tapping it runs an action. (version 1)
 ### `chips`
 
 Small choice buttons, for filters. (version 1)
+
+Parts you can style one by one with `style.parts`: `chip`.
 
 | Field | Holds | |
 |---|---|---|
@@ -356,6 +443,8 @@ Small choice buttons, for filters. (version 1)
 
 A grid of round icons with labels. (version 1)
 
+Parts you can style one by one with `style.parts`: `item`, `icon`, `label`.
+
 | Field | Holds | |
 |---|---|---|
 | `items` | list of object with `label`, `icon`, `action`, at least 1 | **required** |
@@ -364,6 +453,8 @@ A grid of round icons with labels. (version 1)
 ### `form`
 
 Fields people fill in and a button that sends them. (version 1)
+
+Parts you can style one by one with `style.parts`: `label`, `field`, `button`.
 
 | Field | Holds | |
 |---|---|---|
@@ -378,6 +469,8 @@ A list filled with rows from your own API, using a template. (version 1)
 
 A list filled with live data. The app asks its own API for rows (`source.name` is a name the app understands, like "doctors_nearby") and repeats `template` once per row. Inside the template, {{field}} is replaced by that row's value. Placeholders work in text, URLs and action params.
 
+Parts you can style one by one with `style.parts`: `item`.
+
 | Field | Holds | |
 |---|---|---|
 | `source` | object with `name`, `params` | **required** |
@@ -385,3 +478,324 @@ A list filled with live data. The app asks its own API for rows (`source.name` i
 | `layout` | `list` or `carousel` or `grid` |  |
 | `columns` | whole number (1 to 6) |  |
 | `emptyText` | text |  |
+
+## Building blocks
+
+### `row`
+
+Puts widgets side by side (Flutter's Row). (version 1)
+
+| Field | Holds | |
+|---|---|---|
+| `mainAxisAlignment` | see schema |  |
+| `crossAxisAlignment` | see schema |  |
+| `mainAxisSize` | `max` or `min` |  |
+| `spacing` | see schema |  |
+| `children` | list of a widget | **required** |
+
+### `column`
+
+Stacks widgets top to bottom (Flutter's Column). (version 1)
+
+| Field | Holds | |
+|---|---|---|
+| `mainAxisAlignment` | see schema |  |
+| `crossAxisAlignment` | see schema |  |
+| `mainAxisSize` | `max` or `min` |  |
+| `spacing` | see schema |  |
+| `children` | list of a widget | **required** |
+
+### `stack`
+
+Puts widgets on top of each other. Use `positioned` to place one exactly (Flutter's Stack). (version 1)
+
+| Field | Holds | |
+|---|---|---|
+| `alignment` | see schema |  |
+| `fit` | `loose` or `expand` |  |
+| `clip` | true or false |  |
+| `width` | see schema |  |
+| `height` | see schema |  |
+| `children` | list of a widget | **required** |
+
+### `positioned`
+
+Places its widget at exact distances from the edges of the `stack` it is in (Flutter's Positioned). (version 1)
+
+| Field | Holds | |
+|---|---|---|
+| `left` | see schema |  |
+| `top` | see schema |  |
+| `right` | see schema |  |
+| `bottom` | see schema |  |
+| `width` | see schema |  |
+| `height` | see schema |  |
+| `children` | list of a widget, at most 1, at least 1 | **required** |
+
+### `padding`
+
+Adds space around its widget, a different amount on each side if you like (Flutter's Padding). (version 1)
+
+| Field | Holds | |
+|---|---|---|
+| `padding` | see schema | **required** |
+| `children` | list of a widget, at most 1 |  |
+
+### `align`
+
+Places its widget somewhere inside the space it has (Flutter's Align). (version 1)
+
+| Field | Holds | |
+|---|---|---|
+| `alignment` | see schema | **required** |
+| `widthFactor` | number (0 to 20) |  |
+| `heightFactor` | number (0 to 20) |  |
+| `children` | list of a widget, at most 1 |  |
+
+### `center`
+
+Puts its widget in the middle (Flutter's Center). (version 1)
+
+| Field | Holds | |
+|---|---|---|
+| `children` | list of a widget, at most 1 |  |
+
+### `sized_box`
+
+A box of an exact width and height, with an optional widget inside (Flutter's SizedBox). (version 1)
+
+| Field | Holds | |
+|---|---|---|
+| `width` | see schema |  |
+| `height` | see schema |  |
+| `children` | list of a widget, at most 1 |  |
+
+### `expanded`
+
+Inside a row or column: takes all the room left over (Flutter's Expanded). (version 1)
+
+| Field | Holds | |
+|---|---|---|
+| `flex` | whole number (1 to 20) |  |
+| `children` | list of a widget, at most 1, at least 1 | **required** |
+
+### `flexible`
+
+Inside a row or column: may grow to take spare room, or stay small (Flutter's Flexible). (version 1)
+
+| Field | Holds | |
+|---|---|---|
+| `flex` | whole number (1 to 20) |  |
+| `fit` | `loose` or `tight` |  |
+| `children` | list of a widget, at most 1, at least 1 | **required** |
+
+### `aspect_ratio`
+
+Makes its widget a fixed shape: width divided by height (Flutter's AspectRatio). (version 1)
+
+| Field | Holds | |
+|---|---|---|
+| `aspectRatio` | number (0 to 50) | **required** |
+| `children` | list of a widget, at most 1 |  |
+
+### `fractionally_sized_box`
+
+Makes its widget a fraction of the space it has, such as 0.5 for half (Flutter's FractionallySizedBox). (version 1)
+
+| Field | Holds | |
+|---|---|---|
+| `widthFactor` | number (0 to 10) |  |
+| `heightFactor` | number (0 to 10) |  |
+| `alignment` | see schema |  |
+| `children` | list of a widget, at most 1 |  |
+
+### `constrained_box`
+
+Limits how small or how big its widget can be (Flutter's ConstrainedBox). (version 1)
+
+| Field | Holds | |
+|---|---|---|
+| `minWidth` | see schema |  |
+| `maxWidth` | see schema |  |
+| `minHeight` | see schema |  |
+| `maxHeight` | see schema |  |
+| `children` | list of a widget, at most 1 |  |
+
+### `fitted_box`
+
+Shrinks or stretches its widget to fit the space (Flutter's FittedBox). (version 1)
+
+| Field | Holds | |
+|---|---|---|
+| `fit` | see schema |  |
+| `alignment` | see schema |  |
+| `children` | list of a widget, at most 1 |  |
+
+### `wrap`
+
+Lays widgets in a line and starts a new line when they run out of room (Flutter's Wrap). (version 1)
+
+| Field | Holds | |
+|---|---|---|
+| `direction` | see schema |  |
+| `alignment` | `start` or `end` or `center` or `spaceBetween` or `spaceAround` or `spaceEvenly` |  |
+| `runAlignment` | `start` or `end` or `center` or `spaceBetween` or `spaceAround` or `spaceEvenly` |  |
+| `crossAxisAlignment` | `start` or `end` or `center` |  |
+| `spacing` | see schema |  |
+| `runSpacing` | see schema |  |
+| `children` | list of a widget | **required** |
+
+### `single_child_scroll_view`
+
+Lets its widget scroll when it is bigger than the space (Flutter's SingleChildScrollView). (version 1)
+
+| Field | Holds | |
+|---|---|---|
+| `scrollDirection` | see schema |  |
+| `reverse` | true or false |  |
+| `padding` | see schema |  |
+| `children` | list of a widget, at most 1, at least 1 | **required** |
+
+### `list_view`
+
+A scrolling list. Give it a `height` to scroll inside that height; without one it is as tall as its contents (Flutter's ListView). (version 1)
+
+| Field | Holds | |
+|---|---|---|
+| `scrollDirection` | see schema |  |
+| `reverse` | true or false |  |
+| `spacing` | see schema |  |
+| `padding` | see schema |  |
+| `height` | see schema |  |
+| `children` | list of a widget | **required** |
+
+### `grid_view`
+
+A grid with a set number of columns. Give it a `height` to scroll inside it (Flutter's GridView). (version 1)
+
+| Field | Holds | |
+|---|---|---|
+| `crossAxisCount` | whole number (1 to 12) | **required** |
+| `mainAxisSpacing` | see schema |  |
+| `crossAxisSpacing` | see schema |  |
+| `childAspectRatio` | number (0 to 20) |  |
+| `scrollDirection` | see schema |  |
+| `padding` | see schema |  |
+| `height` | see schema |  |
+| `children` | list of a widget | **required** |
+
+### `indexed_stack`
+
+Shows only one of its widgets, chosen by `index`, and keeps the others ready (Flutter's IndexedStack). (version 1)
+
+| Field | Holds | |
+|---|---|---|
+| `index` | whole number (0 to 1000) |  |
+| `alignment` | see schema |  |
+| `children` | list of a widget | **required** |
+
+### `opacity`
+
+Makes its widget see-through: 1 is solid, 0 is invisible (Flutter's Opacity). (version 1)
+
+| Field | Holds | |
+|---|---|---|
+| `opacity` | number (0 to 1) | **required** |
+| `children` | list of a widget, at most 1 |  |
+
+### `transform`
+
+Moves, turns, resizes or flips its widget without changing the layout (Flutter's Transform). (version 1)
+
+| Field | Holds | |
+|---|---|---|
+| `rotate` | number (-360 to 360) |  |
+| `scale` | number (-20 to 20) |  |
+| `scaleX` | number (-20 to 20) |  |
+| `scaleY` | number (-20 to 20) |  |
+| `translateX` | see schema |  |
+| `translateY` | see schema |  |
+| `flipX` | true or false |  |
+| `alignment` | see schema |  |
+| `children` | list of a widget, at most 1 |  |
+
+### `rotated_box`
+
+Turns its widget by quarter turns, and the layout follows (Flutter's RotatedBox). (version 1)
+
+| Field | Holds | |
+|---|---|---|
+| `quarterTurns` | whole number (0 to 3) | **required** |
+| `children` | list of a widget, at most 1 |  |
+
+### `clip`
+
+Cuts its widget to a rectangle, rounded rectangle or oval (Flutter's ClipRect, ClipRRect, ClipOval). (version 1)
+
+| Field | Holds | |
+|---|---|---|
+| `shape` | `rect` or `rounded` or `oval` |  |
+| `radius` | see schema |  |
+| `children` | list of a widget, at most 1 |  |
+
+### `box`
+
+Flutter's Container: size, space inside and outside, colour or gradient, border, rounded corners, shadows and a background picture. (version 1)
+
+| Field | Holds | |
+|---|---|---|
+| `alignment` | see schema |  |
+| `width` | see schema |  |
+| `height` | see schema |  |
+| `padding` | see schema |  |
+| `margin` | see schema |  |
+| `color` | see schema |  |
+| `gradient` | see schema |  |
+| `borderRadius` | see schema |  |
+| `borderWidth` | number (0 to 20) |  |
+| `borderColor` | see schema |  |
+| `shape` | `rectangle` or `circle` |  |
+| `shadows` | list of see schema, at most 6 |  |
+| `backgroundImageUrl` | web address |  |
+| `backgroundFit` | see schema |  |
+| `children` | list of a widget, at most 1 |  |
+
+### `visibility`
+
+Shows or hides its widget, optionally keeping the empty space (Flutter's Visibility). (version 1)
+
+| Field | Holds | |
+|---|---|---|
+| `visible` | true or false | **required** |
+| `maintainSpace` | true or false |  |
+| `children` | list of a widget, at most 1 |  |
+
+### `backdrop_blur`
+
+Blurs whatever is behind its widget, like frosted glass (Flutter's BackdropFilter). (version 1)
+
+| Field | Holds | |
+|---|---|---|
+| `sigma` | number (0 to 50) |  |
+| `children` | list of a widget, at most 1 |  |
+
+### `ink_well`
+
+Makes its widget tappable with the Material ripple. Set the widget's `action` to say what a tap does (Flutter's InkWell). (version 1)
+
+| Field | Holds | |
+|---|---|---|
+| `borderRadius` | see schema |  |
+| `children` | list of a widget, at most 1 |  |
+
+### `safe_area`
+
+Keeps its widget clear of the notch, status bar and home bar (Flutter's SafeArea). (version 1)
+
+| Field | Holds | |
+|---|---|---|
+| `top` | true or false |  |
+| `bottom` | true or false |  |
+| `left` | true or false |  |
+| `right` | true or false |  |
+| `children` | list of a widget, at most 1 |  |

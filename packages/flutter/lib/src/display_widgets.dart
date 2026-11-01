@@ -90,17 +90,17 @@ Widget _quote(BuildContext context, SduiNode node, SduiRender render) {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(text, style: theme.textTheme.bodyLarge?.copyWith(fontStyle: FontStyle.italic)),
+          render.partText(context, node, 'text', text, style: theme.textTheme.bodyLarge?.copyWith(fontStyle: FontStyle.italic)),
           if (who.isNotEmpty || avatarUrl != null) ...[
             const SizedBox(height: 8),
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 if (avatarUrl != null) ...[
-                  CircleAvatar(radius: 14, backgroundImage: NetworkImage(avatarUrl), onBackgroundImageError: (_, __) {}),
+                  render.part(context, node, 'avatar', CircleAvatar(radius: 14, backgroundImage: NetworkImage(avatarUrl), onBackgroundImageError: (_, __) {})),
                   const SizedBox(width: 8),
                 ],
-                if (who.isNotEmpty) Text(who, style: theme.textTheme.bodySmall),
+                if (who.isNotEmpty) render.partText(context, node, 'author', who, style: theme.textTheme.bodySmall),
               ],
             ),
           ],
@@ -136,7 +136,7 @@ Widget _avatar(BuildContext context, SduiNode node, SduiRender render) {
       backgroundImage: imageUrl == null ? null : NetworkImage(imageUrl),
       // If the picture fails, the initials underneath are what the person sees.
       onBackgroundImageError: imageUrl == null ? null : (_, __) {},
-      child: initials == null ? null : Text(initials),
+      child: initials == null ? null : render.partText(context, node, 'initials', initials),
     ),
   );
 }
@@ -172,14 +172,14 @@ Widget _alert(BuildContext context, SduiNode node, SduiRender render) {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(_toneIcon(tone), color: color),
+          render.partIcon(context, node, 'icon', _toneIcon(tone), color: color),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (title != null) Text(title, style: theme.textTheme.titleSmall),
-                Text(message, style: theme.textTheme.bodyMedium),
+                if (title != null) render.partText(context, node, 'title', title, style: theme.textTheme.titleSmall),
+                render.partText(context, node, 'message', message, style: theme.textTheme.bodyMedium),
               ],
             ),
           ),
@@ -204,8 +204,13 @@ Widget _progress(BuildContext context, SduiNode node, SduiRender render) {
           fit: StackFit.expand,
           alignment: Alignment.center,
           children: [
-            CircularProgressIndicator(value: value, semanticsLabel: label),
-            Center(child: Text('${(value * 100).round()}%')),
+            CircularProgressIndicator(
+              value: value,
+              semanticsLabel: label,
+              color: context.sduiTokens.color(render.partLook(node, 'fill')['color']),
+              backgroundColor: context.sduiTokens.color(render.partLook(node, 'track')['color']),
+            ),
+            Center(child: render.partText(context, node, 'label', '${(value * 100).round()}%')),
           ],
         ),
       ),
@@ -217,8 +222,17 @@ Widget _progress(BuildContext context, SduiNode node, SduiRender render) {
     Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (label != null) Padding(padding: const EdgeInsets.only(bottom: 4), child: Text(label)),
-        LinearProgressIndicator(value: value, semanticsLabel: label),
+        if (label != null) Padding(padding: const EdgeInsets.only(bottom: 4), child: render.partText(context, node, 'label', label)),
+        LinearProgressIndicator(
+          value: value,
+          semanticsLabel: label,
+          color: context.sduiTokens.color(render.partLook(node, 'fill')['color']),
+          backgroundColor: context.sduiTokens.color(render.partLook(node, 'track')['color']),
+          minHeight: render.partLook(node, 'track')['height'] is num ? (render.partLook(node, 'track')['height'] as num).toDouble() : null,
+          borderRadius: context.sduiTokens.radius(render.partLook(node, 'track')['radius']) == null
+              ? null
+              : BorderRadius.circular(context.sduiTokens.radius(render.partLook(node, 'track')['radius'])!),
+        ),
       ],
     ),
   );
@@ -241,8 +255,8 @@ Widget _stat(BuildContext context, SduiNode node, SduiRender render) {
     Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: theme.textTheme.bodySmall),
-        Text(value, style: theme.textTheme.headlineSmall),
+        render.partText(context, node, 'label', label, style: theme.textTheme.bodySmall),
+        render.partText(context, node, 'value', value, style: theme.textTheme.headlineSmall),
         if (delta != null)
           Row(
             mainAxisSize: MainAxisSize.min,
@@ -257,7 +271,7 @@ Widget _stat(BuildContext context, SduiNode node, SduiRender render) {
                   size: 14,
                   color: trendColor,
                 ),
-              Text(delta, style: theme.textTheme.bodySmall?.copyWith(color: trendColor)),
+              render.partText(context, node, 'delta', delta, style: theme.textTheme.bodySmall?.copyWith(color: trendColor)),
             ],
           ),
       ],
@@ -269,13 +283,20 @@ Widget _keyValue(BuildContext context, SduiNode node, SduiRender render) {
   final rows = <Widget>[];
   for (final raw in node.list('rows')) {
     if (raw is Map && raw['label'] is String && raw['value'] != null) {
-      rows.add(Padding(
-        padding: const EdgeInsets.symmetric(vertical: 6),
-        child: Row(
-          children: [
-            Expanded(child: Text(raw['label'] as String, style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant))),
-            Text('${raw['value']}', style: const TextStyle(fontWeight: FontWeight.bold)),
-          ],
+      rows.add(render.part(
+        context,
+        node,
+        'row',
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 6),
+          child: Row(
+            children: [
+              Expanded(
+                child: render.partText(context, node, 'label', raw['label'] as String, style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant)),
+              ),
+              render.partText(context, node, 'value', '${raw['value']}', style: const TextStyle(fontWeight: FontWeight.bold)),
+            ],
+          ),
         ),
       ));
     }
@@ -293,12 +314,17 @@ Widget _listItem(BuildContext context, SduiNode node, SduiRender render) {
   final chevron = node.boolean('chevron') ?? false;
   Widget? leading;
   if (imageUrl != null) {
-    leading = ClipRRect(
-      borderRadius: BorderRadius.circular(8),
-      child: SizedBox(width: 40, height: 40, child: sduiNetworkImage(imageUrl, height: 40)),
+    leading = render.part(
+      context,
+      node,
+      'image',
+      ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+        child: SizedBox(width: 40, height: 40, child: sduiNetworkImage(imageUrl, height: 40)),
+      ),
     );
   } else if (icon != null) {
-    leading = Icon(sduiIcon(icon));
+    leading = render.partIcon(context, node, 'icon', sduiIcon(icon));
   }
   return render.wrapNode(
     context,
@@ -306,14 +332,14 @@ Widget _listItem(BuildContext context, SduiNode node, SduiRender render) {
     ListTile(
       contentPadding: EdgeInsets.zero,
       leading: leading,
-      title: Text(title),
-      subtitle: subtitle == null ? null : Text(subtitle),
+      title: render.partText(context, node, 'title', title),
+      subtitle: subtitle == null ? null : render.partText(context, node, 'subtitle', subtitle),
       trailing: (trailingText == null && !chevron)
           ? null
           : Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                if (trailingText != null) Text(trailingText),
+                if (trailingText != null) render.partText(context, node, 'trailing', trailingText),
                 // Directional arrow: points the way "forward" is in the current language.
                 if (chevron) Icon(Directionality.of(context) == TextDirection.rtl ? Icons.chevron_left : Icons.chevron_right),
               ],
@@ -335,16 +361,22 @@ Widget _emptyState(BuildContext context, SduiNode node, SduiRender render) {
       padding: const EdgeInsets.all(24),
       child: Column(
         children: [
-          if (icon != null) Icon(sduiIcon(icon), size: 48, color: theme.colorScheme.onSurfaceVariant),
+          if (icon != null) render.partIcon(context, node, 'icon', sduiIcon(icon), size: 48, color: theme.colorScheme.onSurfaceVariant),
           const SizedBox(height: 12),
-          Text(title, style: theme.textTheme.titleMedium, textAlign: TextAlign.center),
-          if (message != null) Padding(padding: const EdgeInsets.only(top: 4), child: Text(message, textAlign: TextAlign.center)),
+          render.partText(context, node, 'title', title, style: theme.textTheme.titleMedium, textAlign: TextAlign.center),
+          if (message != null) Padding(padding: const EdgeInsets.only(top: 4), child: render.partText(context, node, 'message', message, textAlign: TextAlign.center)),
           if (actionLabel != null)
             Padding(
               padding: const EdgeInsets.only(top: 16),
-              child: FilledButton(
-                onPressed: () => render.tap(context, action: node.action, event: node.analyticsEvent, params: node.analyticsParams),
-                child: Text(actionLabel),
+              child: render.partButton(
+                context,
+                node,
+                'button',
+                (style) => FilledButton(
+                  style: style,
+                  onPressed: () => render.tap(context, action: node.action, event: node.analyticsEvent, params: node.analyticsParams),
+                  child: Text(actionLabel),
+                ),
               ),
             ),
         ],
@@ -368,13 +400,16 @@ Widget _rating(BuildContext context, SduiNode node, SduiRender render) {
       mainAxisSize: MainAxisSize.min,
       children: [
         for (var star = 1; star <= 5; star++)
-          Icon(
+          render.partIcon(
+            context,
+            node,
+            'stars',
             value >= star ? Icons.star : (value >= star - 0.5 ? Icons.star_half : Icons.star_border),
             size: 18,
             color: Colors.amber,
           ),
         const SizedBox(width: 8),
-        Text(summary),
+        render.partText(context, node, 'text', summary),
       ],
     ),
   );
@@ -390,7 +425,7 @@ Widget _table(BuildContext context, SduiNode node, SduiRender render) {
           Padding(
             padding: const EdgeInsets.all(8),
             // A row with too few cells gets empty ones; extra cells are ignored.
-            child: Text(index < cells.length ? cells[index] : '', style: header ? const TextStyle(fontWeight: FontWeight.bold) : null),
+            child: render.partText(context, node, header ? 'header' : 'cell', index < cells.length ? cells[index] : '', style: header ? const TextStyle(fontWeight: FontWeight.bold) : null),
           ),
       ],
     );
@@ -419,7 +454,10 @@ Widget _steps(BuildContext context, SduiNode node, SduiRender render) {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(
+          render.partIcon(
+            context,
+            node,
+            'dot',
             switch (state) {
               'done' => Icons.check_circle,
               'current' => Icons.radio_button_checked,
@@ -432,8 +470,8 @@ Widget _steps(BuildContext context, SduiNode node, SduiRender render) {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(raw['title'] as String, style: theme.textTheme.titleSmall),
-                if (description is String) Text(description, style: theme.textTheme.bodySmall),
+                render.partText(context, node, 'title', raw['title'] as String, style: theme.textTheme.titleSmall),
+                if (description is String) render.partText(context, node, 'description', description, style: theme.textTheme.bodySmall),
               ],
             ),
           ),

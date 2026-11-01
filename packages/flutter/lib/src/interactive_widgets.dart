@@ -36,18 +36,25 @@ Widget _searchBar(BuildContext context, SduiNode node, SduiRender render) {
   return render.wrapNode(
     context,
     node,
-    Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      decoration: BoxDecoration(
-        border: Border.all(color: theme.colorScheme.outline),
-        borderRadius: BorderRadius.circular(context.sduiTokens.radius('full') ?? 24),
-      ),
-      child: Row(
-        children: [
-          const Icon(Icons.search),
-          const SizedBox(width: 8),
-          Expanded(child: Text(placeholder, style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.onSurfaceVariant))),
-        ],
+    render.part(
+      context,
+      node,
+      'field',
+      Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        decoration: BoxDecoration(
+          border: Border.all(color: theme.colorScheme.outline),
+          borderRadius: BorderRadius.circular(context.sduiTokens.radius('full') ?? 24),
+        ),
+        child: Row(
+          children: [
+            const Icon(Icons.search),
+            const SizedBox(width: 8),
+            Expanded(
+              child: render.partText(context, node, 'field', placeholder, style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.onSurfaceVariant)),
+            ),
+          ],
+        ),
       ),
     ),
   );
@@ -70,7 +77,11 @@ Widget _chips(BuildContext context, SduiNode node, SduiRender render) {
           // Which chip looks selected comes from the page. A chip's action (usually call_api)
           // tells the server about the choice, and the next page load shows the new selection.
           FilterChip(
-            label: Text(chip['label'] as String),
+            label: render.partText(context, node, 'chip', chip['label'] as String),
+            backgroundColor: context.sduiTokens.color(render.partLook(node, 'chip')['color']),
+            shape: context.sduiTokens.radius(render.partLook(node, 'chip')['radius']) == null
+                ? null
+                : RoundedRectangleBorder(borderRadius: BorderRadius.circular(context.sduiTokens.radius(render.partLook(node, 'chip')['radius'])!)),
             selected: chip['selected'] == true,
             onSelected: (_) => render.tap(context, action: _actionOf(chip['action'])),
           ),
@@ -85,20 +96,41 @@ Widget _quickActions(BuildContext context, SduiNode node, SduiRender render) {
   final cells = <Widget>[];
   for (final raw in node.list('items')) {
     if (raw is! Map || raw['label'] is! String) continue;
-    cells.add(GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTap: () => render.tap(context, action: _actionOf(raw['action'])),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          CircleAvatar(
-            radius: 24,
-            backgroundColor: theme.colorScheme.primaryContainer,
-            child: Icon(sduiIcon(raw['icon']), color: theme.colorScheme.onPrimaryContainer),
-          ),
-          const SizedBox(height: 6),
-          Text(raw['label'] as String, textAlign: TextAlign.center, maxLines: 2, overflow: TextOverflow.ellipsis, style: theme.textTheme.labelSmall),
-        ],
+    final iconLook = render.partLook(node, 'icon');
+    final tokens = context.sduiTokens;
+    final circle = iconLook['width'] is num ? (iconLook['width'] as num).toDouble() / 2 : 24.0;
+    cells.add(render.part(
+      context,
+      node,
+      'item',
+      GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () => render.tap(context, action: _actionOf(raw['action'])),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            CircleAvatar(
+              radius: circle,
+              backgroundColor: tokens.color(iconLook['color']) ?? theme.colorScheme.primaryContainer,
+              child: Icon(
+                sduiIcon(raw['icon']),
+                size: tokens.textSize(iconLook['textSize']),
+                color: tokens.color(iconLook['textColor']) ?? theme.colorScheme.onPrimaryContainer,
+              ),
+            ),
+            const SizedBox(height: 6),
+            render.partText(
+              context,
+              node,
+              'label',
+              raw['label'] as String,
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: theme.textTheme.labelSmall,
+            ),
+          ],
+        ),
       ),
     ));
   }
@@ -115,16 +147,17 @@ Widget _accordion(BuildContext context, SduiNode node, SduiRender render) {
   return render.wrapNode(
     context,
     node,
-    _SduiAccordion(items: items, allowMultiple: node.boolean('allowMultiple') ?? false, render: render),
+    _SduiAccordion(items: items, allowMultiple: node.boolean('allowMultiple') ?? false, render: render, node: node),
   );
 }
 
 class _SduiAccordion extends StatefulWidget {
-  const _SduiAccordion({required this.items, required this.allowMultiple, required this.render});
+  const _SduiAccordion({required this.items, required this.allowMultiple, required this.render, required this.node});
 
   final List<Map<dynamic, dynamic>> items;
   final bool allowMultiple;
   final SduiRender render;
+  final SduiNode node;
 
   @override
   State<_SduiAccordion> createState() => _SduiAccordionState();
@@ -156,13 +189,19 @@ class _SduiAccordionState extends State<_SduiAccordion> {
               padding: const EdgeInsets.symmetric(vertical: 12),
               child: Row(
                 children: [
-                  Expanded(child: Text(widget.items[index]['title'] as String, style: Theme.of(context).textTheme.titleSmall)),
+                  Expanded(child: widget.render.partText(context, widget.node, 'header', widget.items[index]['title'] as String, style: Theme.of(context).textTheme.titleSmall)),
                   Icon(_open.contains(index) ? Icons.expand_less : Icons.expand_more),
                 ],
               ),
             ),
           ),
-          if (_open.contains(index)) ...widget.render.children(context, widget.items[index]['widgets'] as List),
+          if (_open.contains(index))
+            widget.render.part(
+              context,
+              widget.node,
+              'content',
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: widget.render.children(context, widget.items[index]['widgets'] as List)),
+            ),
           const Divider(height: 1),
         ],
       ],
@@ -238,16 +277,18 @@ Widget _gallery(BuildContext context, SduiNode node, SduiRender render) {
   return render.wrapNode(
     context,
     node,
-    _SduiGallery(images: images, aspectRatio: node.number('aspectRatio') ?? 16 / 9, showDots: node.boolean('showDots') ?? true),
+    _SduiGallery(images: images, aspectRatio: node.number('aspectRatio') ?? 16 / 9, showDots: node.boolean('showDots') ?? true, render: render, node: node),
   );
 }
 
 class _SduiGallery extends StatefulWidget {
-  const _SduiGallery({required this.images, required this.aspectRatio, required this.showDots});
+  const _SduiGallery({required this.images, required this.aspectRatio, required this.showDots, required this.render, required this.node});
 
   final List<Map<dynamic, dynamic>> images;
   final double aspectRatio;
   final bool showDots;
+  final SduiRender render;
+  final SduiNode node;
 
   @override
   State<_SduiGallery> createState() => _SduiGalleryState();
@@ -258,6 +299,9 @@ class _SduiGalleryState extends State<_SduiGallery> {
 
   @override
   Widget build(BuildContext context) {
+    final tokens = context.sduiTokens;
+    final dots = widget.render.partLook(widget.node, 'dots');
+    final dotSize = dots['width'] is num ? (dots['width'] as num).toDouble() : 8.0;
     return Column(
       children: [
         AspectRatio(
@@ -265,7 +309,8 @@ class _SduiGalleryState extends State<_SduiGallery> {
           child: PageView(
             onPageChanged: (page) => setState(() => _page = page),
             children: [
-              for (final image in widget.images) sduiNetworkImage(image['url'] as String, description: image['alt'] is String ? image['alt'] as String : null),
+              for (final image in widget.images)
+                widget.render.part(context, widget.node, 'image', sduiNetworkImage(image['url'] as String, description: image['alt'] is String ? image['alt'] as String : null)),
             ],
           ),
         ),
@@ -278,12 +323,14 @@ class _SduiGalleryState extends State<_SduiGallery> {
                 for (var index = 0; index < widget.images.length; index++)
                   Container(
                     key: Key('sdui-gallery-dot-$index'),
-                    width: 8,
-                    height: 8,
+                    width: dotSize,
+                    height: dotSize,
                     margin: const EdgeInsets.symmetric(horizontal: 3),
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: index == _page ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.outlineVariant,
+                      color: index == _page
+                          ? (tokens.color(dots['color']) ?? Theme.of(context).colorScheme.primary)
+                          : (tokens.color(dots['borderColor']) ?? Theme.of(context).colorScheme.outlineVariant),
                     ),
                   ),
               ],
@@ -309,10 +356,20 @@ Widget _videoCard(BuildContext context, SduiNode node, SduiRender render) {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          sduiNetworkImage(thumbnail),
-          const Center(child: CircleAvatar(radius: 28, backgroundColor: Colors.black54, child: Icon(Icons.play_arrow, color: Colors.white, size: 32))),
-          if (title != null) Positioned(left: 12, bottom: 12, right: 64, child: Text(title, style: onImage.copyWith(fontWeight: FontWeight.bold))),
-          if (duration != null) Positioned(right: 12, bottom: 12, child: Text(duration, style: onImage)),
+          render.part(context, node, 'image', sduiNetworkImage(thumbnail)),
+          Center(
+            child: CircleAvatar(
+              radius: render.partLook(node, 'play')['width'] is num ? (render.partLook(node, 'play')['width'] as num).toDouble() / 2 : 28,
+              backgroundColor: context.sduiTokens.color(render.partLook(node, 'play')['color']) ?? Colors.black54,
+              child: Icon(
+                Icons.play_arrow,
+                color: context.sduiTokens.color(render.partLook(node, 'play')['textColor']) ?? Colors.white,
+                size: context.sduiTokens.textSize(render.partLook(node, 'play')['textSize']) ?? 32,
+              ),
+            ),
+          ),
+          if (title != null) Positioned(left: 12, bottom: 12, right: 64, child: render.partText(context, node, 'title', title, style: onImage.copyWith(fontWeight: FontWeight.bold))),
+          if (duration != null) Positioned(right: 12, bottom: 12, child: render.partText(context, node, 'duration', duration, style: onImage)),
         ],
       ),
     ),
@@ -334,7 +391,7 @@ Widget _hero(BuildContext context, SduiNode node, SduiRender render) {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          sduiNetworkImage(imageUrl, height: 240),
+          render.part(context, node, 'image', sduiNetworkImage(imageUrl, height: 240)),
           const DecoratedBox(
             decoration: BoxDecoration(gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Colors.transparent, Colors.black54])),
           ),
@@ -346,14 +403,20 @@ Widget _hero(BuildContext context, SduiNode node, SduiRender render) {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(title, style: onImage.copyWith(fontSize: 26, fontWeight: FontWeight.bold)),
-                if (subtitle != null) Text(subtitle, style: onImage.copyWith(fontSize: 16)),
+                render.partText(context, node, 'title', title, style: onImage.copyWith(fontSize: 26, fontWeight: FontWeight.bold)),
+                if (subtitle != null) render.partText(context, node, 'subtitle', subtitle, style: onImage.copyWith(fontSize: 16)),
                 if (ctaLabel != null)
                   Padding(
                     padding: const EdgeInsets.only(top: 12),
-                    child: FilledButton(
-                      onPressed: () => render.tap(context, action: node.action, event: node.analyticsEvent, params: node.analyticsParams),
-                      child: Text(ctaLabel),
+                    child: render.partButton(
+                      context,
+                      node,
+                      'button',
+                      (style) => FilledButton(
+                        style: style,
+                        onPressed: () => render.tap(context, action: node.action, event: node.analyticsEvent, params: node.analyticsParams),
+                        child: Text(ctaLabel),
+                      ),
                     ),
                   ),
               ],
@@ -387,28 +450,35 @@ Widget _pricingCard(BuildContext context, SduiNode node, SduiRender render) {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(name, style: theme.textTheme.titleMedium),
+            render.partText(context, node, 'name', name, style: theme.textTheme.titleMedium),
             Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Text(price, style: theme.textTheme.headlineMedium),
-                if (period != null) Padding(padding: const EdgeInsetsDirectional.only(start: 6, bottom: 4), child: Text(period, style: theme.textTheme.bodySmall)),
+                render.partText(context, node, 'price', price, style: theme.textTheme.headlineMedium),
+                if (period != null)
+                  Padding(padding: const EdgeInsetsDirectional.only(start: 6, bottom: 4), child: render.partText(context, node, 'period', period, style: theme.textTheme.bodySmall)),
               ],
             ),
             const SizedBox(height: 8),
             for (final feature in features)
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 2),
-                child: Row(children: [Icon(Icons.check, size: 18, color: theme.colorScheme.primary), const SizedBox(width: 8), Expanded(child: Text(feature))]),
+                child: Row(children: [Icon(Icons.check, size: 18, color: theme.colorScheme.primary), const SizedBox(width: 8), Expanded(child: render.partText(context, node, 'feature', feature))]),
               ),
             if (ctaLabel != null)
               Padding(
                 padding: const EdgeInsets.only(top: 12),
                 child: SizedBox(
                   width: double.infinity,
-                  child: FilledButton(
-                    onPressed: () => render.tap(context, action: node.action, event: node.analyticsEvent, params: node.analyticsParams),
-                    child: Text(ctaLabel),
+                  child: render.partButton(
+                    context,
+                    node,
+                    'button',
+                    (style) => FilledButton(
+                      style: style,
+                      onPressed: () => render.tap(context, action: node.action, event: node.analyticsEvent, params: node.analyticsParams),
+                      child: Text(ctaLabel),
+                    ),
                   ),
                 ),
               ),

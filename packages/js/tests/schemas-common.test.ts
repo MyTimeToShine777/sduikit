@@ -31,6 +31,12 @@ describe("style", () => {
       { borderWidth: 50 },
     ]) expect(style(bad), JSON.stringify(bad)).toBe(false);
   });
+  it("accepts text decoration, lines and overflow, and rejects bad ones", () => {
+    expect(style({ textDecoration: "underline", letterSpacing: 2, lineHeight: 1.5, maxLines: 2, textOverflow: "ellipsis", softWrap: false, overflow: "hidden" })).toBe(true);
+    for (const bad of [{ maxLines: 0 }, { maxLines: 1.5 }, { textOverflow: "dots" }, { textDecoration: "wavy" }, { lineHeight: 0 }, { overflow: "scroll" }]) {
+      expect(style(bad), JSON.stringify(bad)).toBe(false);
+    }
+  });
   it("still rejects pixel strings and keys it does not know", () => {
     expect(style({ spacing: "12px" })).toBe(false);
     expect(style({ gap: 4 })).toBe(false);

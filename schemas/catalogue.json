@@ -21,7 +21,10 @@
           "schema": "widgets/image.v1.json",
           "children": []
         }
-      }
+      },
+      "parts": [
+        "image"
+      ]
     },
     "button": {
       "group": "Basics",
@@ -32,7 +35,10 @@
           "schema": "widgets/button.v1.json",
           "children": []
         }
-      }
+      },
+      "parts": [
+        "button"
+      ]
     },
     "spacer": {
       "group": "Basics",
@@ -54,7 +60,10 @@
           "schema": "widgets/divider.v1.json",
           "children": []
         }
-      }
+      },
+      "parts": [
+        "line"
+      ]
     },
     "section_header": {
       "group": "Layout",
@@ -65,7 +74,12 @@
           "schema": "widgets/section_header.v1.json",
           "children": []
         }
-      }
+      },
+      "parts": [
+        "title",
+        "subtitle",
+        "action"
+      ]
     },
     "card": {
       "group": "Layout",
@@ -78,7 +92,13 @@
             "children"
           ]
         }
-      }
+      },
+      "parts": [
+        "image",
+        "title",
+        "subtitle",
+        "body"
+      ]
     },
     "banner": {
       "group": "Media",
@@ -89,7 +109,12 @@
           "schema": "widgets/banner.v1.json",
           "children": []
         }
-      }
+      },
+      "parts": [
+        "image",
+        "title",
+        "subtitle"
+      ]
     },
     "carousel": {
       "group": "Layout",
@@ -102,7 +127,10 @@
             "items"
           ]
         }
-      }
+      },
+      "parts": [
+        "item"
+      ]
     },
     "list": {
       "group": "Layout",
@@ -115,7 +143,11 @@
             "items"
           ]
         }
-      }
+      },
+      "parts": [
+        "item",
+        "divider"
+      ]
     },
     "grid": {
       "group": "Layout",
@@ -128,7 +160,10 @@
             "items"
           ]
         }
-      }
+      },
+      "parts": [
+        "item"
+      ]
     },
     "tabs": {
       "group": "Layout",
@@ -141,7 +176,11 @@
             "tabs[].widgets"
           ]
         }
-      }
+      },
+      "parts": [
+        "tab",
+        "content"
+      ]
     },
     "data_list": {
       "group": "Live data",
@@ -157,7 +196,10 @@
             "template"
           ]
         }
-      }
+      },
+      "parts": [
+        "item"
+      ]
     },
     "rich_text": {
       "group": "Basics",
@@ -179,7 +221,12 @@
           "schema": "widgets/quote.v1.json",
           "children": []
         }
-      }
+      },
+      "parts": [
+        "text",
+        "author",
+        "avatar"
+      ]
     },
     "icon": {
       "group": "Basics",
@@ -201,7 +248,10 @@
           "schema": "widgets/avatar.v1.json",
           "children": []
         }
-      }
+      },
+      "parts": [
+        "initials"
+      ]
     },
     "badge": {
       "group": "Basics",
@@ -223,7 +273,12 @@
           "schema": "widgets/alert.v1.json",
           "children": []
         }
-      }
+      },
+      "parts": [
+        "icon",
+        "title",
+        "message"
+      ]
     },
     "progress": {
       "group": "Content",
@@ -234,7 +289,12 @@
           "schema": "widgets/progress.v1.json",
           "children": []
         }
-      }
+      },
+      "parts": [
+        "label",
+        "track",
+        "fill"
+      ]
     },
     "stat": {
       "group": "Content",
@@ -245,7 +305,12 @@
           "schema": "widgets/stat.v1.json",
           "children": []
         }
-      }
+      },
+      "parts": [
+        "label",
+        "value",
+        "delta"
+      ]
     },
     "key_value": {
       "group": "Content",
@@ -256,7 +321,12 @@
           "schema": "widgets/key_value.v1.json",
           "children": []
         }
-      }
+      },
+      "parts": [
+        "row",
+        "label",
+        "value"
+      ]
     },
     "list_item": {
       "group": "Content",
@@ -267,7 +337,14 @@
           "schema": "widgets/list_item.v1.json",
           "children": []
         }
-      }
+      },
+      "parts": [
+        "image",
+        "icon",
+        "title",
+        "subtitle",
+        "trailing"
+      ]
     },
     "empty_state": {
       "group": "Content",
@@ -278,7 +355,13 @@
           "schema": "widgets/empty_state.v1.json",
           "children": []
         }
-      }
+      },
+      "parts": [
+        "icon",
+        "title",
+        "message",
+        "button"
+      ]
     },
     "steps": {
       "group": "Content",
@@ -289,7 +372,12 @@
           "schema": "widgets/steps.v1.json",
           "children": []
         }
-      }
+      },
+      "parts": [
+        "dot",
+        "title",
+        "description"
+      ]
     },
     "accordion": {
       "group": "Layout",
@@ -302,7 +390,11 @@
             "items[].widgets"
           ]
         }
-      }
+      },
+      "parts": [
+        "header",
+        "content"
+      ]
     },
     "table": {
       "group": "Content",
@@ -313,7 +405,11 @@
           "schema": "widgets/table.v1.json",
           "children": []
         }
-      }
+      },
+      "parts": [
+        "header",
+        "cell"
+      ]
     },
     "countdown": {
       "group": "Content",
@@ -335,7 +431,11 @@
           "schema": "widgets/gallery.v1.json",
           "children": []
         }
-      }
+      },
+      "parts": [
+        "image",
+        "dots"
+      ]
     },
     "video_card": {
       "group": "Media",
@@ -346,7 +446,13 @@
           "schema": "widgets/video_card.v1.json",
           "children": []
         }
-      }
+      },
+      "parts": [
+        "image",
+        "title",
+        "duration",
+        "play"
+      ]
     },
     "hero": {
       "group": "Media",
@@ -357,7 +463,13 @@
           "schema": "widgets/hero.v1.json",
           "children": []
         }
-      }
+      },
+      "parts": [
+        "image",
+        "title",
+        "subtitle",
+        "button"
+      ]
     },
     "pricing_card": {
       "group": "Content",
@@ -368,7 +480,14 @@
           "schema": "widgets/pricing_card.v1.json",
           "children": []
         }
-      }
+      },
+      "parts": [
+        "name",
+        "price",
+        "period",
+        "feature",
+        "button"
+      ]
     },
     "search_bar": {
       "group": "Interactive",
@@ -379,7 +498,10 @@
           "schema": "widgets/search_bar.v1.json",
           "children": []
         }
-      }
+      },
+      "parts": [
+        "field"
+      ]
     },
     "chips": {
       "group": "Interactive",
@@ -390,7 +512,10 @@
           "schema": "widgets/chips.v1.json",
           "children": []
         }
-      }
+      },
+      "parts": [
+        "chip"
+      ]
     },
     "quick_actions": {
       "group": "Interactive",
@@ -401,7 +526,12 @@
           "schema": "widgets/quick_actions.v1.json",
           "children": []
         }
-      }
+      },
+      "parts": [
+        "item",
+        "icon",
+        "label"
+      ]
     },
     "rating": {
       "group": "Content",
@@ -412,7 +542,11 @@
           "schema": "widgets/rating.v1.json",
           "children": []
         }
-      }
+      },
+      "parts": [
+        "stars",
+        "text"
+      ]
     },
     "container": {
       "group": "Layout",
@@ -436,7 +570,12 @@
           "schema": "widgets/form.v1.json",
           "children": []
         }
-      }
+      },
+      "parts": [
+        "label",
+        "field",
+        "button"
+      ]
     },
     "row": {
       "group": "Building blocks",

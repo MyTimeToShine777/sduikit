@@ -268,11 +268,26 @@ export const SduiActionEditor = defineComponent({
 // ── The look of a widget: every value can be a name from the theme or an exact value ──
 export const SduiStyleEditor = defineComponent({
   name: "SduiStyleEditor",
-  props: { modelValue: { type: Object as PropType<Style | undefined>, default: undefined } },
+  props: {
+    modelValue: { type: Object as PropType<Style | undefined>, default: undefined },
+    // The named pieces inside this widget (a card's "title", a button's "button"...), so each can be styled on its own.
+    parts: { type: Array as PropType<string[]>, default: () => [] },
+  },
   emits: ["update:modelValue"],
   setup(props, { emit }) {
-    const style = () => (props.modelValue ?? {}) as Record<string, any>;
-    const change = (key: string, value: unknown) => emit("update:modelValue", withoutEmpty({ ...style(), [key]: value }) as Style);
+    const part = ref(""); // "" is the whole widget
+    const whole = () => (props.modelValue ?? {}) as Record<string, any>;
+    // The look being edited: the widget's own, or one part's.
+    const style = (): Record<string, any> => {
+      if (part.value) return whole().parts?.[part.value] ?? {};
+      const { parts: _parts, ...own } = whole();
+      return own;
+    };
+    const change = (key: string, value: unknown) => {
+      const next = withoutEmpty({ ...style(), [key]: value });
+      if (!part.value) emit("update:modelValue", withoutEmpty({ ...next, parts: whole().parts }) as Style);
+      else emit("update:modelValue", withoutEmpty({ ...whole(), parts: withoutEmpty({ ...(whole().parts ?? {}), [part.value]: next }) }) as Style);
+    };
 
     const value = (label: string, key: string, presets: readonly string[], max = 200, min = 0) =>
       row(
@@ -311,7 +326,19 @@ export const SduiStyleEditor = defineComponent({
 
     return () => {
       const current = style();
+      const styled = (name: string) => Object.keys(whole().parts?.[name] ?? {}).length > 0;
       return h("div", { class: "sdui-style" }, [
+        props.parts.length
+          ? row(
+              "Change the look of",
+              h(
+                "select",
+                { "data-style-part": "", value: part.value, onChange: (event: Event) => (part.value = (event.target as HTMLSelectElement).value) },
+                [h("option", { value: "" }, "The whole widget"), ...props.parts.map((name) => h("option", { value: name }, `${name}${styled(name) ? " ●" : ""}`))],
+              ),
+              "part",
+            )
+          : null,
         h("h4", { class: "sdui-form-group" }, "Size"),
         value("Width (pixels or fill)", "width", ["fill"], 3000),
         value("Height (pixels or fill)", "height", ["fill"], 3000),
@@ -330,11 +357,21 @@ export const SduiStyleEditor = defineComponent({
           h("span", "Italic"),
         ]),
         choice("Alignment", "align", tokens.align),
+        choice("Decoration", "textDecoration", ["none", "underline", "lineThrough", "overline"]),
+        value("Letter spacing", "letterSpacing", [], 50, -5),
+        value("Line height (1.5 = airy)", "lineHeight", [], 5, 0.5),
+        value("Most lines to show", "maxLines", [], 100, 1),
+        choice("When text does not fit", "textOverflow", ["clip", "ellipsis", "fade", "visible"]),
+        h("label", { class: "sdui-form-row sdui-form-check" }, [
+          h("input", { type: "checkbox", "data-style": "noWrap", checked: current.softWrap === false, onChange: (event: Event) => change("softWrap", (event.target as HTMLInputElement).checked ? false : undefined) }),
+          h("span", "Keep on one line"),
+        ]),
         h("h4", { class: "sdui-form-group" }, "Corners, border and shadow"),
         value("Rounded corners", "radius", tokens.radius, 999),
         value("Border thickness", "borderWidth", [], 20),
         colour("Border colour", "borderColor"),
         choice("Shadow", "shadow", ["none", "small", "medium", "large"]),
+        choice("Content bigger than this widget", "overflow", ["visible", "hidden"]),
         row(
           `Opacity (${Math.round((current.opacity ?? 1) * 100)}%)`,
           h("input", {

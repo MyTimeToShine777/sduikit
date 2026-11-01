@@ -2,7 +2,7 @@
 import { mount } from "@vue/test-utils";
 import { describe, expect, it } from "vitest";
 import { listWidgets } from "../src/index";
-import { SduiPreview } from "../src/vue/index";
+import { SduiPreview, defaultTheme, styleCss } from "../src/vue/index";
 import { loadFixture, page, widget } from "./helpers";
 
 const text = (value: string, id = `t_${value}`) => widget("text", { text: value }, { id });
@@ -87,5 +87,32 @@ describe("building blocks in the preview", () => {
     const style = styleOf(wrapper, "col");
     expect(style.background).toContain("rgb(255, 136, 0)");
     expect(style.marginTop).toBe("8px");
+  });
+});
+
+describe("text decoration, lines and overflow in the shared style", () => {
+  const css = (style: any) => styleCss(style, defaultTheme, false);
+
+  it("draws underline, strikethrough, letter spacing and line height", () => {
+    expect(css({ textDecoration: "underline", letterSpacing: 1.5, lineHeight: 1.6 })).toMatchObject({ textDecorationLine: "underline", letterSpacing: "1.5px", lineHeight: "1.6" });
+    expect(css({ textDecoration: "lineThrough" }).textDecorationLine).toBe("line-through");
+  });
+
+  it("limits the lines and ends the text with ... unless told otherwise", () => {
+    expect(css({ maxLines: 3 })).toMatchObject({ display: "-webkit-box", WebkitLineClamp: "3", overflow: "hidden" });
+    expect(css({ maxLines: 1 })).toMatchObject({ whiteSpace: "nowrap", textOverflow: "ellipsis", overflow: "hidden" });
+  });
+
+  it("can cut, fade or let text spill out instead", () => {
+    expect(css({ maxLines: 2, textOverflow: "clip" })).toMatchObject({ overflow: "hidden" });
+    expect(css({ maxLines: 2, textOverflow: "clip" }).display).toBeUndefined();
+    expect(css({ maxLines: 1, textOverflow: "fade" }).maskImage).toContain("linear-gradient");
+    expect(css({ maxLines: 2, textOverflow: "visible" }).overflow).toBeUndefined();
+  });
+
+  it("keeps text on one line when asked, and cuts off or shows content bigger than the widget", () => {
+    expect(css({ softWrap: false }).whiteSpace).toBe("nowrap");
+    expect(css({ overflow: "hidden" }).overflow).toBe("hidden");
+    expect(css({ overflow: "visible" }).overflow).toBe("visible");
   });
 });

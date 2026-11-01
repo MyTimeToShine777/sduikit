@@ -5,64 +5,340 @@
   "description": "How a widget looks. Every value can be a preset name (\"md\", \"primary\"), which follows the app's theme, dark mode and re-branding, or an exact value (16, \"#FF8800\"), which is used as given and does not change with the theme.",
   "type": "object",
   "properties": {
-    "spacing": { "$ref": "#/$defs/space", "description": "Space inside the widget on every side." },
-    "padding": { "$ref": "#/$defs/sides", "description": "Space inside the widget, side by side. Overrides spacing for the sides given." },
-    "margin": { "$ref": "#/$defs/sides", "description": "Space outside the widget." },
-    "radius": { "$ref": "#/$defs/corner", "description": "How round the corners are." },
-    "color": { "$ref": "#/$defs/colour", "description": "Background colour." },
-    "textColor": { "$ref": "#/$defs/colour" },
-    "textSize": { "$ref": "#/$defs/textSize" },
-    "fontWeight": { "enum": ["normal", "medium", "bold"] },
-    "italic": { "type": "boolean" },
-    "align": { "$ref": "tokens.json#/$defs/align" },
-    "width": { "$ref": "#/$defs/length" },
-    "height": { "$ref": "#/$defs/length" },
-    "borderWidth": { "type": "number", "minimum": 0, "maximum": 20 },
-    "borderColor": { "$ref": "#/$defs/colour" },
-    "shadow": { "enum": ["none", "small", "medium", "large"] },
-    "opacity": { "type": "number", "minimum": 0, "maximum": 1 }
+    "spacing": {
+      "$ref": "#/$defs/space",
+      "description": "Space inside the widget on every side."
+    },
+    "padding": {
+      "$ref": "#/$defs/sides",
+      "description": "Space inside the widget, side by side. Overrides spacing for the sides given."
+    },
+    "margin": {
+      "$ref": "#/$defs/sides",
+      "description": "Space outside the widget."
+    },
+    "radius": {
+      "$ref": "#/$defs/corner",
+      "description": "How round the corners are."
+    },
+    "color": {
+      "$ref": "#/$defs/colour",
+      "description": "Background colour."
+    },
+    "textColor": {
+      "$ref": "#/$defs/colour"
+    },
+    "textSize": {
+      "$ref": "#/$defs/textSize"
+    },
+    "fontWeight": {
+      "enum": [
+        "normal",
+        "medium",
+        "bold"
+      ]
+    },
+    "italic": {
+      "type": "boolean"
+    },
+    "align": {
+      "$ref": "tokens.json#/$defs/align"
+    },
+    "width": {
+      "$ref": "#/$defs/length"
+    },
+    "height": {
+      "$ref": "#/$defs/length"
+    },
+    "borderWidth": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 20
+    },
+    "borderColor": {
+      "$ref": "#/$defs/colour"
+    },
+    "shadow": {
+      "enum": [
+        "none",
+        "small",
+        "medium",
+        "large"
+      ]
+    },
+    "opacity": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "textDecoration": {
+      "enum": [
+        "none",
+        "underline",
+        "lineThrough",
+        "overline"
+      ]
+    },
+    "letterSpacing": {
+      "type": "number",
+      "minimum": -5,
+      "maximum": 50
+    },
+    "lineHeight": {
+      "type": "number",
+      "minimum": 0.5,
+      "maximum": 5,
+      "description": "Line height as a multiple of the text size (1.5 is airy)."
+    },
+    "maxLines": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100,
+      "description": "Shows at most this many lines of text; what happens to the rest is `textOverflow`."
+    },
+    "textOverflow": {
+      "enum": [
+        "clip",
+        "ellipsis",
+        "fade",
+        "visible"
+      ],
+      "description": "What happens to text that does not fit: cut off, end with ..., fade out, or spill out."
+    },
+    "softWrap": {
+      "type": "boolean",
+      "description": "False keeps text on one line however long it is."
+    },
+    "overflow": {
+      "enum": [
+        "visible",
+        "hidden"
+      ],
+      "description": "What happens to content that is bigger than this widget: shown anyway, or cut off at the edge."
+    },
+    "parts": {
+      "type": "object",
+      "description": "The same look options for named pieces inside the widget (a card's `title`, a button's `button`...). Which parts a widget has is listed in docs/widgets.md.",
+      "propertyNames": {
+        "pattern": "^[a-z][A-Za-z0-9]*$"
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/look"
+      }
+    }
   },
   "additionalProperties": false,
   "$defs": {
     "space": {
-      "type": ["string", "number"],
-      "if": { "type": "string" },
-      "then": { "$ref": "tokens.json#/$defs/spacing" },
-      "else": { "minimum": 0, "maximum": 200 }
+      "type": [
+        "string",
+        "number"
+      ],
+      "if": {
+        "type": "string"
+      },
+      "then": {
+        "$ref": "tokens.json#/$defs/spacing"
+      },
+      "else": {
+        "minimum": 0,
+        "maximum": 200
+      }
     },
     "corner": {
-      "type": ["string", "number"],
-      "if": { "type": "string" },
-      "then": { "$ref": "tokens.json#/$defs/radius" },
-      "else": { "minimum": 0, "maximum": 999 }
+      "type": [
+        "string",
+        "number"
+      ],
+      "if": {
+        "type": "string"
+      },
+      "then": {
+        "$ref": "tokens.json#/$defs/radius"
+      },
+      "else": {
+        "minimum": 0,
+        "maximum": 999
+      }
     },
     "textSize": {
-      "type": ["string", "number"],
-      "if": { "type": "string" },
-      "then": { "$ref": "tokens.json#/$defs/textSize" },
-      "else": { "minimum": 6, "maximum": 120 }
+      "type": [
+        "string",
+        "number"
+      ],
+      "if": {
+        "type": "string"
+      },
+      "then": {
+        "$ref": "tokens.json#/$defs/textSize"
+      },
+      "else": {
+        "minimum": 6,
+        "maximum": 120
+      }
     },
     "colour": {
       "type": "string",
-      "if": { "pattern": "^#" },
-      "then": { "pattern": "^#([0-9A-Fa-f]{6}|[0-9A-Fa-f]{8})$" },
-      "else": { "$ref": "tokens.json#/$defs/color" }
+      "if": {
+        "pattern": "^#"
+      },
+      "then": {
+        "pattern": "^#([0-9A-Fa-f]{6}|[0-9A-Fa-f]{8})$"
+      },
+      "else": {
+        "$ref": "tokens.json#/$defs/color"
+      }
     },
     "length": {
-      "type": ["number", "string"],
-      "if": { "type": "string" },
-      "then": { "const": "fill" },
-      "else": { "minimum": 0, "maximum": 3000 }
+      "type": [
+        "number",
+        "string"
+      ],
+      "if": {
+        "type": "string"
+      },
+      "then": {
+        "const": "fill"
+      },
+      "else": {
+        "minimum": 0,
+        "maximum": 3000
+      }
     },
     "sides": {
       "type": "object",
       "properties": {
-        "top": { "$ref": "#/$defs/space" },
-        "right": { "$ref": "#/$defs/space" },
-        "bottom": { "$ref": "#/$defs/space" },
-        "left": { "$ref": "#/$defs/space" }
+        "top": {
+          "$ref": "#/$defs/space"
+        },
+        "right": {
+          "$ref": "#/$defs/space"
+        },
+        "bottom": {
+          "$ref": "#/$defs/space"
+        },
+        "left": {
+          "$ref": "#/$defs/space"
+        }
       },
       "minProperties": 1,
+      "additionalProperties": false
+    },
+    "look": {
+      "type": "object",
+      "properties": {
+        "spacing": {
+          "$ref": "#/$defs/space",
+          "description": "Space inside the widget on every side."
+        },
+        "padding": {
+          "$ref": "#/$defs/sides",
+          "description": "Space inside the widget, side by side. Overrides spacing for the sides given."
+        },
+        "margin": {
+          "$ref": "#/$defs/sides",
+          "description": "Space outside the widget."
+        },
+        "radius": {
+          "$ref": "#/$defs/corner",
+          "description": "How round the corners are."
+        },
+        "color": {
+          "$ref": "#/$defs/colour",
+          "description": "Background colour."
+        },
+        "textColor": {
+          "$ref": "#/$defs/colour"
+        },
+        "textSize": {
+          "$ref": "#/$defs/textSize"
+        },
+        "fontWeight": {
+          "enum": [
+            "normal",
+            "medium",
+            "bold"
+          ]
+        },
+        "italic": {
+          "type": "boolean"
+        },
+        "align": {
+          "$ref": "tokens.json#/$defs/align"
+        },
+        "width": {
+          "$ref": "#/$defs/length"
+        },
+        "height": {
+          "$ref": "#/$defs/length"
+        },
+        "borderWidth": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 20
+        },
+        "borderColor": {
+          "$ref": "#/$defs/colour"
+        },
+        "shadow": {
+          "enum": [
+            "none",
+            "small",
+            "medium",
+            "large"
+          ]
+        },
+        "opacity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "textDecoration": {
+          "enum": [
+            "none",
+            "underline",
+            "lineThrough",
+            "overline"
+          ]
+        },
+        "letterSpacing": {
+          "type": "number",
+          "minimum": -5,
+          "maximum": 50
+        },
+        "lineHeight": {
+          "type": "number",
+          "minimum": 0.5,
+          "maximum": 5,
+          "description": "Line height as a multiple of the text size (1.5 is airy)."
+        },
+        "maxLines": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "description": "Shows at most this many lines of text; what happens to the rest is `textOverflow`."
+        },
+        "textOverflow": {
+          "enum": [
+            "clip",
+            "ellipsis",
+            "fade",
+            "visible"
+          ],
+          "description": "What happens to text that does not fit: cut off, end with ..., fade out, or spill out."
+        },
+        "softWrap": {
+          "type": "boolean",
+          "description": "False keeps text on one line however long it is."
+        },
+        "overflow": {
+          "enum": [
+            "visible",
+            "hidden"
+          ],
+          "description": "What happens to content that is bigger than this widget: shown anyway, or cut off at the edge."
+        }
+      },
       "additionalProperties": false
     }
   }

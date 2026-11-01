@@ -918,6 +918,32 @@
           }
         }
       ]
+    },
+    {
+      "id": "extras",
+      "title": "A few more looks",
+      "widgets": [
+        {
+          "id": "b_banner_sub",
+          "type": "banner",
+          "v": 1,
+          "data": {
+            "imageUrl": "https://picsum.photos/seed/bsub/800/450",
+            "title": "Banner title",
+            "subtitle": "Banner subtitle"
+          }
+        },
+        {
+          "id": "b_item_pic",
+          "type": "list_item",
+          "v": 1,
+          "data": {
+            "title": "With a picture",
+            "subtitle": "Row with an image",
+            "imageUrl": "https://picsum.photos/seed/row/200/200"
+          }
+        }
+      ]
     }
   ]
 }

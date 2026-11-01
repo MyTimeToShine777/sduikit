@@ -341,7 +341,10 @@ export const schemaFiles: Record<string, unknown> = {
             "schema": "widgets/image.v1.json",
             "children": []
           }
-        }
+        },
+        "parts": [
+          "image"
+        ]
       },
       "button": {
         "group": "Basics",
@@ -352,7 +355,10 @@ export const schemaFiles: Record<string, unknown> = {
             "schema": "widgets/button.v1.json",
             "children": []
           }
-        }
+        },
+        "parts": [
+          "button"
+        ]
       },
       "spacer": {
         "group": "Basics",
@@ -374,7 +380,10 @@ export const schemaFiles: Record<string, unknown> = {
             "schema": "widgets/divider.v1.json",
             "children": []
           }
-        }
+        },
+        "parts": [
+          "line"
+        ]
       },
       "section_header": {
         "group": "Layout",
@@ -385,7 +394,12 @@ export const schemaFiles: Record<string, unknown> = {
             "schema": "widgets/section_header.v1.json",
             "children": []
           }
-        }
+        },
+        "parts": [
+          "title",
+          "subtitle",
+          "action"
+        ]
       },
       "card": {
         "group": "Layout",
@@ -398,7 +412,13 @@ export const schemaFiles: Record<string, unknown> = {
               "children"
             ]
           }
-        }
+        },
+        "parts": [
+          "image",
+          "title",
+          "subtitle",
+          "body"
+        ]
       },
       "banner": {
         "group": "Media",
@@ -409,7 +429,12 @@ export const schemaFiles: Record<string, unknown> = {
             "schema": "widgets/banner.v1.json",
             "children": []
           }
-        }
+        },
+        "parts": [
+          "image",
+          "title",
+          "subtitle"
+        ]
       },
       "carousel": {
         "group": "Layout",
@@ -422,7 +447,10 @@ export const schemaFiles: Record<string, unknown> = {
               "items"
             ]
           }
-        }
+        },
+        "parts": [
+          "item"
+        ]
       },
       "list": {
         "group": "Layout",
@@ -435,7 +463,11 @@ export const schemaFiles: Record<string, unknown> = {
               "items"
             ]
           }
-        }
+        },
+        "parts": [
+          "item",
+          "divider"
+        ]
       },
       "grid": {
         "group": "Layout",
@@ -448,7 +480,10 @@ export const schemaFiles: Record<string, unknown> = {
               "items"
             ]
           }
-        }
+        },
+        "parts": [
+          "item"
+        ]
       },
       "tabs": {
         "group": "Layout",
@@ -461,7 +496,11 @@ export const schemaFiles: Record<string, unknown> = {
               "tabs[].widgets"
             ]
           }
-        }
+        },
+        "parts": [
+          "tab",
+          "content"
+        ]
       },
       "data_list": {
         "group": "Live data",
@@ -477,7 +516,10 @@ export const schemaFiles: Record<string, unknown> = {
               "template"
             ]
           }
-        }
+        },
+        "parts": [
+          "item"
+        ]
       },
       "rich_text": {
         "group": "Basics",
@@ -499,7 +541,12 @@ export const schemaFiles: Record<string, unknown> = {
             "schema": "widgets/quote.v1.json",
             "children": []
           }
-        }
+        },
+        "parts": [
+          "text",
+          "author",
+          "avatar"
+        ]
       },
       "icon": {
         "group": "Basics",
@@ -521,7 +568,10 @@ export const schemaFiles: Record<string, unknown> = {
             "schema": "widgets/avatar.v1.json",
             "children": []
           }
-        }
+        },
+        "parts": [
+          "initials"
+        ]
       },
       "badge": {
         "group": "Basics",
@@ -543,7 +593,12 @@ export const schemaFiles: Record<string, unknown> = {
             "schema": "widgets/alert.v1.json",
             "children": []
           }
-        }
+        },
+        "parts": [
+          "icon",
+          "title",
+          "message"
+        ]
       },
       "progress": {
         "group": "Content",
@@ -554,7 +609,12 @@ export const schemaFiles: Record<string, unknown> = {
             "schema": "widgets/progress.v1.json",
             "children": []
           }
-        }
+        },
+        "parts": [
+          "label",
+          "track",
+          "fill"
+        ]
       },
       "stat": {
         "group": "Content",
@@ -565,7 +625,12 @@ export const schemaFiles: Record<string, unknown> = {
             "schema": "widgets/stat.v1.json",
             "children": []
           }
-        }
+        },
+        "parts": [
+          "label",
+          "value",
+          "delta"
+        ]
       },
       "key_value": {
         "group": "Content",
@@ -576,7 +641,12 @@ export const schemaFiles: Record<string, unknown> = {
             "schema": "widgets/key_value.v1.json",
             "children": []
           }
-        }
+        },
+        "parts": [
+          "row",
+          "label",
+          "value"
+        ]
       },
       "list_item": {
         "group": "Content",
@@ -587,7 +657,14 @@ export const schemaFiles: Record<string, unknown> = {
             "schema": "widgets/list_item.v1.json",
             "children": []
           }
-        }
+        },
+        "parts": [
+          "image",
+          "icon",
+          "title",
+          "subtitle",
+          "trailing"
+        ]
       },
       "empty_state": {
         "group": "Content",
@@ -598,7 +675,13 @@ export const schemaFiles: Record<string, unknown> = {
             "schema": "widgets/empty_state.v1.json",
             "children": []
           }
-        }
+        },
+        "parts": [
+          "icon",
+          "title",
+          "message",
+          "button"
+        ]
       },
       "steps": {
         "group": "Content",
@@ -609,7 +692,12 @@ export const schemaFiles: Record<string, unknown> = {
             "schema": "widgets/steps.v1.json",
             "children": []
           }
-        }
+        },
+        "parts": [
+          "dot",
+          "title",
+          "description"
+        ]
       },
       "accordion": {
         "group": "Layout",
@@ -622,7 +710,11 @@ export const schemaFiles: Record<string, unknown> = {
               "items[].widgets"
             ]
           }
-        }
+        },
+        "parts": [
+          "header",
+          "content"
+        ]
       },
       "table": {
         "group": "Content",
@@ -633,7 +725,11 @@ export const schemaFiles: Record<string, unknown> = {
             "schema": "widgets/table.v1.json",
             "children": []
           }
-        }
+        },
+        "parts": [
+          "header",
+          "cell"
+        ]
       },
       "countdown": {
         "group": "Content",
@@ -655,7 +751,11 @@ export const schemaFiles: Record<string, unknown> = {
             "schema": "widgets/gallery.v1.json",
             "children": []
           }
-        }
+        },
+        "parts": [
+          "image",
+          "dots"
+        ]
       },
       "video_card": {
         "group": "Media",
@@ -666,7 +766,13 @@ export const schemaFiles: Record<string, unknown> = {
             "schema": "widgets/video_card.v1.json",
             "children": []
           }
-        }
+        },
+        "parts": [
+          "image",
+          "title",
+          "duration",
+          "play"
+        ]
       },
       "hero": {
         "group": "Media",
@@ -677,7 +783,13 @@ export const schemaFiles: Record<string, unknown> = {
             "schema": "widgets/hero.v1.json",
             "children": []
           }
-        }
+        },
+        "parts": [
+          "image",
+          "title",
+          "subtitle",
+          "button"
+        ]
       },
       "pricing_card": {
         "group": "Content",
@@ -688,7 +800,14 @@ export const schemaFiles: Record<string, unknown> = {
             "schema": "widgets/pricing_card.v1.json",
             "children": []
           }
-        }
+        },
+        "parts": [
+          "name",
+          "price",
+          "period",
+          "feature",
+          "button"
+        ]
       },
       "search_bar": {
         "group": "Interactive",
@@ -699,7 +818,10 @@ export const schemaFiles: Record<string, unknown> = {
             "schema": "widgets/search_bar.v1.json",
             "children": []
           }
-        }
+        },
+        "parts": [
+          "field"
+        ]
       },
       "chips": {
         "group": "Interactive",
@@ -710,7 +832,10 @@ export const schemaFiles: Record<string, unknown> = {
             "schema": "widgets/chips.v1.json",
             "children": []
           }
-        }
+        },
+        "parts": [
+          "chip"
+        ]
       },
       "quick_actions": {
         "group": "Interactive",
@@ -721,7 +846,12 @@ export const schemaFiles: Record<string, unknown> = {
             "schema": "widgets/quick_actions.v1.json",
             "children": []
           }
-        }
+        },
+        "parts": [
+          "item",
+          "icon",
+          "label"
+        ]
       },
       "rating": {
         "group": "Content",
@@ -732,7 +862,11 @@ export const schemaFiles: Record<string, unknown> = {
             "schema": "widgets/rating.v1.json",
             "children": []
           }
-        }
+        },
+        "parts": [
+          "stars",
+          "text"
+        ]
       },
       "container": {
         "group": "Layout",
@@ -756,7 +890,12 @@ export const schemaFiles: Record<string, unknown> = {
             "schema": "widgets/form.v1.json",
             "children": []
           }
-        }
+        },
+        "parts": [
+          "label",
+          "field",
+          "button"
+        ]
       },
       "row": {
         "group": "Building blocks",
@@ -1525,6 +1664,61 @@ export const schemaFiles: Record<string, unknown> = {
         "type": "number",
         "minimum": 0,
         "maximum": 1
+      },
+      "textDecoration": {
+        "enum": [
+          "none",
+          "underline",
+          "lineThrough",
+          "overline"
+        ]
+      },
+      "letterSpacing": {
+        "type": "number",
+        "minimum": -5,
+        "maximum": 50
+      },
+      "lineHeight": {
+        "type": "number",
+        "minimum": 0.5,
+        "maximum": 5,
+        "description": "Line height as a multiple of the text size (1.5 is airy)."
+      },
+      "maxLines": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 100,
+        "description": "Shows at most this many lines of text; what happens to the rest is `textOverflow`."
+      },
+      "textOverflow": {
+        "enum": [
+          "clip",
+          "ellipsis",
+          "fade",
+          "visible"
+        ],
+        "description": "What happens to text that does not fit: cut off, end with ..., fade out, or spill out."
+      },
+      "softWrap": {
+        "type": "boolean",
+        "description": "False keeps text on one line however long it is."
+      },
+      "overflow": {
+        "enum": [
+          "visible",
+          "hidden"
+        ],
+        "description": "What happens to content that is bigger than this widget: shown anyway, or cut off at the edge."
+      },
+      "parts": {
+        "type": "object",
+        "description": "The same look options for named pieces inside the widget (a card's `title`, a button's `button`...). Which parts a widget has is listed in docs/widgets.md.",
+        "propertyNames": {
+          "pattern": "^[a-z][A-Za-z0-9]*$"
+        },
+        "additionalProperties": {
+          "$ref": "#/$defs/look"
+        }
       }
     },
     "additionalProperties": false,
@@ -1622,6 +1816,123 @@ export const schemaFiles: Record<string, unknown> = {
           }
         },
         "minProperties": 1,
+        "additionalProperties": false
+      },
+      "look": {
+        "type": "object",
+        "properties": {
+          "spacing": {
+            "$ref": "#/$defs/space",
+            "description": "Space inside the widget on every side."
+          },
+          "padding": {
+            "$ref": "#/$defs/sides",
+            "description": "Space inside the widget, side by side. Overrides spacing for the sides given."
+          },
+          "margin": {
+            "$ref": "#/$defs/sides",
+            "description": "Space outside the widget."
+          },
+          "radius": {
+            "$ref": "#/$defs/corner",
+            "description": "How round the corners are."
+          },
+          "color": {
+            "$ref": "#/$defs/colour",
+            "description": "Background colour."
+          },
+          "textColor": {
+            "$ref": "#/$defs/colour"
+          },
+          "textSize": {
+            "$ref": "#/$defs/textSize"
+          },
+          "fontWeight": {
+            "enum": [
+              "normal",
+              "medium",
+              "bold"
+            ]
+          },
+          "italic": {
+            "type": "boolean"
+          },
+          "align": {
+            "$ref": "tokens.json#/$defs/align"
+          },
+          "width": {
+            "$ref": "#/$defs/length"
+          },
+          "height": {
+            "$ref": "#/$defs/length"
+          },
+          "borderWidth": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 20
+          },
+          "borderColor": {
+            "$ref": "#/$defs/colour"
+          },
+          "shadow": {
+            "enum": [
+              "none",
+              "small",
+              "medium",
+              "large"
+            ]
+          },
+          "opacity": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "textDecoration": {
+            "enum": [
+              "none",
+              "underline",
+              "lineThrough",
+              "overline"
+            ]
+          },
+          "letterSpacing": {
+            "type": "number",
+            "minimum": -5,
+            "maximum": 50
+          },
+          "lineHeight": {
+            "type": "number",
+            "minimum": 0.5,
+            "maximum": 5,
+            "description": "Line height as a multiple of the text size (1.5 is airy)."
+          },
+          "maxLines": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100,
+            "description": "Shows at most this many lines of text; what happens to the rest is `textOverflow`."
+          },
+          "textOverflow": {
+            "enum": [
+              "clip",
+              "ellipsis",
+              "fade",
+              "visible"
+            ],
+            "description": "What happens to text that does not fit: cut off, end with ..., fade out, or spill out."
+          },
+          "softWrap": {
+            "type": "boolean",
+            "description": "False keeps text on one line however long it is."
+          },
+          "overflow": {
+            "enum": [
+              "visible",
+              "hidden"
+            ],
+            "description": "What happens to content that is bigger than this widget: shown anyway, or cut off at the edge."
+          }
+        },
         "additionalProperties": false
       }
     }

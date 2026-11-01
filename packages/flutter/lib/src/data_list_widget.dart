@@ -39,6 +39,7 @@ Widget buildDataList(BuildContext context, SduiNode node, SduiRender render) {
       emptyText: node.string('emptyText'),
       loader: loader,
       render: render,
+      node: node,
     ),
   );
 }
@@ -54,6 +55,7 @@ class _SduiDataList extends StatefulWidget {
     required this.emptyText,
     required this.loader,
     required this.render,
+    required this.node,
   });
 
   final String name;
@@ -64,6 +66,7 @@ class _SduiDataList extends StatefulWidget {
   final String? emptyText;
   final SduiDataLoader loader;
   final SduiRender render;
+  final SduiNode node;
 
   @override
   State<_SduiDataList> createState() => _SduiDataListState();
@@ -117,7 +120,7 @@ class _SduiDataListState extends State<_SduiDataList> {
         widget.render.onError?.call(const FormatException('A row of live data could not be turned into a widget.'), null);
         continue;
       }
-      items.add(widget.render.build(context, node));
+      items.add(widget.render.part(context, widget.node, 'item', widget.render.build(context, node)));
     }
 
     switch (widget.layout) {

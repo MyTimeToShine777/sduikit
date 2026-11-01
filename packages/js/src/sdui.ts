@@ -16,6 +16,7 @@ export interface WidgetListing {
   version: number; // the newest version
   group: string; // "Basics", "Layout", "Media", "Content", "Interactive", "Live data" or "Custom"
   description: string;
+  parts: string[]; // named pieces inside the widget that can each be styled (`style.parts`)
 }
 
 export function createSdui(options: SduiOptions = {}) {
@@ -31,12 +32,14 @@ export function createSdui(options: SduiOptions = {}) {
         version: Math.max(...Object.keys(entry.versions).map(Number)),
         group: entry.group ?? "Other",
         description: entry.description ?? "",
+        parts: (entry as { parts?: string[] }).parts ?? [],
       })),
       ...Object.entries(options.extraWidgets ?? {}).map(([type, versions]) => ({
         type,
         version: Math.max(...Object.keys(versions).map(Number)),
         group: "Custom",
         description: "",
+        parts: [],
       })),
     ],
     // The lists of widgets inside this widget (a carousel's items, each tab's contents...), with where each one is.

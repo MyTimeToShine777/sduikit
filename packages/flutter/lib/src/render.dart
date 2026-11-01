@@ -154,31 +154,15 @@ class SduiRender {
 
     var result = child;
 
-    // Text look: colour, size, weight, italic, and alignment reach the text inside.
-    final textColor = tokens.color(style['textColor']);
-    final textSize = tokens.textSize(style['textSize']);
-    final weight = switch (style['fontWeight']) {
-      'bold' => FontWeight.w700,
-      'medium' => FontWeight.w500,
-      'normal' => FontWeight.w400,
-      _ => null,
-    };
-    final italic = style['italic'] == true;
-    final align = switch (style['align']) {
-      'start' => TextAlign.start,
-      'center' => TextAlign.center,
-      'end' => TextAlign.end,
-      _ => null,
-    };
-    if (textColor != null || textSize != null || weight != null || italic || align != null) {
+    // Text look (colour, size, weight, decoration, lines...) reaches the text inside.
+    final text = _textLookOf(tokens, style);
+    if (!text.isEmpty) {
       result = DefaultTextStyle.merge(
-        style: TextStyle(
-          color: textColor,
-          fontSize: textSize,
-          fontWeight: weight,
-          fontStyle: italic ? FontStyle.italic : null,
-        ),
-        textAlign: align,
+        style: text.style,
+        textAlign: text.align,
+        maxLines: text.maxLines,
+        overflow: text.overflow,
+        softWrap: text.softWrap,
         child: result,
       );
     }
@@ -196,6 +180,8 @@ class SduiRender {
         child: result,
       );
     }
+    // Content bigger than the widget is cut off at its edge when asked.
+    if (style['overflow'] == 'hidden') result = ClipRect(child: result);
     if (width != null || height != null) result = SizedBox(width: width, height: height, child: result);
     if (margin != EdgeInsets.zero) result = Padding(padding: margin, child: result);
     if (style['opacity'] is num) result = Opacity(opacity: (style['opacity'] as num).toDouble().clamp(0.0, 1.0), child: result);
@@ -208,6 +194,148 @@ class SduiRender {
       );
     }
     return result;
+  }
+
+  // The text part of a style: what the text inside should look like.
+  _TextLook _textLookOf(SduiTokens tokens, Map<String, dynamic> style) {
+    final weight = switch (style['fontWeight']) {
+      'bold' => FontWeight.w700,
+      'medium' => FontWeight.w500,
+      'normal' => FontWeight.w400,
+      _ => null,
+    };
+    final decoration = switch (style['textDecoration']) {
+      'underline' => TextDecoration.underline,
+      'lineThrough' => TextDecoration.lineThrough,
+      'overline' => TextDecoration.overline,
+      'none' => TextDecoration.none,
+      _ => null,
+    };
+    final maxLines = style['maxLines'] is int ? style['maxLines'] as int : null;
+    return _TextLook(
+      style: TextStyle(
+        color: tokens.color(style['textColor']),
+        fontSize: tokens.textSize(style['textSize']),
+        fontWeight: weight,
+        fontStyle: style['italic'] == true ? FontStyle.italic : null,
+        decoration: decoration,
+        letterSpacing: style['letterSpacing'] is num ? (style['letterSpacing'] as num).toDouble() : null,
+        height: style['lineHeight'] is num ? (style['lineHeight'] as num).toDouble() : null,
+      ),
+      align: switch (style['align']) {
+        'start' => TextAlign.start,
+        'center' => TextAlign.center,
+        'end' => TextAlign.end,
+        _ => null,
+      },
+      maxLines: maxLines,
+      // With a line limit and nothing said about the ending, text ends with "..." (friendlier than a hard cut).
+      overflow: switch (style['textOverflow']) {
+        'clip' => TextOverflow.clip,
+        'ellipsis' => TextOverflow.ellipsis,
+        'fade' => TextOverflow.fade,
+        'visible' => TextOverflow.visible,
+        _ => maxLines != null ? TextOverflow.ellipsis : null,
+      },
+      softWrap: style['softWrap'] is bool ? style['softWrap'] as bool : null,
+      present: style.keys.any(_textKeys.contains),
+    );
+  }
+
+  static const _textKeys = {
+    'textColor', 'textSize', 'fontWeight', 'italic', 'align', 'textDecoration', 'letterSpacing', 'lineHeight', 'maxLines', 'textOverflow', 'softWrap',
+  };
+
+  // ── Named pieces of a widget ──
+  // A widget's `style.parts.title` is a whole look for the piece called "title". Each widget draws its pieces
+  // through these three helpers, so every piece can be changed on its own.
+
+  /// The look of one named piece of [node], or an empty map when it has none.
+  Map<String, dynamic> partLook(SduiNode node, String name) {
+    final parts = node.style['parts'];
+    final look = parts is Map ? parts[name] : null;
+    return look is Map ? Map<String, dynamic>.from(look) : const {};
+  }
+
+  /// Draws some text as the piece [name] of [node]. The text is drawn in [style] (the widget's normal look for it),
+  /// then the whole widget's text look is put on top, then the piece's own look, so every text option works
+  /// on every widget.
+  Widget partText(
+    BuildContext context,
+    SduiNode node,
+    String name,
+    String text, {
+    TextStyle? style,
+    TextAlign? textAlign,
+    int? maxLines,
+    TextOverflow? overflow,
+  }) {
+    final tokens = context.sduiTokens;
+    final whole = _textLookOf(tokens, node.style);
+    final own = partLook(node, name);
+    final piece = _textLookOf(tokens, own);
+    var merged = (style ?? const TextStyle());
+    if (whole.present) merged = merged.merge(whole.style);
+    if (piece.present) merged = merged.merge(piece.style);
+    final result = Text(
+      text,
+      style: merged,
+      textAlign: piece.align ?? textAlign,
+      maxLines: piece.maxLines ?? maxLines,
+      overflow: piece.overflow ?? overflow,
+      softWrap: piece.softWrap,
+    );
+    return own.isEmpty ? result : wrap(context, result, style: own, tappable: false);
+  }
+
+  /// Only the text style of the piece [name] (the widget's own text look, then the piece's), for places that take
+  /// a [TextStyle] instead of a Text widget, such as a form field. Null when neither says anything about text.
+  TextStyle? partTextStyle(BuildContext context, SduiNode node, String name) {
+    final tokens = context.sduiTokens;
+    final whole = _textLookOf(tokens, node.style);
+    final piece = _textLookOf(tokens, partLook(node, name));
+    if (!whole.present && !piece.present) return null;
+    return const TextStyle().merge(whole.present ? whole.style : null).merge(piece.present ? piece.style : null);
+  }
+
+  /// Puts the look of the piece [name] around any widget (a picture, a button, a row...).
+  Widget part(BuildContext context, SduiNode node, String name, Widget child) {
+    final own = partLook(node, name);
+    return own.isEmpty ? child : wrap(context, child, style: own, tappable: false);
+  }
+
+  /// A button that is the piece [name]. [build] makes the button and is given the look as a [ButtonStyle]
+  /// (colours, corners, border, text, padding), or null when the piece has no look of its own.
+  Widget partButton(BuildContext context, SduiNode node, String name, Widget Function(ButtonStyle? style) build) {
+    final own = partLook(node, name);
+    if (own.isEmpty) return build(null);
+    final tokens = context.sduiTokens;
+    final text = _textLookOf(tokens, own);
+    final radius = tokens.radius(own['radius']);
+    final borderWidth = own['borderWidth'] is num ? (own['borderWidth'] as num).toDouble() : null;
+    final borderColor = tokens.color(own['borderColor']);
+    final padding = tokens.space(own['spacing']);
+    final style = FilledButton.styleFrom(
+      backgroundColor: tokens.color(own['color']),
+      foregroundColor: tokens.color(own['textColor']),
+      textStyle: text.present ? text.style : null,
+      padding: padding == null ? null : EdgeInsets.all(padding),
+      shape: radius == null ? null : RoundedRectangleBorder(borderRadius: BorderRadius.circular(radius)),
+      side: (borderWidth != null || borderColor != null) ? BorderSide(width: borderWidth ?? 1, color: borderColor ?? const Color(0x33000000)) : null,
+    );
+    // What the button style cannot say (outer space, size, opacity, shadow) goes around the button.
+    const handled = {'color', 'textColor', 'radius', 'borderWidth', 'borderColor', 'textSize', 'fontWeight', 'italic', 'textDecoration', 'letterSpacing', 'lineHeight', 'spacing', 'padding', 'maxLines', 'textOverflow', 'softWrap', 'align'};
+    final around = {...own}..removeWhere((key, _) => handled.contains(key));
+    final button = build(style);
+    return around.isEmpty ? button : wrap(context, button, style: around, tappable: false);
+  }
+
+  /// An icon that is the piece [name]: the piece's text colour and size change the icon's colour and size.
+  Widget partIcon(BuildContext context, SduiNode node, String name, IconData icon, {double? size, Color? color}) {
+    final own = partLook(node, name);
+    final tokens = context.sduiTokens;
+    final shown = Icon(icon, size: tokens.textSize(own['textSize']) ?? size, color: tokens.color(own['textColor']) ?? color);
+    return own.isEmpty ? shown : wrap(context, shown, style: {...own}..remove('textSize')..remove('textColor'), tappable: false);
   }
 
   // Four sides from {top,right,bottom,left}; a side that is not given uses [fallback].
@@ -238,4 +366,19 @@ class SduiRender {
       tappable: tappable,
     );
   }
+}
+
+/// What the text inside a widget should look like (the text half of a style).
+class _TextLook {
+  const _TextLook({required this.style, this.align, this.maxLines, this.overflow, this.softWrap, required this.present});
+
+  final TextStyle style;
+  final TextAlign? align;
+  final int? maxLines;
+  final TextOverflow? overflow;
+  final bool? softWrap;
+
+  /// True when the style said anything about text at all.
+  final bool present;
+  bool get isEmpty => !present;
 }

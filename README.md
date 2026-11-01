@@ -117,7 +117,7 @@ Full table of every field: **[docs/widgets.md](docs/widgets.md)** (generated fro
 | **Live data** | `data_list` (rows from your own API, drawn through a template) |
 | **Building blocks** | Named after Flutter's own widgets: `row` `column` `stack` `positioned` `padding` `align` `center` `sized_box` `expanded` `flexible` `aspect_ratio` `fractionally_sized_box` `constrained_box` `fitted_box` `wrap` `single_child_scroll_view` `list_view` `grid_view` `indexed_stack` `opacity` `transform` `rotated_box` `clip` `box` (Flutter's Container: gradient, border, shadows, background picture) `visibility` `backdrop_blur` `ink_well` `safe_area` |
 
-Every widget also takes the shared `style`: a theme name (`"md"`, `"primary"`, follows dark mode and re-branding) **or an exact value** (`13`, `"#FF8800"`) for space inside and outside (each side), size, colours, text size and weight, border, shadow and opacity.
+Every widget also takes the shared `style` (and `style.parts` to change one piece of a widget at a time, such as a card's title or a button): a theme name (`"md"`, `"primary"`, follows dark mode and re-branding) **or an exact value** (`13`, `"#FF8800"`) for space inside and outside (each side), size, colours, text size and weight, border, shadow and opacity.
 
 Your app adds its own widgets (a product tile, a map, a chart) next to these. They are checked and
 drawn the same way (see "Your own widgets").
