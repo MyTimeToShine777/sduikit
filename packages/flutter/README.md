@@ -33,7 +33,10 @@ flutter test
 |---|---|
 | `lib/src/theme.dart` | Turns the manifest `theme` into `ThemeData` and a token lookup (`context.sduiTokens`). |
 | `lib/src/registry.dart` | Maps widget `type` + `v` to code. Your app adds its own widgets here. |
-| `lib/src/builtin_widgets.dart` | The 12 starter widgets (text, image, button, spacer, divider, section_header, card, banner, carousel, list, grid, tabs). |
+| `lib/src/builtin_widgets.dart` | The first widgets (text, image, button, spacer, divider, section_header, card, banner, carousel, list, grid, tabs, data_list, form), and the place where all 38 are registered. |
+| `lib/src/display_widgets.dart` | Widgets that show information: rich_text, quote, icon, avatar, badge, alert, progress, stat, key_value, list_item, empty_state, rating, table, steps. |
+| `lib/src/interactive_widgets.dart` | Widgets people tap or that change: search_bar, chips, quick_actions, accordion, countdown, gallery, video_card, hero, pricing_card, container. |
+| `lib/src/form_widget.dart` | The form: text, email, number, multiline, password, date, select, checkbox and switch fields, with checks. |
 | `lib/src/blocks.dart` | The building blocks for custom screens (column, row, stack, grid, scroll, text, image, button, spacer, divider, widget). |
 | `lib/src/render.dart` | Draws widgets safely: one broken widget is skipped (or replaced by its fallback), reported, and the rest is drawn. |
 | `lib/src/actions.dart` | Runs actions (open screen/sheet/url/native, call API, share, dismiss). The app supplies the handlers. |

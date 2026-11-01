@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 
 import 'data_list_widget.dart';
+import 'display_widgets.dart';
+import 'form_widget.dart';
+import 'images.dart';
+import 'interactive_widgets.dart';
 import 'layout.dart';
 import 'model.dart';
 import 'registry.dart';
 import 'render.dart';
 import 'theme.dart';
 
-/// Adds the 12 starter widgets (version 1) to a registry.
+/// Adds every built-in widget (all 38, version 1) to a registry. The first 14 are registered here;
+/// the display widgets and the interactive widgets are registered by their own files (last two lines).
 void registerBuiltInWidgets(SduiWidgetRegistry registry) {
   registry
     ..register('text', 1, _text)
@@ -22,7 +27,10 @@ void registerBuiltInWidgets(SduiWidgetRegistry registry) {
     ..register('list', 1, _list)
     ..register('grid', 1, _grid)
     ..register('tabs', 1, _tabs)
-    ..register('data_list', 1, buildDataList);
+    ..register('data_list', 1, buildDataList)
+    ..register('form', 1, buildForm);
+  registerDisplayWidgets(registry);
+  registerInteractiveWidgets(registry);
 }
 
 TextAlign? _textAlign(Object? token) => switch (token) {
@@ -31,35 +39,6 @@ TextAlign? _textAlign(Object? token) => switch (token) {
       'end' => TextAlign.end,
       _ => null,
     };
-
-// Shown instead of a picture that cannot be loaded. The page layout stays the same.
-class _ImagePlaceholder extends StatelessWidget {
-  const _ImagePlaceholder({this.height = 120});
-
-  final double height;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: height,
-      width: double.infinity,
-      alignment: Alignment.center,
-      color: Theme.of(context).colorScheme.surfaceContainerHighest,
-      child: const Icon(Icons.image_not_supported_outlined),
-    );
-  }
-}
-
-Widget _networkImage(String url, {double? height, BoxFit fit = BoxFit.cover, String? description}) {
-  return Image.network(
-    url,
-    height: height,
-    width: double.infinity,
-    fit: fit,
-    semanticLabel: description,
-    errorBuilder: (context, error, stackTrace) => _ImagePlaceholder(height: height ?? 120),
-  );
-}
 
 Widget _text(BuildContext context, SduiNode node, SduiRender render) {
   final tokens = context.sduiTokens;
@@ -81,7 +60,7 @@ Widget _text(BuildContext context, SduiNode node, SduiRender render) {
 }
 
 Widget _image(BuildContext context, SduiNode node, SduiRender render) {
-  final image = _networkImage(
+  final image = sduiNetworkImage(
     node.requireString('url'),
     fit: node.string('fit') == 'contain' ? BoxFit.contain : BoxFit.cover,
     description: node.string('alt'),
@@ -166,7 +145,7 @@ Widget _card(BuildContext context, SduiNode node, SduiRender render) {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (imageUrl != null) _networkImage(imageUrl, height: 120),
+          if (imageUrl != null) sduiNetworkImage(imageUrl, height: 120),
           Padding(
             padding: const EdgeInsets.all(12),
             child: Column(
@@ -199,7 +178,7 @@ Widget _banner(BuildContext context, SduiNode node, SduiRender render) {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          _networkImage(imageUrl, height: 160),
+          sduiNetworkImage(imageUrl, height: 160),
           if (title != null || subtitle != null)
             Positioned(
               left: 12,

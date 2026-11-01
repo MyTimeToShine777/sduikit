@@ -31,7 +31,7 @@
           "data": {
             "chips": [
               { "label": "All", "selected": true, "action": { "type": "call_api", "name": "set_filter", "params": { "category": "all" } } },
-              { "label": "New", "action": { "type": "call_api", "name": "set_filter", "params": { "category": "new" } } }
+              { "label": "Latest", "action": { "type": "call_api", "name": "set_filter", "params": { "category": "new" } } }
             ]
           }
         }

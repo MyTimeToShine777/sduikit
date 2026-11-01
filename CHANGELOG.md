@@ -7,7 +7,11 @@ and the packages use [semantic versioning](https://semver.org/). The format itse
 
 ## [Unreleased]
 
-### Added (live data, drafts and a saved copy)
+### Added (38 widgets in total, live data, drafts and a saved copy)
+- 26 more widgets: `data_list`, `form`, `rich_text`, `quote`, `icon`, `avatar`, `badge`, `alert`,
+  `progress`, `stat`, `key_value`, `list_item`, `empty_state`, `steps`, `accordion`, `table`,
+  `countdown`, `gallery`, `video_card`, `hero`, `pricing_card`, `search_bar`, `chips`,
+  `quick_actions`, `rating`, `container`. New icon, tone and size token lists.
 - `data_list` widget (v1): the app loads rows from its own API and the page repeats a template
   once per row, filling `{{field}}` placeholders. `validate` understands templates (placeholders
   are allowed inside them only), and `createSdui` accepts a `templates` list for your own widgets.
@@ -17,7 +21,7 @@ and the packages use [semantic versioning](https://semver.org/). The format itse
 
 ### Added
 - The format: JSON Schema files for pages, screens, building blocks, the app manifest, actions,
-  rules and the 12 starter widgets (`text`, `image`, `button`, `spacer`, `divider`,
+  rules and the first 12 widgets (`text`, `image`, `button`, `spacer`, `divider`,
   `section_header`, `card`, `banner`, `carousel`, `list`, `grid`, `tabs`).
 - `sduikit` for JavaScript: `validate` (errors in plain words with the path of the wrong
   field), `filterForClient` (country, app version, audience, schedule, supported widgets,

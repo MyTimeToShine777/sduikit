@@ -10,7 +10,9 @@ Status: early development (nothing is published yet). Design:
 ## What is in this repo today
 
 - `schemas/` is the format. JSON Schema files for pages, screens, building blocks, the
-  manifest, actions and the 12 starter widgets. Everything else follows these files.
+  manifest, actions and **38 built-in widgets** (text, image, button, card, banner, carousel, tabs,
+  forms, live-data lists, rating, progress, accordion, countdown, gallery, pricing card and more).
+  Everything else follows these files.
 - `fixtures/` is a set of valid sample documents that every package tests against.
 - `packages/js/` is the `sduikit` npm package: `validate`, `filterForClient`, token lists
   and a way to register your app's own widgets.

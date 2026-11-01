@@ -4,6 +4,8 @@ library;
 export 'src/actions.dart';
 export 'src/blocks.dart' show buildBlock;
 export 'src/client.dart';
+export 'src/icons.dart';
+export 'src/images.dart';
 export 'src/layout.dart' show SduiGridRows;
 export 'src/model.dart';
 export 'src/registry.dart';

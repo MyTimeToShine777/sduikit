@@ -31,7 +31,9 @@ class SduiRender {
     this.onAnalytics,
     this.dataLoader,
     this.killedWidgets = const {},
-  }) : actions = actions ?? SduiActionHandler(onError: onError);
+    DateTime Function()? clock,
+  })  : actions = actions ?? SduiActionHandler(onError: onError),
+        now = clock ?? DateTime.now;
 
   final SduiWidgetRegistry registry;
   final SduiActionHandler actions;
@@ -43,6 +45,9 @@ class SduiRender {
 
   /// Widget types the manifest switched off. They are not drawn (their fallback is, if there is one).
   final Set<String> killedWidgets;
+
+  /// The current time. Widgets like the countdown read it from here, so tests can set it.
+  final DateTime Function() now;
 
   /// Draws one widget.
   Widget build(BuildContext context, SduiNode node) {
@@ -81,9 +86,24 @@ class SduiRender {
   }
 
   /// Reports the analytics event (if any), then runs the action (if any).
-  void tap(BuildContext context, {Map<String, dynamic>? action, String? event, Map<String, dynamic>? params}) {
+  /// [extraParams] are added to the action's own `params` (a form uses this to send what was typed).
+  void tap(
+    BuildContext context, {
+    Map<String, dynamic>? action,
+    String? event,
+    Map<String, dynamic>? params,
+    Map<String, dynamic>? extraParams,
+  }) {
     if (event != null) onAnalytics?.call(event, params ?? const {});
-    unawaited(actions.run(context, action));
+    var toRun = action;
+    if (action != null && extraParams != null) {
+      final own = action['params'];
+      toRun = {
+        ...action,
+        'params': {if (own is Map) ...Map<String, dynamic>.from(own), ...extraParams},
+      };
+    }
+    unawaited(actions.run(context, toRun));
   }
 
   /// Applies the shared `style` tokens (padding, background, corners) and makes the widget tappable

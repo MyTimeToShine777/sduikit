@@ -11,7 +11,7 @@ typedef SduiWidgetBuilder = Widget Function(BuildContext context, SduiNode node,
 class SduiWidgetRegistry {
   SduiWidgetRegistry();
 
-  /// A registry that already knows the 12 starter widgets.
+  /// A registry that already knows all 38 built-in widgets.
   factory SduiWidgetRegistry.withBuiltIns() {
     final registry = SduiWidgetRegistry();
     registerBuiltInWidgets(registry);

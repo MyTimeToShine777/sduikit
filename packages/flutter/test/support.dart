@@ -71,10 +71,12 @@ SduiRender makeRender(
   SduiDataLoader? dataLoader,
   bool withoutDataLoader = false,
   Set<String> killedWidgets = const {},
+  DateTime Function()? clock,
 }) {
   return SduiRender(
     registry: registry ?? SduiWidgetRegistry.withBuiltIns(),
     actions: actions,
+    clock: clock,
     dataLoader: withoutDataLoader ? null : (dataLoader ?? sampleDataLoader),
     killedWidgets: killedWidgets,
     onError: (error, stackTrace) => reports.errors.add(error),
