@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import 'data_list_widget.dart';
@@ -209,14 +211,71 @@ Widget _carousel(BuildContext context, SduiNode node, SduiRender render) {
   return render.wrapNode(
     context,
     node,
-    SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [for (final card in cards) SizedBox(width: cardWidth, child: card)],
-      ),
-    ),
+    _SduiCarousel(cardWidth: cardWidth, autoplay: node.boolean('autoplay') ?? false, cards: cards),
   );
+}
+
+/// Scrolls sideways. With `autoplay` it moves to the next card every few seconds and goes back to the
+/// first card after the last. Touching or dragging it pauses the automatic movement for a while.
+class _SduiCarousel extends StatefulWidget {
+  const _SduiCarousel({required this.cardWidth, required this.autoplay, required this.cards});
+
+  final double cardWidth;
+  final bool autoplay;
+  final List<Widget> cards;
+
+  @override
+  State<_SduiCarousel> createState() => _SduiCarouselState();
+}
+
+class _SduiCarouselState extends State<_SduiCarousel> {
+  static const _every = Duration(seconds: 4);
+  final _controller = ScrollController();
+  Timer? _timer;
+  bool _pausedByTouch = false;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.autoplay && widget.cards.length > 1) {
+      _timer = Timer.periodic(_every, (_) => _next());
+    }
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _next() {
+    if (!mounted || !_controller.hasClients) return;
+    if (_pausedByTouch) {
+      // Skip this round, then start moving again.
+      _pausedByTouch = false;
+      return;
+    }
+    final position = _controller.position;
+    final atEnd = position.pixels >= position.maxScrollExtent - 1;
+    final target = atEnd ? 0.0 : (position.pixels + widget.cardWidth).clamp(0.0, position.maxScrollExtent);
+    _controller.animateTo(target, duration: const Duration(milliseconds: 400), curve: Curves.easeInOut);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Listener(
+      onPointerDown: (_) => _pausedByTouch = true,
+      child: SingleChildScrollView(
+        controller: _controller,
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [for (final card in widget.cards) SizedBox(width: widget.cardWidth, child: card)],
+        ),
+      ),
+    );
+  }
 }
 
 Widget _list(BuildContext context, SduiNode node, SduiRender render) {

@@ -104,7 +104,6 @@ alignment and ordinary Rows and Columns. Test it with your own Arabic text.
 
 ## Known gaps in version 0.2.0
 
-- The carousel's `autoplay` setting is accepted but does not animate yet.
 - `FileSduiCache` uses `dart:io`, so it does not work in a web build.
 - The loading placeholders are static grey boxes (no shimmer).
 - Lottie animations are not included; the design makes them an optional add-on package.
