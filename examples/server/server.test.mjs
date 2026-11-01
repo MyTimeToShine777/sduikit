@@ -1,6 +1,9 @@
 // End-to-end check of the main promise: change a page on the server and the next request from
 // an app returns the change, with no new app release and no server restart.
 import assert from "node:assert/strict";
+import { mkdtempSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { after, before, describe, it } from "node:test";
 import { createExampleServer } from "./server.mjs";
 
@@ -186,5 +189,102 @@ describe("drafts, publishing and going back", () => {
     const { status, body } = await post("/admin/rollback/screens/offers?revision=1999");
     assert.equal(status, 404);
     assert.match(body.message, /no earlier version/);
+  });
+});
+
+describe("what a dashboard needs", () => {
+  it("lists pages with their state, and returns the live page and the draft together", async () => {
+    const { status, body } = await get("/admin/screens");
+    assert.equal(status, 200);
+    const offers = body.find((entry) => entry.id === "offers");
+    assert.equal(offers.isLive, true);
+    assert.equal(typeof offers.revision, "string");
+
+    const both = (await get("/admin/screens/offers")).body;
+    assert.equal(both.live.id, "offers");
+    assert.equal(both.draft, null);
+    assert.deepEqual((await get("/admin/screens/nothing")).body, { live: null, draft: null });
+  });
+
+  it("lets staff create a brand-new page as a draft, and shows it in the list", async () => {
+    const draft = { schema: 1, id: "faq", revision: "1", title: "FAQ", sections: [{ id: "s", widgets: [] }] };
+    assert.equal((await save("/admin/drafts/pages/faq", draft)).status, 200);
+
+    const entry = (await get("/admin/pages")).body.find((each) => each.id === "faq");
+    assert.deepEqual({ isLive: entry.isLive, hasDraft: entry.hasDraft }, { isLive: false, hasDraft: true });
+    assert.equal((await get("/pages/faq?appVersion=1.0.0")).status, 404); // apps cannot see it yet
+
+    assert.equal((await post("/admin/publish/pages/faq")).status, 200);
+    assert.equal((await get("/pages/faq?appVersion=1.0.0")).status, 200);
+  });
+
+  it("refuses a document whose id does not match the address", async () => {
+    const draft = { schema: 1, id: "other", revision: "1", sections: [] };
+    const saved = await save("/admin/drafts/pages/faq", draft);
+    assert.equal(saved.status, 400);
+    assert.match(saved.body.message, /does not match/);
+  });
+
+  it("can throw a draft away", async () => {
+    const draft = { schema: 1, id: "temp", revision: "1", sections: [] };
+    await save("/admin/drafts/pages/temp", draft);
+    assert.equal((await fetchJson("/admin/drafts/pages/temp", { method: "DELETE" })).status, 200);
+    assert.equal((await get("/admin/drafts/pages/temp")).status, 404);
+  });
+
+  it("answers the browser's permission check so a dashboard on another address can call it", async () => {
+    const response = await fetch(`${base}/admin/pages`, { method: "OPTIONS" });
+    assert.equal(response.status, 204);
+    assert.equal(response.headers.get("access-control-allow-origin"), "*");
+    assert.match(response.headers.get("access-control-allow-methods"), /PUT/);
+  });
+});
+
+describe("staff sign-in and saved changes", () => {
+  it("refuses staff routes without the token and allows them with it, while apps are not affected", async () => {
+    const locked = createExampleServer({ adminToken: "secret" });
+    await new Promise((resolve) => locked.listen(0, resolve));
+    const where = `http://localhost:${locked.address().port}`;
+    try {
+      assert.equal((await fetch(`${where}/admin/pages`)).status, 401);
+      assert.equal((await fetch(`${where}/admin/pages`, { headers: { authorization: "Bearer wrong" } })).status, 401);
+      assert.equal((await fetch(`${where}/admin/pages`, { headers: { authorization: "Bearer secret" } })).status, 200);
+      assert.equal((await fetch(`${where}/pages/home?appVersion=1.0.0`)).status, 200); // apps need no token
+    } finally {
+      locked.close();
+    }
+  });
+
+  it("keeps pages, drafts and history after a restart when given a data file", async () => {
+    const folder = mkdtempSync(join(tmpdir(), "sduikit-server-"));
+    const dataFile = join(folder, "data.json");
+    const start = async () => {
+      const instance = createExampleServer({ dataFile });
+      await new Promise((resolve) => instance.listen(0, resolve));
+      return { instance, where: `http://localhost:${instance.address().port}` };
+    };
+    const send = (where, path, method, body) =>
+      fetch(where + path, { method, headers: { "content-type": "application/json" }, body: body && JSON.stringify(body) }).then((r) => r.json());
+
+    let { instance, where } = await start();
+    try {
+      const home = (await fetch(`${where}/admin/pages/home`).then((r) => r.json())).live;
+      await send(where, "/admin/pages/home", "PUT", { ...home, revision: "saved-1", title: "Saved title" });
+      await send(where, "/admin/drafts/pages/home", "PUT", { ...home, revision: "draft-1" });
+    } finally {
+      instance.close();
+    }
+
+    ({ instance, where } = await start()); // a brand-new server using the same file
+    try {
+      const both = await fetch(`${where}/admin/pages/home`).then((r) => r.json());
+      assert.equal(both.live.revision, "saved-1");
+      assert.equal(both.draft.revision, "draft-1");
+      const versions = await fetch(`${where}/admin/history/pages/home`).then((r) => r.json());
+      assert.deepEqual(versions.map((entry) => entry.revision), ["2026-11-01.3"]);
+    } finally {
+      instance.close();
+      rmSync(folder, { recursive: true, force: true });
+    }
   });
 });
