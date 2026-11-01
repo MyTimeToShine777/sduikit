@@ -1,3 +1,4 @@
+import { getAt, insertAt, type Pointer } from "./pointers.js";
 import type { Page, Widget } from "./types.js";
 import { deepCopy } from "./util.js";
 
@@ -126,6 +127,30 @@ export function duplicateWidget(page: Page, sectionIndex: number, widgetIndex: n
   renumber(twin);
   copy.sections[sectionIndex].widgets.splice(widgetIndex + 1, 0, twin);
   return copy;
+}
+
+/** Like duplicateWidget, but for a widget at any depth (a card inside a carousel, for example). */
+export function duplicateAt<T>(document: T, pointer: Pointer): T {
+  const widget = getAt(document, pointer);
+  if (!widget || typeof widget !== "object") return deepCopy(document);
+  const used = allIds(document);
+  const newIdFor = (id: string): string => {
+    let candidate = `${id}_copy`;
+    for (let number = 2; used.has(candidate); number++) candidate = `${id}_copy${number}`;
+    used.add(candidate);
+    return candidate;
+  };
+  const twin = deepCopy(widget) as Record<string, unknown>;
+  const renumber = (value: unknown): void => {
+    if (Array.isArray(value)) return value.forEach(renumber);
+    if (value === null || typeof value !== "object") return;
+    const object = value as Record<string, unknown>;
+    if (typeof object.id === "string") object.id = newIdFor(object.id);
+    Object.values(object).forEach(renumber);
+  };
+  renumber(twin);
+  const index = Number(pointer[pointer.length - 1]);
+  return insertAt(document, pointer.slice(0, -1), index + 1, twin);
 }
 
 function clamp(value: number, low: number, high: number): number {

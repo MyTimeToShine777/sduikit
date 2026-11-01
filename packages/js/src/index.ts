@@ -1,4 +1,5 @@
-export { createSdui, filterForClient, listWidgets, sampleWidget, validate, widgetDataSchema } from "./sdui.js";
+export { childListsOf, createSdui, filterForClient, listWidgets, sampleWidget, validate, widgetDataSchema } from "./sdui.js";
+export * from "./pointers.js";
 export type { SduiOptions, WidgetListing } from "./sdui.js";
 export { sampleFromSchema } from "./sample.js";
 export * from "./documentEdit.js";

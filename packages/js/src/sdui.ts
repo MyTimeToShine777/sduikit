@@ -1,5 +1,6 @@
 import { filterDocument } from "./filter.js";
 import { builtInCatalogue, createRegistry, type ExtraWidgets } from "./registry.js";
+import { childLists, type ChildList, type Pointer } from "./pointers.js";
 import { sampleFromSchema } from "./sample.js";
 import type { ClientInfo, Manifest, Page, Screen, Widget } from "./types.js";
 import { validateDocument, type DocumentKind } from "./validate.js";
@@ -38,6 +39,9 @@ export function createSdui(options: SduiOptions = {}) {
         description: "",
       })),
     ],
+    // The lists of widgets inside this widget (a carousel's items, each tab's contents...), with where each one is.
+    childListsOf: (widget: Widget, pointer: Pointer): ChildList[] =>
+      childLists(widget, pointer, registry.lookup(widget.type, widget.v)?.children ?? []),
     // A new widget of this type with data that is already valid, ready to be edited.
     sampleWidget: (type: string, version: number, id = `w_${type}_1`): Widget | undefined => {
       const schema = registry.lookup(type, version)?.validateData.schema as Record<string, unknown> | undefined;
@@ -57,3 +61,4 @@ export const filterForClient = builtIn.filterForClient;
 export const widgetDataSchema = builtIn.widgetDataSchema;
 export const listWidgets = builtIn.listWidgets;
 export const sampleWidget = builtIn.sampleWidget;
+export const childListsOf = builtIn.childListsOf;
