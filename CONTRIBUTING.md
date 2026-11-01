@@ -19,6 +19,13 @@ npm run test:example   # the example server, end to end
 
 You need Node 22.12 or newer (Node 24 is what the project is developed on).
 
+**Use `npm ci`, not a second `npm install`.** A repeat `npm install` can make npm drop the
+platform-specific test-runner files (an npm bug, https://github.com/npm/cli/issues/4828), and
+the tests then fail with "Cannot find native binding". `npm ci` installs exactly what the
+lockfile says. If you add a dependency and the tests stop starting, delete `node_modules` and
+`package-lock.json`, run `npm install` once, and check that the lockfile still contains
+`node_modules/@rolldown/binding-` entries before committing it.
+
 ## Changing a schema
 
 1. Edit the file in `schemas/`.
