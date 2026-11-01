@@ -3,7 +3,126 @@
 export const schemaFiles: Record<string, unknown> = {
   "catalogue.json": {
     "$comment": "Lists every built-in widget type and version. 'since' is the first package version that supports it. 'children' says where the widget's data holds other widgets, for example \"tabs[].widgets\".",
-    "types": {}
+    "types": {
+      "text": {
+        "versions": {
+          "1": {
+            "since": "0.1.0",
+            "schema": "widgets/text.v1.json",
+            "children": []
+          }
+        }
+      },
+      "image": {
+        "versions": {
+          "1": {
+            "since": "0.1.0",
+            "schema": "widgets/image.v1.json",
+            "children": []
+          }
+        }
+      },
+      "button": {
+        "versions": {
+          "1": {
+            "since": "0.1.0",
+            "schema": "widgets/button.v1.json",
+            "children": []
+          }
+        }
+      },
+      "spacer": {
+        "versions": {
+          "1": {
+            "since": "0.1.0",
+            "schema": "widgets/spacer.v1.json",
+            "children": []
+          }
+        }
+      },
+      "divider": {
+        "versions": {
+          "1": {
+            "since": "0.1.0",
+            "schema": "widgets/divider.v1.json",
+            "children": []
+          }
+        }
+      },
+      "section_header": {
+        "versions": {
+          "1": {
+            "since": "0.1.0",
+            "schema": "widgets/section_header.v1.json",
+            "children": []
+          }
+        }
+      },
+      "card": {
+        "versions": {
+          "1": {
+            "since": "0.1.0",
+            "schema": "widgets/card.v1.json",
+            "children": [
+              "children"
+            ]
+          }
+        }
+      },
+      "banner": {
+        "versions": {
+          "1": {
+            "since": "0.1.0",
+            "schema": "widgets/banner.v1.json",
+            "children": []
+          }
+        }
+      },
+      "carousel": {
+        "versions": {
+          "1": {
+            "since": "0.1.0",
+            "schema": "widgets/carousel.v1.json",
+            "children": [
+              "items"
+            ]
+          }
+        }
+      },
+      "list": {
+        "versions": {
+          "1": {
+            "since": "0.1.0",
+            "schema": "widgets/list.v1.json",
+            "children": [
+              "items"
+            ]
+          }
+        }
+      },
+      "grid": {
+        "versions": {
+          "1": {
+            "since": "0.1.0",
+            "schema": "widgets/grid.v1.json",
+            "children": [
+              "items"
+            ]
+          }
+        }
+      },
+      "tabs": {
+        "versions": {
+          "1": {
+            "since": "0.1.0",
+            "schema": "widgets/tabs.v1.json",
+            "children": [
+              "tabs[].widgets"
+            ]
+          }
+        }
+      }
+    }
   },
   "common/action.json": {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -360,6 +479,287 @@ export const schemaFiles: Record<string, unknown> = {
       "type",
       "v",
       "data"
+    ],
+    "additionalProperties": false
+  },
+  "widgets/banner.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/banner.v1.json",
+    "title": "banner (v1) data",
+    "type": "object",
+    "properties": {
+      "imageUrl": {
+        "type": "string",
+        "format": "uri"
+      },
+      "title": {
+        "type": "string"
+      },
+      "subtitle": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "imageUrl"
+    ],
+    "additionalProperties": false
+  },
+  "widgets/button.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/button.v1.json",
+    "title": "button (v1) data",
+    "type": "object",
+    "properties": {
+      "label": {
+        "type": "string",
+        "minLength": 1
+      },
+      "variant": {
+        "enum": [
+          "filled",
+          "outline",
+          "text"
+        ]
+      }
+    },
+    "required": [
+      "label"
+    ],
+    "additionalProperties": false
+  },
+  "widgets/card.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/card.v1.json",
+    "title": "card (v1) data",
+    "type": "object",
+    "properties": {
+      "title": {
+        "type": "string",
+        "minLength": 1
+      },
+      "subtitle": {
+        "type": "string"
+      },
+      "imageUrl": {
+        "type": "string",
+        "format": "uri"
+      },
+      "children": {
+        "type": "array",
+        "items": {
+          "$ref": "../common/widget.json"
+        }
+      }
+    },
+    "minProperties": 1,
+    "additionalProperties": false
+  },
+  "widgets/carousel.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/carousel.v1.json",
+    "title": "carousel (v1) data",
+    "type": "object",
+    "properties": {
+      "items": {
+        "type": "array",
+        "items": {
+          "$ref": "../common/widget.json"
+        },
+        "minItems": 1
+      },
+      "autoplay": {
+        "type": "boolean"
+      },
+      "viewportFraction": {
+        "type": "number",
+        "minimum": 0.3,
+        "maximum": 1
+      }
+    },
+    "required": [
+      "items"
+    ],
+    "additionalProperties": false
+  },
+  "widgets/divider.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/divider.v1.json",
+    "title": "divider (v1) data",
+    "type": "object",
+    "properties": {},
+    "additionalProperties": false
+  },
+  "widgets/grid.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/grid.v1.json",
+    "title": "grid (v1) data",
+    "type": "object",
+    "properties": {
+      "columns": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 6
+      },
+      "items": {
+        "type": "array",
+        "items": {
+          "$ref": "../common/widget.json"
+        },
+        "minItems": 1
+      }
+    },
+    "required": [
+      "columns",
+      "items"
+    ],
+    "additionalProperties": false
+  },
+  "widgets/image.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/image.v1.json",
+    "title": "image (v1) data",
+    "type": "object",
+    "properties": {
+      "url": {
+        "type": "string",
+        "format": "uri"
+      },
+      "alt": {
+        "type": "string"
+      },
+      "aspectRatio": {
+        "type": "number",
+        "exclusiveMinimum": 0
+      },
+      "fit": {
+        "enum": [
+          "cover",
+          "contain"
+        ]
+      }
+    },
+    "required": [
+      "url"
+    ],
+    "additionalProperties": false
+  },
+  "widgets/list.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/list.v1.json",
+    "title": "list (v1) data",
+    "type": "object",
+    "properties": {
+      "items": {
+        "type": "array",
+        "items": {
+          "$ref": "../common/widget.json"
+        },
+        "minItems": 1
+      },
+      "dividers": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "items"
+    ],
+    "additionalProperties": false
+  },
+  "widgets/section_header.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/section_header.v1.json",
+    "title": "section_header (v1) data",
+    "type": "object",
+    "properties": {
+      "title": {
+        "type": "string",
+        "minLength": 1
+      },
+      "subtitle": {
+        "type": "string"
+      },
+      "actionLabel": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "title"
+    ],
+    "additionalProperties": false
+  },
+  "widgets/spacer.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/spacer.v1.json",
+    "title": "spacer (v1) data",
+    "type": "object",
+    "properties": {
+      "size": {
+        "$ref": "../common/tokens.json#/$defs/spacing"
+      }
+    },
+    "required": [
+      "size"
+    ],
+    "additionalProperties": false
+  },
+  "widgets/tabs.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/tabs.v1.json",
+    "title": "tabs (v1) data",
+    "type": "object",
+    "properties": {
+      "tabs": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "label": {
+              "type": "string",
+              "minLength": 1
+            },
+            "widgets": {
+              "type": "array",
+              "items": {
+                "$ref": "../common/widget.json"
+              }
+            }
+          },
+          "required": [
+            "id",
+            "label",
+            "widgets"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    "required": [
+      "tabs"
+    ],
+    "additionalProperties": false
+  },
+  "widgets/text.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/text.v1.json",
+    "title": "text (v1) data",
+    "type": "object",
+    "properties": {
+      "text": {
+        "type": "string",
+        "minLength": 1
+      },
+      "maxLines": {
+        "type": "integer",
+        "minimum": 1
+      }
+    },
+    "required": [
+      "text"
     ],
     "additionalProperties": false
   }

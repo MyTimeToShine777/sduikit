@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sduikit.dev/schemas/widgets/button.v1.json",
+  "title": "button (v1) data",
+  "type": "object",
+  "properties": {
+    "label": { "type": "string", "minLength": 1 },
+    "variant": { "enum": ["filled", "outline", "text"] }
+  },
+  "required": ["label"],
+  "additionalProperties": false
+}

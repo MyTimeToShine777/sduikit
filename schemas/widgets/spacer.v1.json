@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sduikit.dev/schemas/widgets/spacer.v1.json",
+  "title": "spacer (v1) data",
+  "type": "object",
+  "properties": {
+    "size": { "$ref": "../common/tokens.json#/$defs/spacing" }
+  },
+  "required": ["size"],
+  "additionalProperties": false
+}

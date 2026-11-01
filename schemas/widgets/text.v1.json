@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sduikit.dev/schemas/widgets/text.v1.json",
+  "title": "text (v1) data",
+  "type": "object",
+  "properties": {
+    "text": { "type": "string", "minLength": 1 },
+    "maxLines": { "type": "integer", "minimum": 1 }
+  },
+  "required": ["text"],
+  "additionalProperties": false
+}

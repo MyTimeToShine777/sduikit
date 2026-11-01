@@ -1,0 +1,8 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sduikit.dev/schemas/widgets/divider.v1.json",
+  "title": "divider (v1) data",
+  "type": "object",
+  "properties": {},
+  "additionalProperties": false
+}

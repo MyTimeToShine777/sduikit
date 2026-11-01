@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sduikit.dev/schemas/widgets/image.v1.json",
+  "title": "image (v1) data",
+  "type": "object",
+  "properties": {
+    "url": { "type": "string", "format": "uri" },
+    "alt": { "type": "string" },
+    "aspectRatio": { "type": "number", "exclusiveMinimum": 0 },
+    "fit": { "enum": ["cover", "contain"] }
+  },
+  "required": ["url"],
+  "additionalProperties": false
+}

@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sduikit.dev/schemas/widgets/carousel.v1.json",
+  "title": "carousel (v1) data",
+  "type": "object",
+  "properties": {
+    "items": { "type": "array", "items": { "$ref": "../common/widget.json" }, "minItems": 1 },
+    "autoplay": { "type": "boolean" },
+    "viewportFraction": { "type": "number", "minimum": 0.3, "maximum": 1 }
+  },
+  "required": ["items"],
+  "additionalProperties": false
+}

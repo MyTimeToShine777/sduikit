@@ -1,4 +1,17 @@
 {
   "$comment": "Lists every built-in widget type and version. 'since' is the first package version that supports it. 'children' says where the widget's data holds other widgets, for example \"tabs[].widgets\".",
-  "types": {}
+  "types": {
+    "text": { "versions": { "1": { "since": "0.1.0", "schema": "widgets/text.v1.json", "children": [] } } },
+    "image": { "versions": { "1": { "since": "0.1.0", "schema": "widgets/image.v1.json", "children": [] } } },
+    "button": { "versions": { "1": { "since": "0.1.0", "schema": "widgets/button.v1.json", "children": [] } } },
+    "spacer": { "versions": { "1": { "since": "0.1.0", "schema": "widgets/spacer.v1.json", "children": [] } } },
+    "divider": { "versions": { "1": { "since": "0.1.0", "schema": "widgets/divider.v1.json", "children": [] } } },
+    "section_header": { "versions": { "1": { "since": "0.1.0", "schema": "widgets/section_header.v1.json", "children": [] } } },
+    "card": { "versions": { "1": { "since": "0.1.0", "schema": "widgets/card.v1.json", "children": ["children"] } } },
+    "banner": { "versions": { "1": { "since": "0.1.0", "schema": "widgets/banner.v1.json", "children": [] } } },
+    "carousel": { "versions": { "1": { "since": "0.1.0", "schema": "widgets/carousel.v1.json", "children": ["items"] } } },
+    "list": { "versions": { "1": { "since": "0.1.0", "schema": "widgets/list.v1.json", "children": ["items"] } } },
+    "grid": { "versions": { "1": { "since": "0.1.0", "schema": "widgets/grid.v1.json", "children": ["items"] } } },
+    "tabs": { "versions": { "1": { "since": "0.1.0", "schema": "widgets/tabs.v1.json", "children": ["tabs[].widgets"] } } }
+  }
 }

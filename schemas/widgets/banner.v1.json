@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sduikit.dev/schemas/widgets/banner.v1.json",
+  "title": "banner (v1) data",
+  "type": "object",
+  "properties": {
+    "imageUrl": { "type": "string", "format": "uri" },
+    "title": { "type": "string" },
+    "subtitle": { "type": "string" }
+  },
+  "required": ["imageUrl"],
+  "additionalProperties": false
+}

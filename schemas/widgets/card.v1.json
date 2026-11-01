@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sduikit.dev/schemas/widgets/card.v1.json",
+  "title": "card (v1) data",
+  "type": "object",
+  "properties": {
+    "title": { "type": "string", "minLength": 1 },
+    "subtitle": { "type": "string" },
+    "imageUrl": { "type": "string", "format": "uri" },
+    "children": { "type": "array", "items": { "$ref": "../common/widget.json" } }
+  },
+  "minProperties": 1,
+  "additionalProperties": false
+}

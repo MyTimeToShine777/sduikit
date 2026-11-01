@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sduikit.dev/schemas/widgets/section_header.v1.json",
+  "title": "section_header (v1) data",
+  "type": "object",
+  "properties": {
+    "title": { "type": "string", "minLength": 1 },
+    "subtitle": { "type": "string" },
+    "actionLabel": { "type": "string" }
+  },
+  "required": ["title"],
+  "additionalProperties": false
+}
