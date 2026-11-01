@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { widgetDataSchema } from "../src/index";
+import { listWidgets, validate, widgetDataSchema } from "../src/index";
 import { schemaToFields } from "../src/vue/fields";
 import { insertItem, moveItem, removeItem } from "../src/vue/reorder";
 
@@ -49,8 +49,25 @@ describe("schemaToFields", () => {
     });
   });
 
-  it("marks lists of other things as unsupported", () => {
-    expect(schemaToFields(widgetDataSchema("tabs", 1)!)[0].kind).toBe("unsupported");
+  it("turns a list of objects into a list of groups, and a list of widgets inside them stays a widget list", () => {
+    const [tabs] = schemaToFields(widgetDataSchema("tabs", 1)!);
+    expect(tabs.kind).toBe("list");
+    expect(tabs.minItems).toBe(1);
+    expect(tabs.item!.kind).toBe("group");
+    expect(tabs.item!.fields!.map((f) => [f.key, f.kind])).toEqual([["id", "text"], ["label", "text"], ["widgets", "widgets"]]);
+  });
+
+  it("follows the shared action schema, and treats an object with no named fields as free-form JSON", () => {
+    const quick = schemaToFields(widgetDataSchema("quick_actions", 1)!).find((f) => f.kind === "list")!;
+    expect(quick.item!.fields!.some((f) => f.kind === "action")).toBe(true);
+    const params = schemaToFields(widgetDataSchema("data_list", 1)!).find((f) => f.key === "source")!.fields!.find((f) => f.key === "params")!;
+    expect(params.kind).toBe("json");
+  });
+
+  it("gives every kind of widget a form with no field it cannot show", () => {
+    const kinds = new Set(["text", "longtext", "url", "number", "integer", "boolean", "choice", "widgets", "action", "group", "list", "json"]);
+    const check = (fields: any[]) => fields.forEach((f) => { expect(kinds.has(f.kind), f.key).toBe(true); check(f.fields ?? []); if (f.item) check([f.item]); });
+    for (const listing of listWidgets()) check(schemaToFields(widgetDataSchema(listing.type, 1)!));
   });
 
   it("returns undefined for a widget that does not exist", () => {
