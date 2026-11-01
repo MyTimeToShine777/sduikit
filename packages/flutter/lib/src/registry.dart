@@ -7,7 +7,7 @@ import 'render.dart';
 typedef SduiWidgetBuilder = Widget Function(BuildContext context, SduiNode node, SduiRender render);
 
 /// Which widget code draws which `type` + `v`. Your app adds its own widgets here
-/// (a doctor card, a pharmacy tile...) next to the built-in ones.
+/// (a product tile, a map, a chart...) next to the built-in ones.
 class SduiWidgetRegistry {
   SduiWidgetRegistry();
 
