@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sduikit.dev/schemas/page.json",
+  "title": "Page",
+  "description": "A page made of sections of catalogue widgets.",
+  "type": "object",
+  "properties": {
+    "schema": { "const": 1 },
+    "id": { "type": "string", "minLength": 1 },
+    "revision": { "type": "string", "minLength": 1 },
+    "title": { "type": "string" },
+    "sections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "title": { "type": "string" },
+          "widgets": { "type": "array", "items": { "$ref": "common/widget.json" } }
+        },
+        "required": ["id", "widgets"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["schema", "id", "revision", "sections"],
+  "additionalProperties": false
+}

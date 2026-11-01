@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sduikit.dev/schemas/screen.json",
+  "title": "Screen",
+  "description": "A custom screen made of building blocks.",
+  "type": "object",
+  "properties": {
+    "schema": { "const": 1 },
+    "id": { "type": "string", "minLength": 1 },
+    "revision": { "type": "string", "minLength": 1 },
+    "title": { "type": "string" },
+    "root": { "$ref": "blocks/block.json" }
+  },
+  "required": ["schema", "id", "revision", "root"],
+  "additionalProperties": false
+}

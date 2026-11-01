@@ -1,0 +1,67 @@
+{
+  "schema": 1,
+  "id": "offers",
+  "revision": "2026-11-01.1",
+  "title": "Offers",
+  "root": {
+    "block": "scroll",
+    "children": [
+      {
+        "block": "column",
+        "gap": "md",
+        "style": { "spacing": "md" },
+        "children": [
+          { "block": "text", "text": "This month's offers", "style": { "textSize": "headline" } },
+          { "block": "image", "url": "https://example.com/offers.jpg", "alt": "Offers", "aspectRatio": 1.78, "fit": "cover" },
+          {
+            "block": "row",
+            "gap": "sm",
+            "children": [
+              {
+                "block": "button",
+                "label": "Book now",
+                "variant": "filled",
+                "action": { "type": "open_native", "name": "booking", "params": { "source": "offers" } }
+              },
+              {
+                "block": "button",
+                "label": "Share",
+                "variant": "outline",
+                "action": { "type": "share", "text": "Look at these offers", "url": "https://example.com/offers" }
+              },
+              { "block": "button", "label": "Close", "variant": "text", "action": { "type": "dismiss" } }
+            ]
+          },
+          { "block": "spacer", "size": "lg" },
+          { "block": "divider" },
+          {
+            "block": "stack",
+            "children": [
+              { "block": "image", "url": "https://example.com/badge.png" },
+              { "block": "text", "text": "New" }
+            ]
+          },
+          {
+            "block": "grid",
+            "columns": 2,
+            "gap": "sm",
+            "children": [
+              { "block": "text", "text": "One" },
+              { "block": "text", "text": "Two" }
+            ]
+          },
+          {
+            "block": "widget",
+            "widget": {
+              "id": "w_offer_banner",
+              "type": "banner",
+              "v": 1,
+              "data": { "imageUrl": "https://example.com/b.jpg", "title": "Winter check-ups" },
+              "action": { "type": "open_url", "url": "https://example.com/winter", "external": true }
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,144 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sduikit.dev/schemas/blocks/block.json",
+  "title": "Block",
+  "description": "A building block of a custom screen. Layout blocks hold other blocks; the widget block embeds a catalogue widget.",
+  "type": "object",
+  "discriminator": { "propertyName": "block" },
+  "oneOf": [
+    { "$ref": "#/$defs/column" },
+    { "$ref": "#/$defs/row" },
+    { "$ref": "#/$defs/stack" },
+    { "$ref": "#/$defs/grid" },
+    { "$ref": "#/$defs/scroll" },
+    { "$ref": "#/$defs/text" },
+    { "$ref": "#/$defs/image" },
+    { "$ref": "#/$defs/button" },
+    { "$ref": "#/$defs/spacer" },
+    { "$ref": "#/$defs/divider" },
+    { "$ref": "#/$defs/widget" }
+  ],
+  "$defs": {
+    "column": {
+      "type": "object",
+      "properties": {
+        "block": { "const": "column" },
+        "children": { "type": "array", "items": { "$ref": "block.json" } },
+        "gap": { "$ref": "../common/tokens.json#/$defs/spacing" },
+        "style": { "$ref": "../common/style.json" },
+        "action": { "$ref": "../common/action.json" }
+      },
+      "required": ["block", "children"],
+      "additionalProperties": false
+    },
+    "row": {
+      "type": "object",
+      "properties": {
+        "block": { "const": "row" },
+        "children": { "type": "array", "items": { "$ref": "block.json" } },
+        "gap": { "$ref": "../common/tokens.json#/$defs/spacing" },
+        "style": { "$ref": "../common/style.json" },
+        "action": { "$ref": "../common/action.json" }
+      },
+      "required": ["block", "children"],
+      "additionalProperties": false
+    },
+    "stack": {
+      "type": "object",
+      "properties": {
+        "block": { "const": "stack" },
+        "children": { "type": "array", "items": { "$ref": "block.json" } },
+        "style": { "$ref": "../common/style.json" },
+        "action": { "$ref": "../common/action.json" }
+      },
+      "required": ["block", "children"],
+      "additionalProperties": false
+    },
+    "grid": {
+      "type": "object",
+      "properties": {
+        "block": { "const": "grid" },
+        "columns": { "type": "integer", "minimum": 1, "maximum": 6 },
+        "children": { "type": "array", "items": { "$ref": "block.json" } },
+        "gap": { "$ref": "../common/tokens.json#/$defs/spacing" },
+        "style": { "$ref": "../common/style.json" }
+      },
+      "required": ["block", "columns", "children"],
+      "additionalProperties": false
+    },
+    "scroll": {
+      "type": "object",
+      "properties": {
+        "block": { "const": "scroll" },
+        "children": { "type": "array", "items": { "$ref": "block.json" } },
+        "style": { "$ref": "../common/style.json" }
+      },
+      "required": ["block", "children"],
+      "additionalProperties": false
+    },
+    "text": {
+      "type": "object",
+      "properties": {
+        "block": { "const": "text" },
+        "text": { "type": "string", "minLength": 1 },
+        "style": { "$ref": "../common/style.json" },
+        "action": { "$ref": "../common/action.json" }
+      },
+      "required": ["block", "text"],
+      "additionalProperties": false
+    },
+    "image": {
+      "type": "object",
+      "properties": {
+        "block": { "const": "image" },
+        "url": { "type": "string", "format": "uri" },
+        "alt": { "type": "string" },
+        "aspectRatio": { "type": "number", "exclusiveMinimum": 0 },
+        "fit": { "enum": ["cover", "contain"] },
+        "style": { "$ref": "../common/style.json" },
+        "action": { "$ref": "../common/action.json" }
+      },
+      "required": ["block", "url"],
+      "additionalProperties": false
+    },
+    "button": {
+      "type": "object",
+      "properties": {
+        "block": { "const": "button" },
+        "label": { "type": "string", "minLength": 1 },
+        "variant": { "enum": ["filled", "outline", "text"] },
+        "style": { "$ref": "../common/style.json" },
+        "action": { "$ref": "../common/action.json" }
+      },
+      "required": ["block", "label"],
+      "additionalProperties": false
+    },
+    "spacer": {
+      "type": "object",
+      "properties": {
+        "block": { "const": "spacer" },
+        "size": { "$ref": "../common/tokens.json#/$defs/spacing" }
+      },
+      "required": ["block", "size"],
+      "additionalProperties": false
+    },
+    "divider": {
+      "type": "object",
+      "properties": {
+        "block": { "const": "divider" },
+        "style": { "$ref": "../common/style.json" }
+      },
+      "required": ["block"],
+      "additionalProperties": false
+    },
+    "widget": {
+      "type": "object",
+      "properties": {
+        "block": { "const": "widget" },
+        "widget": { "$ref": "../common/widget.json" }
+      },
+      "required": ["block", "widget"],
+      "additionalProperties": false
+    }
+  }
+}

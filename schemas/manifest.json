@@ -1,0 +1,153 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sduikit.dev/schemas/manifest.json",
+  "title": "Manifest",
+  "description": "App setup fetched at launch: theme, navigation and kill switches.",
+  "type": "object",
+  "properties": {
+    "schema": { "const": 1 },
+    "minAppVersion": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+    "theme": {
+      "type": "object",
+      "properties": {
+        "light": { "$ref": "#/$defs/palette" },
+        "dark": { "$ref": "#/$defs/palette" },
+        "fonts": {
+          "type": "object",
+          "properties": {
+            "body": { "type": "string", "minLength": 1 },
+            "heading": { "type": "string", "minLength": 1 }
+          },
+          "required": ["body", "heading"],
+          "additionalProperties": false
+        },
+        "textSizes": {
+          "type": "object",
+          "properties": {
+            "caption": { "$ref": "#/$defs/positive" },
+            "body": { "$ref": "#/$defs/positive" },
+            "title": { "$ref": "#/$defs/positive" },
+            "headline": { "$ref": "#/$defs/positive" },
+            "display": { "$ref": "#/$defs/positive" }
+          },
+          "required": ["caption", "body", "title", "headline", "display"],
+          "additionalProperties": false
+        },
+        "spacing": {
+          "type": "object",
+          "properties": {
+            "none": { "$ref": "#/$defs/zeroOrMore" },
+            "xs": { "$ref": "#/$defs/zeroOrMore" },
+            "sm": { "$ref": "#/$defs/zeroOrMore" },
+            "md": { "$ref": "#/$defs/zeroOrMore" },
+            "lg": { "$ref": "#/$defs/zeroOrMore" },
+            "xl": { "$ref": "#/$defs/zeroOrMore" }
+          },
+          "required": ["none", "xs", "sm", "md", "lg", "xl"],
+          "additionalProperties": false
+        },
+        "radii": {
+          "type": "object",
+          "properties": {
+            "none": { "$ref": "#/$defs/zeroOrMore" },
+            "sm": { "$ref": "#/$defs/zeroOrMore" },
+            "md": { "$ref": "#/$defs/zeroOrMore" },
+            "lg": { "$ref": "#/$defs/zeroOrMore" },
+            "full": { "$ref": "#/$defs/zeroOrMore" }
+          },
+          "required": ["none", "sm", "md", "lg", "full"],
+          "additionalProperties": false
+        }
+      },
+      "required": ["light", "dark", "fonts", "textSizes", "spacing", "radii"],
+      "additionalProperties": false
+    },
+    "navigation": {
+      "type": "object",
+      "properties": {
+        "bottomBar": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 5,
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string", "minLength": 1 },
+              "label": { "type": "string", "minLength": 1 },
+              "icon": { "type": "string", "minLength": 1 },
+              "pageId": { "type": "string", "minLength": 1 }
+            },
+            "required": ["id", "label", "icon", "pageId"],
+            "additionalProperties": false
+          }
+        },
+        "pages": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string", "minLength": 1 },
+              "title": { "type": "string", "minLength": 1 },
+              "icon": { "type": "string", "minLength": 1 },
+              "tabs": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "string", "minLength": 1 },
+                    "label": { "type": "string", "minLength": 1 },
+                    "pageId": { "type": "string", "minLength": 1 }
+                  },
+                  "required": ["id", "label", "pageId"],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": ["id", "title"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": ["bottomBar", "pages"],
+      "additionalProperties": false
+    },
+    "killSwitches": {
+      "type": "object",
+      "properties": {
+        "widgets": { "type": "array", "items": { "type": "string" } },
+        "actions": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": false
+    }
+  },
+  "required": ["schema", "theme", "navigation"],
+  "additionalProperties": false,
+  "$defs": {
+    "hexColor": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$" },
+    "positive": { "type": "number", "exclusiveMinimum": 0 },
+    "zeroOrMore": { "type": "number", "minimum": 0 },
+    "palette": {
+      "type": "object",
+      "properties": {
+        "primary": { "$ref": "#/$defs/hexColor" },
+        "onPrimary": { "$ref": "#/$defs/hexColor" },
+        "secondary": { "$ref": "#/$defs/hexColor" },
+        "onSecondary": { "$ref": "#/$defs/hexColor" },
+        "background": { "$ref": "#/$defs/hexColor" },
+        "onBackground": { "$ref": "#/$defs/hexColor" },
+        "surface": { "$ref": "#/$defs/hexColor" },
+        "onSurface": { "$ref": "#/$defs/hexColor" },
+        "muted": { "$ref": "#/$defs/hexColor" },
+        "success": { "$ref": "#/$defs/hexColor" },
+        "warning": { "$ref": "#/$defs/hexColor" },
+        "error": { "$ref": "#/$defs/hexColor" }
+      },
+      "required": [
+        "primary", "onPrimary", "secondary", "onSecondary",
+        "background", "onBackground", "surface", "onSurface",
+        "muted", "success", "warning", "error"
+      ],
+      "additionalProperties": false
+    }
+  }
+}
