@@ -14,7 +14,8 @@ before(async () => {
 });
 after(() => server.close());
 
-const allWidgets = "text:1,image:1,button:1,spacer:1,divider:1,section_header:1,card:1,banner:1,carousel:1,list:1,grid:1,tabs:1";
+const allWidgets =
+  "text:1,image:1,button:1,spacer:1,divider:1,section_header:1,card:1,banner:1,carousel:1,list:1,grid:1,tabs:1,data_list:1";
 const inNovember = "now=2026-11-15T12:00:00Z";
 const newApp = `appVersion=1.2.0&country=AE&widgets=${allWidgets}&${inNovember}`;
 
@@ -25,6 +26,7 @@ async function fetchJson(path, options) {
 const get = (path) => fetchJson(path);
 const save = (path, document) =>
   fetchJson(path, { method: "PUT", headers: { "content-type": "application/json" }, body: JSON.stringify(document) });
+const post = (path) => fetchJson(path, { method: "POST" });
 const widgetIds = (page) => page.sections.flatMap((section) => section.widgets.map((widget) => widget.id));
 
 describe("example server", () => {
@@ -96,5 +98,76 @@ describe("example server", () => {
   it("refuses a body that is not JSON", async () => {
     const response = await fetch(`${base}/admin/pages/home`, { method: "PUT", body: "not json" });
     assert.equal(response.status, 400);
+  });
+});
+
+describe("live data", () => {
+  it("gives the page a data_list that an up-to-date app can draw, and leaves it out for an old app", async () => {
+    const newer = (await get(`/pages/home?${newApp}`)).body;
+    assert.ok(widgetIds(newer).includes("w_doctors_1"));
+    const older = (await get(`/pages/home?appVersion=1.2.0&country=AE&widgets=text:1,button:1&${inNovember}`)).body;
+    assert.ok(!widgetIds(older).includes("w_doctors_1"));
+  });
+
+  it("serves the rows the data_list asks for", async () => {
+    const { status, body } = await get("/data/doctors_nearby?city=Dubai");
+    assert.equal(status, 200);
+    assert.deepEqual(body.map((doctor) => doctor.name), ["Dr Rao", "Dr Khan"]);
+  });
+
+  it("gives an empty list for a city with no doctors, and 404 for data that does not exist", async () => {
+    assert.deepEqual((await get("/data/doctors_nearby?city=Nowhere")).body, []);
+    assert.equal((await get("/data/pharmacies")).status, 404);
+  });
+});
+
+describe("drafts, publishing and going back", () => {
+  const titleBlock = (screen) => screen.root.children[0].children[0];
+  const liveScreen = async () => (await get(`/screens/offers?${newApp}`)).body;
+
+  it("keeps a draft away from apps until it is published", async () => {
+    const original = await liveScreen();
+    const draft = structuredClone(original);
+    draft.revision = "2026-11-02.2";
+    titleBlock(draft).text = "Draft title";
+
+    assert.equal((await save("/admin/drafts/screens/offers", draft)).status, 200);
+    assert.equal(titleBlock(await liveScreen()).text, "This month's offers"); // apps still see the old one
+    assert.equal((await get("/admin/drafts/screens/offers")).body.revision, "2026-11-02.2"); // staff can read it back
+
+    assert.equal((await post("/admin/publish/screens/offers")).status, 200);
+    assert.equal(titleBlock(await liveScreen()).text, "Draft title");
+    assert.equal((await get("/admin/drafts/screens/offers")).status, 404); // the draft was used up
+  });
+
+  it("refuses to publish when there is no draft", async () => {
+    assert.equal((await post("/admin/publish/screens/offers")).status, 409);
+  });
+
+  it("refuses a broken draft", async () => {
+    const draft = structuredClone(await liveScreen());
+    draft.root = { block: "nope" };
+    const saved = await save("/admin/drafts/screens/offers", draft);
+    assert.equal(saved.status, 422);
+  });
+
+  it("lists replaced versions and can put an earlier one back", async () => {
+    const history = (await get("/admin/history/screens/offers")).body;
+    assert.deepEqual(history.map((entry) => entry.revision), ["2026-11-01.1"]);
+
+    assert.equal((await post("/admin/rollback/screens/offers?revision=2026-11-01.1")).status, 200);
+    const restored = await liveScreen();
+    assert.equal(restored.revision, "2026-11-01.1");
+    assert.equal(titleBlock(restored).text, "This month's offers");
+
+    // The version that was just replaced can be restored too.
+    const after = (await get("/admin/history/screens/offers")).body;
+    assert.deepEqual(after.map((entry) => entry.revision), ["2026-11-01.1", "2026-11-02.2"]);
+  });
+
+  it("says so when the version to go back to does not exist", async () => {
+    const { status, body } = await post("/admin/rollback/screens/offers?revision=1999");
+    assert.equal(status, 404);
+    assert.match(body.message, /no earlier version/);
   });
 });
