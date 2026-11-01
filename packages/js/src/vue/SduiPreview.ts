@@ -1,6 +1,6 @@
 import { computed, defineComponent, h, ref, type PropType, type VNode } from "vue";
 import { fillTemplate } from "../templates.js";
-import type { Block, Manifest, Style, Widget } from "../types.js";
+import type { Block, Manifest, Sides, Space, Style, Widget } from "../types.js";
 
 type Theme = Manifest["theme"];
 
@@ -126,20 +126,52 @@ function themeVars(theme: Theme, dark: boolean): Record<string, string> {
   };
 }
 
-// What a widget's `style` tokens mean here: padding, background, rounded corners, text size and so on.
-function styleCss(style: Style | undefined, theme: Theme, dark: boolean): Record<string, string> {
+// What a widget's `style` means here. A preset name follows the app's theme; a number or "#RRGGBB" is used as given.
+const SHADOWS = {
+  none: "none",
+  small: "0 1px 3px rgba(0,0,0,.2)",
+  medium: "0 4px 12px rgba(0,0,0,.22)",
+  large: "0 12px 28px rgba(0,0,0,.28)",
+};
+const WEIGHTS = { normal: "400", medium: "500", bold: "700" };
+
+export function styleCss(style: Style | undefined, theme: Theme, dark: boolean): Record<string, string> {
   const css: Record<string, string> = {};
   if (!style) return css;
   const p = paletteOf(theme, dark);
-  if (style.spacing) css.padding = `${theme.spacing[style.spacing]}px`;
-  if (style.radius) {
-    css.borderRadius = `${theme.radii[style.radius]}px`;
+  const space = (value: Space) => `${typeof value === "number" ? value : theme.spacing[value]}px`;
+  const colour = (value: string) => (value.startsWith("#") ? value : (p as any)[value]);
+  const sidesCss = (sides: Sides) =>
+    (["top", "right", "bottom", "left"] as const).map((side) => (sides[side] === undefined ? "0px" : space(sides[side]!)));
+
+  if (style.spacing !== undefined) css.padding = space(style.spacing);
+  if (style.padding) {
+    // Sides that were not given keep the overall spacing, so one side can differ from the rest.
+    const base = style.spacing === undefined ? 0 : style.spacing;
+    const merged = { top: base, right: base, bottom: base, left: base, ...style.padding };
+    css.padding = sidesCss(merged).join(" ");
+  }
+  if (style.margin) css.margin = sidesCss(style.margin).join(" ");
+  if (style.radius !== undefined) {
+    css.borderRadius = `${typeof style.radius === "number" ? style.radius : theme.radii[style.radius]}px`;
     css.overflow = "hidden";
   }
-  if (style.color) css.background = p[style.color];
-  if (style.textColor) css.color = p[style.textColor];
-  if (style.textSize) css.fontSize = `${theme.textSizes[style.textSize]}px`;
+  if (style.color) css.background = colour(style.color);
+  if (style.textColor) css.color = colour(style.textColor);
+  if (style.textSize !== undefined) css.fontSize = `${typeof style.textSize === "number" ? style.textSize : theme.textSizes[style.textSize]}px`;
+  if (style.fontWeight) css.fontWeight = WEIGHTS[style.fontWeight];
+  if (style.italic) css.fontStyle = "italic";
   if (style.align) css.textAlign = style.align === "start" ? "start" : style.align === "end" ? "end" : "center";
+  if (style.width !== undefined) css.width = style.width === "fill" ? "100%" : `${style.width}px`;
+  if (style.height !== undefined) css.height = style.height === "fill" ? "100%" : `${style.height}px`;
+  if (style.borderWidth) {
+    css.border = `${style.borderWidth}px solid ${style.borderColor ? colour(style.borderColor) : "var(--sp-outline)"}`;
+  } else if (style.borderColor) {
+    css.border = `1px solid ${colour(style.borderColor)}`;
+  }
+  if (style.shadow) css.boxShadow = SHADOWS[style.shadow];
+  if (style.opacity !== undefined) css.opacity = String(style.opacity);
+  if (css.width || css.height || css.margin || css.border) css.boxSizing = "border-box";
   return css;
 }
 

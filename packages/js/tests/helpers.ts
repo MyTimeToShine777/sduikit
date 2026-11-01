@@ -22,7 +22,7 @@ let sharedAjv: Ajv2020 | undefined;
 // Used by the schema tests so they do not depend on the package's own registry.
 export function compileSchema(file: string): ValidateFunction {
   if (!sharedAjv) {
-    sharedAjv = new Ajv2020({ allErrors: true, strict: true, discriminator: true });
+    sharedAjv = new Ajv2020({ allErrors: true, strict: true, discriminator: true, allowUnionTypes: true });
     addFormats(sharedAjv);
     for (const [name, schema] of Object.entries(schemaFiles)) {
       if (name === "catalogue.json") continue; // not a JSON Schema

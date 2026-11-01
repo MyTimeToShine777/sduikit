@@ -10,8 +10,31 @@ describe("style", () => {
     ).toBe(true);
   });
   it("rejects pixel values", () => expect(style({ spacing: "12px" })).toBe(false));
-  it("rejects hex colours", () => expect(style({ color: "#ff0000" })).toBe(false));
-  it("rejects keys it does not know", () => expect(style({ padding: "md" })).toBe(false));
+  it("accepts exact values as well as names", () => {
+    expect(style({ color: "#ff0000", textColor: "#FFFFFF80", spacing: 13, radius: 999, textSize: 17, borderColor: "#00000033" })).toBe(true);
+    expect(style({ padding: { top: 4, left: "lg" }, margin: { bottom: 30 }, width: 240, height: "fill", borderWidth: 2 })).toBe(true);
+    expect(style({ fontWeight: "bold", italic: true, shadow: "large", opacity: 0.5 })).toBe(true);
+  });
+  it("rejects bad exact values", () => {
+    for (const bad of [
+      { color: "#ff00" },
+      { color: "#gggggg" },
+      { color: "red" },
+      { spacing: -1 },
+      { spacing: 500 },
+      { textSize: 2 },
+      { opacity: 2 },
+      { shadow: "huge" },
+      { width: "wide" },
+      { padding: {} },
+      { padding: { middle: 4 } },
+      { borderWidth: 50 },
+    ]) expect(style(bad), JSON.stringify(bad)).toBe(false);
+  });
+  it("still rejects pixel strings and keys it does not know", () => {
+    expect(style({ spacing: "12px" })).toBe(false);
+    expect(style({ gap: 4 })).toBe(false);
+  });
 });
 
 describe("action", () => {

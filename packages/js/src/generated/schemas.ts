@@ -968,29 +968,174 @@ export const schemaFiles: Record<string, unknown> = {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "$id": "https://sduikit.dev/schemas/common/style.json",
     "title": "Style",
-    "description": "Token names only. Never pixels or hex codes; the app theme decides what a token looks like.",
+    "description": "How a widget looks. Every value can be a preset name (\"md\", \"primary\"), which follows the app's theme, dark mode and re-branding, or an exact value (16, \"#FF8800\"), which is used as given and does not change with the theme.",
     "type": "object",
     "properties": {
       "spacing": {
-        "$ref": "tokens.json#/$defs/spacing"
+        "$ref": "#/$defs/space",
+        "description": "Space inside the widget on every side."
+      },
+      "padding": {
+        "$ref": "#/$defs/sides",
+        "description": "Space inside the widget, side by side. Overrides spacing for the sides given."
+      },
+      "margin": {
+        "$ref": "#/$defs/sides",
+        "description": "Space outside the widget."
       },
       "radius": {
-        "$ref": "tokens.json#/$defs/radius"
+        "$ref": "#/$defs/corner",
+        "description": "How round the corners are."
       },
       "color": {
-        "$ref": "tokens.json#/$defs/color"
+        "$ref": "#/$defs/colour",
+        "description": "Background colour."
       },
       "textColor": {
-        "$ref": "tokens.json#/$defs/color"
+        "$ref": "#/$defs/colour"
       },
       "textSize": {
-        "$ref": "tokens.json#/$defs/textSize"
+        "$ref": "#/$defs/textSize"
+      },
+      "fontWeight": {
+        "enum": [
+          "normal",
+          "medium",
+          "bold"
+        ]
+      },
+      "italic": {
+        "type": "boolean"
       },
       "align": {
         "$ref": "tokens.json#/$defs/align"
+      },
+      "width": {
+        "$ref": "#/$defs/length"
+      },
+      "height": {
+        "$ref": "#/$defs/length"
+      },
+      "borderWidth": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 20
+      },
+      "borderColor": {
+        "$ref": "#/$defs/colour"
+      },
+      "shadow": {
+        "enum": [
+          "none",
+          "small",
+          "medium",
+          "large"
+        ]
+      },
+      "opacity": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 1
       }
     },
-    "additionalProperties": false
+    "additionalProperties": false,
+    "$defs": {
+      "space": {
+        "type": [
+          "string",
+          "number"
+        ],
+        "if": {
+          "type": "string"
+        },
+        "then": {
+          "$ref": "tokens.json#/$defs/spacing"
+        },
+        "else": {
+          "minimum": 0,
+          "maximum": 200
+        }
+      },
+      "corner": {
+        "type": [
+          "string",
+          "number"
+        ],
+        "if": {
+          "type": "string"
+        },
+        "then": {
+          "$ref": "tokens.json#/$defs/radius"
+        },
+        "else": {
+          "minimum": 0,
+          "maximum": 999
+        }
+      },
+      "textSize": {
+        "type": [
+          "string",
+          "number"
+        ],
+        "if": {
+          "type": "string"
+        },
+        "then": {
+          "$ref": "tokens.json#/$defs/textSize"
+        },
+        "else": {
+          "minimum": 6,
+          "maximum": 120
+        }
+      },
+      "colour": {
+        "type": "string",
+        "if": {
+          "pattern": "^#"
+        },
+        "then": {
+          "pattern": "^#([0-9A-Fa-f]{6}|[0-9A-Fa-f]{8})$"
+        },
+        "else": {
+          "$ref": "tokens.json#/$defs/color"
+        }
+      },
+      "length": {
+        "type": [
+          "number",
+          "string"
+        ],
+        "if": {
+          "type": "string"
+        },
+        "then": {
+          "const": "fill"
+        },
+        "else": {
+          "minimum": 0,
+          "maximum": 3000
+        }
+      },
+      "sides": {
+        "type": "object",
+        "properties": {
+          "top": {
+            "$ref": "#/$defs/space"
+          },
+          "right": {
+            "$ref": "#/$defs/space"
+          },
+          "bottom": {
+            "$ref": "#/$defs/space"
+          },
+          "left": {
+            "$ref": "#/$defs/space"
+          }
+        },
+        "minProperties": 1,
+        "additionalProperties": false
+      }
+    }
   },
   "common/tokens.json": {
     "$schema": "https://json-schema.org/draft/2020-12/schema",

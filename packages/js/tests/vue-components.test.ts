@@ -2,7 +2,7 @@
 import { mount } from "@vue/test-utils";
 import { describe, expect, it } from "vitest";
 import { widgetDataSchema } from "../src/index";
-import { SduiForm, SduiPreview } from "../src/vue/index";
+import { SduiForm, SduiPreview, defaultTheme, styleCss } from "../src/vue/index";
 import { loadFixture } from "./helpers";
 
 describe("SduiForm", () => {
@@ -209,4 +209,43 @@ describe("SduiPreview", () => {
   it("says so when there is nothing to show", () => {
     expect(textOf(mount(SduiPreview, { props: { document: {} } }))).toBe("Nothing to show.");
   });
+});
+
+describe("styleCss (what a widget's style looks like in the preview)", () => {
+  const css = (style: any, dark = false) => styleCss(style, defaultTheme, dark);
+
+  it("turns exact values into exactly those values", () => {
+    expect(css({ color: "#FF8800", spacing: 13, radius: 7, textSize: 17, width: 240, height: 90 })).toMatchObject({
+      background: "#FF8800",
+      padding: "13px",
+      borderRadius: "7px",
+      fontSize: "17px",
+      width: "240px",
+      height: "90px",
+    });
+  });
+
+  it("still follows the theme (and dark mode) for preset names", () => {
+    expect(css({ color: "primary" }).background).toBe(defaultTheme.light.primary);
+    expect(css({ color: "primary" }, true).background).toBe(defaultTheme.dark.primary);
+    expect(css({ spacing: "lg" }).padding).toBe(`${defaultTheme.spacing.lg}px`);
+  });
+
+  it("lets one side differ from the rest", () => {
+    expect(css({ spacing: 8, padding: { top: 20 } }).padding).toBe("20px 8px 8px 8px");
+    expect(css({ margin: { left: 5, bottom: 9 } }).margin).toBe("0px 0px 9px 5px");
+  });
+
+  it("draws borders, shadows, weight, italic and opacity", () => {
+    expect(css({ borderWidth: 3, borderColor: "#112233", shadow: "large", fontWeight: "bold", italic: true, opacity: 0.4 })).toMatchObject({
+      border: "3px solid #112233",
+      fontWeight: "700",
+      fontStyle: "italic",
+      opacity: "0.4",
+    });
+    expect(css({ shadow: "large" }).boxShadow).toContain("rgba");
+    expect(css({ width: "fill" }).width).toBe("100%");
+  });
+
+  it("gives nothing when there is no style", () => expect(css(undefined)).toEqual({}));
 });

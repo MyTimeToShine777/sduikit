@@ -54,7 +54,7 @@ export type ExtraWidgets = Record<string, Record<number, WidgetDefinition>>;
 
 export function createRegistry(extraWidgets: ExtraWidgets = {}): Registry {
   // strict: true makes Ajv complain about mistakes in our own schema files instead of ignoring them.
-  const ajv = new Ajv2020({ allErrors: true, strict: true, discriminator: true });
+  const ajv = new Ajv2020({ allErrors: true, strict: true, discriminator: true, allowUnionTypes: true });
   addFormats(ajv);
 
   for (const [file, schema] of Object.entries(schemaFiles)) {

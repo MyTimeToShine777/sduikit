@@ -7,13 +7,28 @@ export type ColorToken =
 export type TextSizeToken = "caption" | "body" | "title" | "headline" | "display";
 export type AlignToken = "start" | "center" | "end";
 
+/** A preset name follows the app's theme; a number or "#RRGGBB" is used exactly as given. */
+export type Space = SpacingToken | number;
+export type Sides = { top?: Space; right?: Space; bottom?: Space; left?: Space };
+export type Colour = ColorToken | string; // a ColorToken or "#RRGGBB" / "#RRGGBBAA"
+
 export interface Style {
-  spacing?: SpacingToken;
-  radius?: RadiusToken;
-  color?: ColorToken;
-  textColor?: ColorToken;
-  textSize?: TextSizeToken;
+  spacing?: Space;
+  padding?: Sides;
+  margin?: Sides;
+  radius?: RadiusToken | number;
+  color?: Colour;
+  textColor?: Colour;
+  textSize?: TextSizeToken | number;
+  fontWeight?: "normal" | "medium" | "bold";
+  italic?: boolean;
   align?: AlignToken;
+  width?: number | "fill";
+  height?: number | "fill";
+  borderWidth?: number;
+  borderColor?: Colour;
+  shadow?: "none" | "small" | "medium" | "large";
+  opacity?: number;
 }
 
 export type Action =
