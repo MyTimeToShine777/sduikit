@@ -30,7 +30,17 @@ interface WidgetEntry {
   children: string[];
 }
 
-export function createRegistry(): Registry {
+export interface WidgetDefinition {
+  // JSON Schema for the widget's `data` object.
+  schema: Record<string, unknown>;
+  // Where the data holds other widgets, same notation as the catalogue: "items" or "tabs[].widgets".
+  children?: string[];
+}
+
+// Widget type name -> version number -> definition.
+export type ExtraWidgets = Record<string, Record<number, WidgetDefinition>>;
+
+export function createRegistry(extraWidgets: ExtraWidgets = {}): Registry {
   // strict: true makes Ajv complain about mistakes in our own schema files instead of ignoring them.
   const ajv = new Ajv2020({ allErrors: true, strict: true, discriminator: true });
   addFormats(ajv);
@@ -45,6 +55,19 @@ export function createRegistry(): Registry {
     const versions = new Map<number, WidgetEntry>();
     for (const [version, info] of Object.entries(entry.versions)) {
       versions.set(Number(version), { schemaKey: SCHEMA_BASE + info.schema, children: info.children });
+    }
+    widgetTypes.set(type, versions);
+  }
+
+  // The app's own widgets, added next to the built-in ones.
+  for (const [type, versionDefinitions] of Object.entries(extraWidgets)) {
+    if (widgetTypes.has(type)) throw new Error(`The widget type "${type}" is built in and cannot be redefined.`);
+    if (!/^[a-z][a-z0-9_]*$/.test(type)) throw new Error(`The widget type name "${type}" must be lower_snake_case.`);
+    const versions = new Map<number, WidgetEntry>();
+    for (const [version, definition] of Object.entries(versionDefinitions)) {
+      const schemaKey = `${SCHEMA_BASE}custom/${type}.v${version}.json`;
+      ajv.addSchema({ ...definition.schema, $id: schemaKey }, schemaKey);
+      versions.set(Number(version), { schemaKey, children: definition.children ?? [] });
     }
     widgetTypes.set(type, versions);
   }
