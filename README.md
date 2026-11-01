@@ -41,6 +41,20 @@ const { validate, filterForClient } = createSdui({
 });
 ```
 
+## Pieces for a dashboard (Vue)
+
+```js
+import { SduiForm, SduiPreview, moveItem } from "sduikit/vue";
+import { widgetDataSchema } from "sduikit";
+
+// <SduiForm :schema="widgetDataSchema('banner', 1)" v-model="widget.data" />
+// <SduiPreview :document="page" />   // a quick look at how the app will draw the page
+```
+
+`SduiForm` builds an edit form for any widget from its schema. `SduiPreview` draws a page or
+screen approximately the way the app will. `moveItem`, `insertItem` and `removeItem` help with
+reordering. Vue 3 is an optional dependency: you only need it if you import `sduikit/vue`.
+
 ## Working on it
 
 ```

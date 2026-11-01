@@ -1,4 +1,4 @@
-export { createSdui, filterForClient, validate } from "./sdui.js";
+export { createSdui, filterForClient, validate, widgetDataSchema } from "./sdui.js";
 export type { SduiOptions } from "./sdui.js";
 export { builtInCatalogue } from "./registry.js";
 export type { ExtraWidgets, WidgetDefinition } from "./registry.js";

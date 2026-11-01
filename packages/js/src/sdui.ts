@@ -14,6 +14,9 @@ export function createSdui(options: SduiOptions = {}) {
     validate: (document: unknown, kind?: DocumentKind) => validateDocument(registry, document, kind),
     filterForClient: <T extends Page | Screen | Manifest>(document: T, client: ClientInfo): T =>
       filterDocument(registry, document, client),
+    // The JSON Schema for one widget's `data`, so a dashboard can build an edit form from it.
+    widgetDataSchema: (type: string, version: number) =>
+      registry.lookup(type, version)?.validateData.schema as Record<string, unknown> | undefined,
   };
 }
 
@@ -21,3 +24,4 @@ export function createSdui(options: SduiOptions = {}) {
 const builtIn = createSdui();
 export const validate = builtIn.validate;
 export const filterForClient = builtIn.filterForClient;
+export const widgetDataSchema = builtIn.widgetDataSchema;
