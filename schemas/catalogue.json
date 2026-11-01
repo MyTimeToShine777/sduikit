@@ -437,6 +437,370 @@
           "children": []
         }
       }
+    },
+    "row": {
+      "group": "Building blocks",
+      "description": "Puts widgets side by side (Flutter's Row).",
+      "versions": {
+        "1": {
+          "since": "0.3.0",
+          "schema": "widgets/row.v1.json",
+          "children": [
+            "children"
+          ]
+        }
+      }
+    },
+    "column": {
+      "group": "Building blocks",
+      "description": "Stacks widgets top to bottom (Flutter's Column).",
+      "versions": {
+        "1": {
+          "since": "0.3.0",
+          "schema": "widgets/column.v1.json",
+          "children": [
+            "children"
+          ]
+        }
+      }
+    },
+    "stack": {
+      "group": "Building blocks",
+      "description": "Puts widgets on top of each other. Use `positioned` to place one exactly (Flutter's Stack).",
+      "versions": {
+        "1": {
+          "since": "0.3.0",
+          "schema": "widgets/stack.v1.json",
+          "children": [
+            "children"
+          ]
+        }
+      }
+    },
+    "positioned": {
+      "group": "Building blocks",
+      "description": "Places its widget at exact distances from the edges of the `stack` it is in (Flutter's Positioned).",
+      "versions": {
+        "1": {
+          "since": "0.3.0",
+          "schema": "widgets/positioned.v1.json",
+          "children": [
+            "children"
+          ]
+        }
+      }
+    },
+    "padding": {
+      "group": "Building blocks",
+      "description": "Adds space around its widget, a different amount on each side if you like (Flutter's Padding).",
+      "versions": {
+        "1": {
+          "since": "0.3.0",
+          "schema": "widgets/padding.v1.json",
+          "children": [
+            "children"
+          ]
+        }
+      }
+    },
+    "align": {
+      "group": "Building blocks",
+      "description": "Places its widget somewhere inside the space it has (Flutter's Align).",
+      "versions": {
+        "1": {
+          "since": "0.3.0",
+          "schema": "widgets/align.v1.json",
+          "children": [
+            "children"
+          ]
+        }
+      }
+    },
+    "center": {
+      "group": "Building blocks",
+      "description": "Puts its widget in the middle (Flutter's Center).",
+      "versions": {
+        "1": {
+          "since": "0.3.0",
+          "schema": "widgets/center.v1.json",
+          "children": [
+            "children"
+          ]
+        }
+      }
+    },
+    "sized_box": {
+      "group": "Building blocks",
+      "description": "A box of an exact width and height, with an optional widget inside (Flutter's SizedBox).",
+      "versions": {
+        "1": {
+          "since": "0.3.0",
+          "schema": "widgets/sized_box.v1.json",
+          "children": [
+            "children"
+          ]
+        }
+      }
+    },
+    "expanded": {
+      "group": "Building blocks",
+      "description": "Inside a row or column: takes all the room left over (Flutter's Expanded).",
+      "versions": {
+        "1": {
+          "since": "0.3.0",
+          "schema": "widgets/expanded.v1.json",
+          "children": [
+            "children"
+          ]
+        }
+      }
+    },
+    "flexible": {
+      "group": "Building blocks",
+      "description": "Inside a row or column: may grow to take spare room, or stay small (Flutter's Flexible).",
+      "versions": {
+        "1": {
+          "since": "0.3.0",
+          "schema": "widgets/flexible.v1.json",
+          "children": [
+            "children"
+          ]
+        }
+      }
+    },
+    "aspect_ratio": {
+      "group": "Building blocks",
+      "description": "Makes its widget a fixed shape: width divided by height (Flutter's AspectRatio).",
+      "versions": {
+        "1": {
+          "since": "0.3.0",
+          "schema": "widgets/aspect_ratio.v1.json",
+          "children": [
+            "children"
+          ]
+        }
+      }
+    },
+    "fractionally_sized_box": {
+      "group": "Building blocks",
+      "description": "Makes its widget a fraction of the space it has, such as 0.5 for half (Flutter's FractionallySizedBox).",
+      "versions": {
+        "1": {
+          "since": "0.3.0",
+          "schema": "widgets/fractionally_sized_box.v1.json",
+          "children": [
+            "children"
+          ]
+        }
+      }
+    },
+    "constrained_box": {
+      "group": "Building blocks",
+      "description": "Limits how small or how big its widget can be (Flutter's ConstrainedBox).",
+      "versions": {
+        "1": {
+          "since": "0.3.0",
+          "schema": "widgets/constrained_box.v1.json",
+          "children": [
+            "children"
+          ]
+        }
+      }
+    },
+    "fitted_box": {
+      "group": "Building blocks",
+      "description": "Shrinks or stretches its widget to fit the space (Flutter's FittedBox).",
+      "versions": {
+        "1": {
+          "since": "0.3.0",
+          "schema": "widgets/fitted_box.v1.json",
+          "children": [
+            "children"
+          ]
+        }
+      }
+    },
+    "wrap": {
+      "group": "Building blocks",
+      "description": "Lays widgets in a line and starts a new line when they run out of room (Flutter's Wrap).",
+      "versions": {
+        "1": {
+          "since": "0.3.0",
+          "schema": "widgets/wrap.v1.json",
+          "children": [
+            "children"
+          ]
+        }
+      }
+    },
+    "single_child_scroll_view": {
+      "group": "Building blocks",
+      "description": "Lets its widget scroll when it is bigger than the space (Flutter's SingleChildScrollView).",
+      "versions": {
+        "1": {
+          "since": "0.3.0",
+          "schema": "widgets/single_child_scroll_view.v1.json",
+          "children": [
+            "children"
+          ]
+        }
+      }
+    },
+    "list_view": {
+      "group": "Building blocks",
+      "description": "A scrolling list. Give it a `height` to scroll inside that height; without one it is as tall as its contents (Flutter's ListView).",
+      "versions": {
+        "1": {
+          "since": "0.3.0",
+          "schema": "widgets/list_view.v1.json",
+          "children": [
+            "children"
+          ]
+        }
+      }
+    },
+    "grid_view": {
+      "group": "Building blocks",
+      "description": "A grid with a set number of columns. Give it a `height` to scroll inside it (Flutter's GridView).",
+      "versions": {
+        "1": {
+          "since": "0.3.0",
+          "schema": "widgets/grid_view.v1.json",
+          "children": [
+            "children"
+          ]
+        }
+      }
+    },
+    "indexed_stack": {
+      "group": "Building blocks",
+      "description": "Shows only one of its widgets, chosen by `index`, and keeps the others ready (Flutter's IndexedStack).",
+      "versions": {
+        "1": {
+          "since": "0.3.0",
+          "schema": "widgets/indexed_stack.v1.json",
+          "children": [
+            "children"
+          ]
+        }
+      }
+    },
+    "opacity": {
+      "group": "Building blocks",
+      "description": "Makes its widget see-through: 1 is solid, 0 is invisible (Flutter's Opacity).",
+      "versions": {
+        "1": {
+          "since": "0.3.0",
+          "schema": "widgets/opacity.v1.json",
+          "children": [
+            "children"
+          ]
+        }
+      }
+    },
+    "transform": {
+      "group": "Building blocks",
+      "description": "Moves, turns, resizes or flips its widget without changing the layout (Flutter's Transform).",
+      "versions": {
+        "1": {
+          "since": "0.3.0",
+          "schema": "widgets/transform.v1.json",
+          "children": [
+            "children"
+          ]
+        }
+      }
+    },
+    "rotated_box": {
+      "group": "Building blocks",
+      "description": "Turns its widget by quarter turns, and the layout follows (Flutter's RotatedBox).",
+      "versions": {
+        "1": {
+          "since": "0.3.0",
+          "schema": "widgets/rotated_box.v1.json",
+          "children": [
+            "children"
+          ]
+        }
+      }
+    },
+    "clip": {
+      "group": "Building blocks",
+      "description": "Cuts its widget to a rectangle, rounded rectangle or oval (Flutter's ClipRect, ClipRRect, ClipOval).",
+      "versions": {
+        "1": {
+          "since": "0.3.0",
+          "schema": "widgets/clip.v1.json",
+          "children": [
+            "children"
+          ]
+        }
+      }
+    },
+    "box": {
+      "group": "Building blocks",
+      "description": "Flutter's Container: size, space inside and outside, colour or gradient, border, rounded corners, shadows and a background picture.",
+      "versions": {
+        "1": {
+          "since": "0.3.0",
+          "schema": "widgets/box.v1.json",
+          "children": [
+            "children"
+          ]
+        }
+      }
+    },
+    "visibility": {
+      "group": "Building blocks",
+      "description": "Shows or hides its widget, optionally keeping the empty space (Flutter's Visibility).",
+      "versions": {
+        "1": {
+          "since": "0.3.0",
+          "schema": "widgets/visibility.v1.json",
+          "children": [
+            "children"
+          ]
+        }
+      }
+    },
+    "backdrop_blur": {
+      "group": "Building blocks",
+      "description": "Blurs whatever is behind its widget, like frosted glass (Flutter's BackdropFilter).",
+      "versions": {
+        "1": {
+          "since": "0.3.0",
+          "schema": "widgets/backdrop_blur.v1.json",
+          "children": [
+            "children"
+          ]
+        }
+      }
+    },
+    "ink_well": {
+      "group": "Building blocks",
+      "description": "Makes its widget tappable with the Material ripple. Set the widget's `action` to say what a tap does (Flutter's InkWell).",
+      "versions": {
+        "1": {
+          "since": "0.3.0",
+          "schema": "widgets/ink_well.v1.json",
+          "children": [
+            "children"
+          ]
+        }
+      }
+    },
+    "safe_area": {
+      "group": "Building blocks",
+      "description": "Keeps its widget clear of the notch, status bar and home bar (Flutter's SafeArea).",
+      "versions": {
+        "1": {
+          "since": "0.3.0",
+          "schema": "widgets/safe_area.v1.json",
+          "children": [
+            "children"
+          ]
+        }
+      }
     }
   }
 }

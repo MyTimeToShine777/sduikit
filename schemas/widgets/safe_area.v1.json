@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sduikit.dev/schemas/widgets/safe_area.v1.json",
+  "title": "safe_area (v1) data",
+  "type": "object",
+  "properties": {
+    "top": {
+      "type": "boolean"
+    },
+    "bottom": {
+      "type": "boolean"
+    },
+    "left": {
+      "type": "boolean"
+    },
+    "right": {
+      "type": "boolean"
+    },
+    "children": {
+      "type": "array",
+      "items": {
+        "$ref": "../common/widget.json"
+      },
+      "maxItems": 1
+    }
+  },
+  "additionalProperties": false
+}

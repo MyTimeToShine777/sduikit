@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sduikit.dev/schemas/widgets/backdrop_blur.v1.json",
+  "title": "backdrop_blur (v1) data",
+  "type": "object",
+  "properties": {
+    "sigma": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 50
+    },
+    "children": {
+      "type": "array",
+      "items": {
+        "$ref": "../common/widget.json"
+      },
+      "maxItems": 1
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sduikit.dev/schemas/widgets/align.v1.json",
+  "title": "align (v1) data",
+  "type": "object",
+  "properties": {
+    "alignment": {
+      "$ref": "../common/layout.json#/$defs/alignment"
+    },
+    "widthFactor": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 20
+    },
+    "heightFactor": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 20
+    },
+    "children": {
+      "type": "array",
+      "items": {
+        "$ref": "../common/widget.json"
+      },
+      "maxItems": 1
+    }
+  },
+  "required": [
+    "alignment"
+  ],
+  "additionalProperties": false
+}

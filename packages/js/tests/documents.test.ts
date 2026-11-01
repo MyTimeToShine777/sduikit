@@ -22,11 +22,16 @@ describe("fixtures", () => {
   const documents = [
     loadFixture("valid/page-home.json"),
     loadFixture("valid/page-showcase.json"),
+    loadFixture("valid/page-blocks.json"),
     loadFixture("valid/screen-offers.json"),
   ];
 
   it("page-showcase is a valid page", () => {
     expect(checkPage(loadFixture("valid/page-showcase.json")), JSON.stringify(checkPage.errors)).toBe(true);
+  });
+
+  it("page-blocks is a valid page", () => {
+    expect(checkPage(loadFixture("valid/page-blocks.json")), JSON.stringify(checkPage.errors)).toBe(true);
   });
 
   function collect(value: unknown, found: { widgets: Set<string>; blocks: Set<string>; actions: Set<string> }) {

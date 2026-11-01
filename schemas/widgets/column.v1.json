@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sduikit.dev/schemas/widgets/column.v1.json",
+  "title": "column (v1) data",
+  "type": "object",
+  "properties": {
+    "mainAxisAlignment": {
+      "$ref": "../common/layout.json#/$defs/mainAxisAlignment"
+    },
+    "crossAxisAlignment": {
+      "$ref": "../common/layout.json#/$defs/crossAxisAlignment"
+    },
+    "mainAxisSize": {
+      "enum": [
+        "max",
+        "min"
+      ]
+    },
+    "spacing": {
+      "$ref": "../common/style.json#/$defs/space"
+    },
+    "children": {
+      "type": "array",
+      "items": {
+        "$ref": "../common/widget.json"
+      }
+    }
+  },
+  "required": [
+    "children"
+  ],
+  "additionalProperties": false
+}

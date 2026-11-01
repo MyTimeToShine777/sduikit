@@ -1,4 +1,6 @@
-import { computed, defineComponent, h, ref, type PropType, type VNode } from "vue";
+import { computed, defineComponent, h, nextTick, onBeforeUnmount, onMounted, onUpdated, ref, watch, type PropType, type VNode } from "vue";
+import { renderBuildingBlock } from "./blocksPreview.js";
+import { attachCanvasEditing, markDraggable, quoteId } from "./canvasEditing.js";
 import { fillTemplate } from "../templates.js";
 import type { Block, Manifest, Sides, Space, Style, Widget } from "../types.js";
 
@@ -102,6 +104,14 @@ const CSS = `
 .sp-input{padding:12px;border:1px solid var(--sp-outline);border-radius:4px;color:var(--sp-muted);min-height:48px;background:transparent}
 .sp-play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:56px;height:56px;border-radius:50%;background:rgba(0,0,0,.55);color:#fff;display:flex;align-items:center;justify-content:center;font-size:24px}
 .sp-skel{height:64px;margin-bottom:8px;border-radius:8px;background:var(--sp-surface)}
+.sp-edit [data-id]{cursor:pointer}
+.sp-edit [data-id]:hover{outline:1.5px dashed color-mix(in srgb,var(--sp-primary) 70%,transparent);outline-offset:-1.5px}
+.sp-edit .sp-selected{outline:2px solid #2563EB!important;outline-offset:-2px}
+.sp-edit .sp-dragging{opacity:.4}
+.sp-edit .sp-drop-before{box-shadow:0 -3px 0 0 #2563EB!important}
+.sp-edit .sp-drop-after{box-shadow:0 3px 0 0 #2563EB!important}
+.sp-edit .sp-editing{outline:2px solid #2563EB!important;background:color-mix(in srgb,#2563EB 10%,transparent);cursor:text;user-select:text}
+.sp-stack>:not([data-widget="positioned"]){grid-area:1/1}
 .sp-unknown{border:1px dashed var(--sp-muted);padding:8px;margin:4px;border-radius:8px;color:var(--sp-muted);font-size:12px}
 `;
 
@@ -179,6 +189,7 @@ interface Context {
   theme: Theme;
   dark: boolean;
   samples: Record<string, unknown[]>;
+  editable: boolean;
 }
 
 const toneColor = (ctx: Context, tone: unknown): string => {
@@ -515,9 +526,17 @@ function renderWidget(ctx: Context, widget: Widget): VNode | null {
         ),
         h("span", { class: "sp-btn", style: { display: "flex" } }, data.submitLabel),
       ]);
-    default:
+    default: {
+      const block = renderBuildingBlock(widget.type, data, tag, {
+        space: (value) => (typeof value === "number" ? value : ctx.theme.spacing[value as keyof Theme["spacing"]] ?? 0),
+        colour: (value) => (typeof value !== "string" ? undefined : value.startsWith("#") ? value : (p as any)[value]),
+        kids: (value) => kids(value),
+        editable: ctx.editable,
+      });
+      if (block !== undefined) return block;
       // A widget this preview does not know (an app's own widget). It shows its name and main texts so staff can still see what is there.
       return h("div", { ...tag, class: "sp-unknown sdui-unknown" }, `${widget.type} (v${widget.v})${mainTexts(data)}`);
+    }
   }
 }
 
@@ -570,11 +589,35 @@ export const SduiPreview = defineComponent({
     dark: { type: Boolean, default: false },
     // Example rows for data_list widgets, by source name, e.g. { doctors_nearby: [{ name: "Dr Rao" }] }.
     dataSamples: { type: Object as PropType<Record<string, unknown[]>>, default: () => ({}) },
+    // Turns the preview into a design canvas: click to select, drag to move, double-click text to retype it.
+    editable: { type: Boolean, default: false },
+    selectedId: { type: String, default: "" },
   },
-  setup(props) {
+  emits: ["select", "edit", "move"],
+  setup(props, { emit }) {
+    const root = ref<HTMLElement>();
+    let detach: (() => void) | undefined;
+    // Adds the selection mark to the chosen widget and makes every widget draggable (the page is redrawn often).
+    const refresh = () => {
+      if (!root.value || !props.editable) return;
+      markDraggable(root.value, true);
+      root.value.querySelectorAll(".sp-selected").forEach((el) => el.classList.remove("sp-selected"));
+      if (props.selectedId) root.value.querySelector(`[data-id="${quoteId(props.selectedId)}"]`)?.classList.add("sp-selected");
+    };
+    onMounted(() => {
+      if (root.value) detach = attachCanvasEditing(root.value, () => props.document, {
+        select: (id) => props.editable && emit("select", id),
+        edit: (change) => emit("edit", change),
+        move: (change) => emit("move", change),
+      });
+      refresh();
+    });
+    onUpdated(refresh);
+    watch(() => [props.selectedId, props.editable], () => nextTick(refresh));
+    onBeforeUnmount(() => detach?.());
     const vars = computed(() => themeVars(props.theme, props.dark));
     return () => {
-      const ctx: Context = { theme: props.theme, dark: props.dark, samples: props.dataSamples };
+      const ctx: Context = { theme: props.theme, dark: props.dark, samples: props.dataSamples, editable: props.editable };
       const document = props.document;
       let body: Array<VNode | null>;
 
@@ -589,7 +632,7 @@ export const SduiPreview = defineComponent({
         body = [h("p", { class: "sp-muted", style: { padding: "16px" } }, "Nothing to show.")];
       }
 
-      return h("div", { class: "sp-root sdui-preview", style: vars.value, "data-dark": props.dark ? "true" : "false" }, [h("style", CSS), h("div", { class: "sp-content" }, body)]);
+      return h("div", { ref: root, class: props.editable ? "sp-root sdui-preview sp-edit" : "sp-root sdui-preview", style: vars.value, "data-dark": props.dark ? "true" : "false" }, [h("style", CSS), h("div", { class: "sp-content" }, body)]);
     };
   },
 });

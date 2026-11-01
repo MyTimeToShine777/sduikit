@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sduikit.dev/schemas/widgets/positioned.v1.json",
+  "title": "positioned (v1) data",
+  "type": "object",
+  "properties": {
+    "left": {
+      "$ref": "../common/layout.json#/$defs/number"
+    },
+    "top": {
+      "$ref": "../common/layout.json#/$defs/number"
+    },
+    "right": {
+      "$ref": "../common/layout.json#/$defs/number"
+    },
+    "bottom": {
+      "$ref": "../common/layout.json#/$defs/number"
+    },
+    "width": {
+      "$ref": "../common/layout.json#/$defs/size"
+    },
+    "height": {
+      "$ref": "../common/layout.json#/$defs/size"
+    },
+    "children": {
+      "type": "array",
+      "items": {
+        "$ref": "../common/widget.json"
+      },
+      "minItems": 1,
+      "maxItems": 1
+    }
+  },
+  "required": [
+    "children"
+  ],
+  "additionalProperties": false
+}

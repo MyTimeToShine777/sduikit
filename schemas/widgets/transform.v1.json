@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sduikit.dev/schemas/widgets/transform.v1.json",
+  "title": "transform (v1) data",
+  "type": "object",
+  "properties": {
+    "rotate": {
+      "type": "number",
+      "minimum": -360,
+      "maximum": 360
+    },
+    "scale": {
+      "type": "number",
+      "minimum": -20,
+      "maximum": 20
+    },
+    "scaleX": {
+      "type": "number",
+      "minimum": -20,
+      "maximum": 20
+    },
+    "scaleY": {
+      "type": "number",
+      "minimum": -20,
+      "maximum": 20
+    },
+    "translateX": {
+      "$ref": "../common/layout.json#/$defs/number"
+    },
+    "translateY": {
+      "$ref": "../common/layout.json#/$defs/number"
+    },
+    "flipX": {
+      "type": "boolean"
+    },
+    "alignment": {
+      "$ref": "../common/layout.json#/$defs/alignment"
+    },
+    "children": {
+      "type": "array",
+      "items": {
+        "$ref": "../common/widget.json"
+      },
+      "maxItems": 1
+    }
+  },
+  "additionalProperties": false
+}

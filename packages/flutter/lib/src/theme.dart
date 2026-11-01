@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
 
+/// "#RRGGBB" or "#RRGGBBAA" (the web way, alpha last) as a Flutter colour, or null if it is not one.
 Color? _parseHexColor(Object? value) {
-  if (value is! String || !RegExp(r'^#[0-9A-Fa-f]{6}$').hasMatch(value)) return null;
-  return Color(0xFF000000 | int.parse(value.substring(1), radix: 16));
+  if (value is! String) return null;
+  if (RegExp(r'^#[0-9A-Fa-f]{6}$').hasMatch(value)) {
+    return Color(0xFF000000 | int.parse(value.substring(1), radix: 16));
+  }
+  if (RegExp(r'^#[0-9A-Fa-f]{8}$').hasMatch(value)) {
+    final rgb = int.parse(value.substring(1, 7), radix: 16);
+    final alpha = int.parse(value.substring(7), radix: 16);
+    return Color((alpha << 24) | rgb);
+  }
+  return null;
 }
 
 Map<String, double> _numbers(Object? json) {
@@ -59,11 +68,13 @@ class SduiTokens {
     );
   }
 
-  // Each lookup takes `Object?` because values come straight from JSON. An unknown token gives null.
-  Color? color(Object? token) => token is String ? colors[token] : null;
-  double? textSize(Object? token) => token is String ? textSizes[token] : null;
-  double? space(Object? token) => token is String ? spacing[token] : null;
-  double? radius(Object? token) => token is String ? radii[token] : null;
+  // Each lookup takes `Object?` because values come straight from JSON. A value is either a name from the
+  // theme ("md", "primary", which follows dark mode and re-branding) or an exact value (16, "#FF8800").
+  // Anything else gives null.
+  Color? color(Object? value) => value is String ? (colors[value] ?? _parseHexColor(value)) : null;
+  double? textSize(Object? value) => value is num ? value.toDouble() : (value is String ? textSizes[value] : null);
+  double? space(Object? value) => value is num ? value.toDouble() : (value is String ? spacing[value] : null);
+  double? radius(Object? value) => value is num ? value.toDouble() : (value is String ? radii[value] : null);
 }
 
 /// Carries the tokens inside Flutter's [ThemeData], so every widget can find them.

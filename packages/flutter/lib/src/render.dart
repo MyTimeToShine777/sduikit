@@ -127,8 +127,9 @@ class SduiRender {
     unawaited(actions.run(context, toRun));
   }
 
-  /// Applies the shared `style` tokens (padding, background, corners) and makes the widget tappable
-  /// when it has an action. Pass `tappable: false` when the child handles taps itself (a button).
+  /// Applies the shared `style` (space, margin, size, colours, corners, border, shadow, opacity, text look)
+  /// and makes the widget tappable when it has an action. Pass `tappable: false` when the child handles taps
+  /// itself (a button). Every value in the style is a theme name or an exact value.
   Widget wrap(
     BuildContext context,
     Widget child, {
@@ -139,22 +140,66 @@ class SduiRender {
     bool tappable = true,
   }) {
     final tokens = context.sduiTokens;
-    final padding = tokens.space(style['spacing']);
+    final spacing = tokens.space(style['spacing']);
+    final padding = _sides(tokens, style['padding'], spacing ?? 0);
+    final margin = _sides(tokens, style['margin'], 0);
     final background = tokens.color(style['color']);
     final radius = tokens.radius(style['radius']);
+    final borderWidth = style['borderWidth'] is num ? (style['borderWidth'] as num).toDouble() : null;
+    final borderColor = tokens.color(style['borderColor']);
+    final hasBorder = (borderWidth != null && borderWidth > 0) || borderColor != null;
+    final shadow = _shadowFor(style['shadow']);
+    final width = _length(style['width']);
+    final height = _length(style['height']);
 
     var result = child;
-    if (padding != null || background != null || radius != null) {
+
+    // Text look: colour, size, weight, italic, and alignment reach the text inside.
+    final textColor = tokens.color(style['textColor']);
+    final textSize = tokens.textSize(style['textSize']);
+    final weight = switch (style['fontWeight']) {
+      'bold' => FontWeight.w700,
+      'medium' => FontWeight.w500,
+      'normal' => FontWeight.w400,
+      _ => null,
+    };
+    final italic = style['italic'] == true;
+    final align = switch (style['align']) {
+      'start' => TextAlign.start,
+      'center' => TextAlign.center,
+      'end' => TextAlign.end,
+      _ => null,
+    };
+    if (textColor != null || textSize != null || weight != null || italic || align != null) {
+      result = DefaultTextStyle.merge(
+        style: TextStyle(
+          color: textColor,
+          fontSize: textSize,
+          fontWeight: weight,
+          fontStyle: italic ? FontStyle.italic : null,
+        ),
+        textAlign: align,
+        child: result,
+      );
+    }
+
+    if (padding != EdgeInsets.zero || background != null || radius != null || hasBorder || shadow.isNotEmpty) {
       result = Container(
-        padding: padding == null ? null : EdgeInsets.all(padding),
+        padding: padding == EdgeInsets.zero ? null : padding,
         clipBehavior: radius == null ? Clip.none : Clip.antiAlias,
         decoration: BoxDecoration(
           color: background,
           borderRadius: radius == null ? null : BorderRadius.circular(radius),
+          border: hasBorder ? Border.all(width: borderWidth ?? 1, color: borderColor ?? const Color(0x33000000)) : null,
+          boxShadow: shadow.isEmpty ? null : shadow,
         ),
         child: result,
       );
     }
+    if (width != null || height != null) result = SizedBox(width: width, height: height, child: result);
+    if (margin != EdgeInsets.zero) result = Padding(padding: margin, child: result);
+    if (style['opacity'] is num) result = Opacity(opacity: (style['opacity'] as num).toDouble().clamp(0.0, 1.0), child: result);
+
     if (tappable && action != null) {
       result = GestureDetector(
         behavior: HitTestBehavior.opaque,
@@ -164,6 +209,22 @@ class SduiRender {
     }
     return result;
   }
+
+  // Four sides from {top,right,bottom,left}; a side that is not given uses [fallback].
+  EdgeInsets _sides(SduiTokens tokens, Object? value, double fallback) {
+    if (value is! Map) return EdgeInsets.all(fallback);
+    double side(String key) => tokens.space(value[key]) ?? fallback;
+    return EdgeInsets.fromLTRB(side('left'), side('top'), side('right'), side('bottom'));
+  }
+
+  double? _length(Object? value) => value is num ? value.toDouble() : (value == 'fill' ? double.infinity : null);
+
+  List<BoxShadow> _shadowFor(Object? name) => switch (name) {
+        'small' => const [BoxShadow(color: Color(0x33000000), blurRadius: 3, offset: Offset(0, 1))],
+        'medium' => const [BoxShadow(color: Color(0x38000000), blurRadius: 12, offset: Offset(0, 4))],
+        'large' => const [BoxShadow(color: Color(0x47000000), blurRadius: 28, offset: Offset(0, 12))],
+        _ => const [],
+      };
 
   /// [wrap] using the style, action and analytics that belong to a widget.
   Widget wrapNode(BuildContext context, SduiNode node, Widget child, {bool tappable = true}) {

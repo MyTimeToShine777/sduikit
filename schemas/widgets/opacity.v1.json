@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sduikit.dev/schemas/widgets/opacity.v1.json",
+  "title": "opacity (v1) data",
+  "type": "object",
+  "properties": {
+    "opacity": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "children": {
+      "type": "array",
+      "items": {
+        "$ref": "../common/widget.json"
+      },
+      "maxItems": 1
+    }
+  },
+  "required": [
+    "opacity"
+  ],
+  "additionalProperties": false
+}

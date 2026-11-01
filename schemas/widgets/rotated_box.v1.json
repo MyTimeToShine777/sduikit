@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sduikit.dev/schemas/widgets/rotated_box.v1.json",
+  "title": "rotated_box (v1) data",
+  "type": "object",
+  "properties": {
+    "quarterTurns": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 3
+    },
+    "children": {
+      "type": "array",
+      "items": {
+        "$ref": "../common/widget.json"
+      },
+      "maxItems": 1
+    }
+  },
+  "required": [
+    "quarterTurns"
+  ],
+  "additionalProperties": false
+}

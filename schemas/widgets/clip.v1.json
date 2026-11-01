@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sduikit.dev/schemas/widgets/clip.v1.json",
+  "title": "clip (v1) data",
+  "type": "object",
+  "properties": {
+    "shape": {
+      "enum": [
+        "rect",
+        "rounded",
+        "oval"
+      ]
+    },
+    "radius": {
+      "$ref": "../common/style.json#/$defs/corner"
+    },
+    "children": {
+      "type": "array",
+      "items": {
+        "$ref": "../common/widget.json"
+      },
+      "maxItems": 1
+    }
+  },
+  "additionalProperties": false
+}

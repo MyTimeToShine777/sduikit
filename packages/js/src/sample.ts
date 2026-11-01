@@ -11,6 +11,19 @@ function tokenChoices(reference: string): string[] | undefined {
   return definitions[match[1]]?.enum;
 }
 
+// A reference to a shared definition in style.json or layout.json (sides, alignment, colour...).
+function sharedDefinition(reference: string): Schema | undefined {
+  const match = /^(?:.*?(style|layout)\.json)?#\/\$defs\/(\w+)$/.exec(reference);
+  if (!match) return undefined;
+  // Inside style.json, "#/$defs/space" means style.json's own definition.
+  const files = match[1] ? [match[1]] : ["style", "layout"];
+  for (const file of files) {
+    const found = (schemaFiles[`common/${file}.json`] as { $defs: Record<string, Schema> }).$defs[match[2]];
+    if (found) return found;
+  }
+  return undefined;
+}
+
 // The smallest valid widget there is. Used when a schema needs a widget inside it (a container's first child).
 const placeholderWidget = () => ({ id: "w_text_1", type: "text", v: 1, data: { text: "Text" } });
 
@@ -25,13 +38,22 @@ export function sampleFromSchema(schema: Schema): unknown {
     if (choices) return choices[0];
     if (schema.$ref.endsWith("widget.json")) return placeholderWidget();
     if (schema.$ref.endsWith("action.json")) return { type: "dismiss" };
+    const shared = sharedDefinition(schema.$ref);
+    if (shared) return sampleFromSchema(shared);
     return null;
   }
   if ("const" in schema) return schema.const;
   if (Array.isArray(schema.enum)) return schema.enum[0];
 
+  // "A name or a number" (spacing, sizes): the name form is the one that follows the theme.
+  if (Array.isArray(schema.type)) {
+    if (schema.type[0] === "string" && schema.then) return sampleFromSchema(schema.then);
+    return sampleFromSchema({ ...schema, type: schema.type[0] });
+  }
+
   switch (schema.type) {
     case "string": {
+      if (schema.if && schema.else) return sampleFromSchema(schema.else); // a colour: the first theme name
       if (schema.format === "uri") return "https://example.com/";
       if (schema.format === "date-time") return "2030-01-01T00:00:00Z";
       if (schema.pattern === "^[A-Za-z_][A-Za-z0-9_]*$") return "field";

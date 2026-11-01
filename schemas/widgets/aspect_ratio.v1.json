@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sduikit.dev/schemas/widgets/aspect_ratio.v1.json",
+  "title": "aspect_ratio (v1) data",
+  "type": "object",
+  "properties": {
+    "aspectRatio": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "maximum": 50
+    },
+    "children": {
+      "type": "array",
+      "items": {
+        "$ref": "../common/widget.json"
+      },
+      "maxItems": 1
+    }
+  },
+  "required": [
+    "aspectRatio"
+  ],
+  "additionalProperties": false
+}

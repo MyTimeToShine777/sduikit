@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sduikit.dev/schemas/widgets/indexed_stack.v1.json",
+  "title": "indexed_stack (v1) data",
+  "type": "object",
+  "properties": {
+    "index": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 1000
+    },
+    "alignment": {
+      "$ref": "../common/layout.json#/$defs/alignment"
+    },
+    "children": {
+      "type": "array",
+      "items": {
+        "$ref": "../common/widget.json"
+      }
+    }
+  },
+  "required": [
+    "children"
+  ],
+  "additionalProperties": false
+}

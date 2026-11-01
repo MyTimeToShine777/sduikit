@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sduikit.dev/schemas/widgets/fractionally_sized_box.v1.json",
+  "title": "fractionally_sized_box (v1) data",
+  "type": "object",
+  "properties": {
+    "widthFactor": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 10
+    },
+    "heightFactor": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 10
+    },
+    "alignment": {
+      "$ref": "../common/layout.json#/$defs/alignment"
+    },
+    "children": {
+      "type": "array",
+      "items": {
+        "$ref": "../common/widget.json"
+      },
+      "maxItems": 1
+    }
+  },
+  "additionalProperties": false
+}

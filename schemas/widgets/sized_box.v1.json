@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sduikit.dev/schemas/widgets/sized_box.v1.json",
+  "title": "sized_box (v1) data",
+  "type": "object",
+  "properties": {
+    "width": {
+      "$ref": "../common/style.json#/$defs/length"
+    },
+    "height": {
+      "$ref": "../common/style.json#/$defs/length"
+    },
+    "children": {
+      "type": "array",
+      "items": {
+        "$ref": "../common/widget.json"
+      },
+      "maxItems": 1
+    }
+  },
+  "additionalProperties": false
+}

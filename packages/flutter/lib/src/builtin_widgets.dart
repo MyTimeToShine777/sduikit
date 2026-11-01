@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import 'building_blocks.dart';
 import 'data_list_widget.dart';
 import 'display_widgets.dart';
 import 'form_widget.dart';
@@ -13,8 +14,8 @@ import 'registry.dart';
 import 'render.dart';
 import 'theme.dart';
 
-/// Adds every built-in widget (all 38, version 1) to a registry. The first 14 are registered here;
-/// the display widgets and the interactive widgets are registered by their own files (last two lines).
+/// Adds every built-in widget (all 66, version 1) to a registry. The first 14 are registered here;
+/// the display, interactive and building-block widgets are registered by their own files (last three lines).
 void registerBuiltInWidgets(SduiWidgetRegistry registry) {
   registry
     ..register('text', 1, _text)
@@ -33,6 +34,7 @@ void registerBuiltInWidgets(SduiWidgetRegistry registry) {
     ..register('form', 1, buildForm);
   registerDisplayWidgets(registry);
   registerInteractiveWidgets(registry);
+  registerBuildingBlocks(registry);
 }
 
 TextAlign? _textAlign(Object? token) => switch (token) {

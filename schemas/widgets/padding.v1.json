@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sduikit.dev/schemas/widgets/padding.v1.json",
+  "title": "padding (v1) data",
+  "type": "object",
+  "properties": {
+    "padding": {
+      "$ref": "../common/style.json#/$defs/sides"
+    },
+    "children": {
+      "type": "array",
+      "items": {
+        "$ref": "../common/widget.json"
+      },
+      "maxItems": 1
+    }
+  },
+  "required": [
+    "padding"
+  ],
+  "additionalProperties": false
+}

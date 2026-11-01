@@ -1,0 +1,125 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sduikit.dev/schemas/common/layout.json",
+  "title": "Layout values",
+  "description": "Values shared by the building-block widgets. They use the same names as Flutter.",
+  "$defs": {
+    "alignment": {
+      "enum": [
+        "topLeft",
+        "topCenter",
+        "topRight",
+        "centerLeft",
+        "center",
+        "centerRight",
+        "bottomLeft",
+        "bottomCenter",
+        "bottomRight"
+      ],
+      "description": "Where something sits inside its space (Flutter's Alignment)."
+    },
+    "mainAxisAlignment": {
+      "enum": [
+        "start",
+        "end",
+        "center",
+        "spaceBetween",
+        "spaceAround",
+        "spaceEvenly"
+      ]
+    },
+    "crossAxisAlignment": {
+      "enum": [
+        "start",
+        "end",
+        "center",
+        "stretch"
+      ]
+    },
+    "boxFit": {
+      "enum": [
+        "contain",
+        "cover",
+        "fill",
+        "fitWidth",
+        "fitHeight",
+        "none",
+        "scaleDown"
+      ]
+    },
+    "scrollDirection": {
+      "enum": [
+        "vertical",
+        "horizontal"
+      ]
+    },
+    "number": {
+      "type": "number",
+      "minimum": -5000,
+      "maximum": 5000
+    },
+    "size": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 5000
+    },
+    "gradient": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "enum": [
+            "linear",
+            "radial"
+          ]
+        },
+        "colors": {
+          "type": "array",
+          "items": {
+            "$ref": "style.json#/$defs/colour"
+          },
+          "minItems": 2,
+          "maxItems": 8
+        },
+        "begin": {
+          "$ref": "#/$defs/alignment"
+        },
+        "end": {
+          "$ref": "#/$defs/alignment"
+        }
+      },
+      "required": [
+        "colors"
+      ],
+      "additionalProperties": false
+    },
+    "shadow": {
+      "type": "object",
+      "properties": {
+        "color": {
+          "$ref": "style.json#/$defs/colour"
+        },
+        "offsetX": {
+          "type": "number",
+          "minimum": -200,
+          "maximum": 200
+        },
+        "offsetY": {
+          "type": "number",
+          "minimum": -200,
+          "maximum": 200
+        },
+        "blur": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 200
+        },
+        "spread": {
+          "type": "number",
+          "minimum": -100,
+          "maximum": 200
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

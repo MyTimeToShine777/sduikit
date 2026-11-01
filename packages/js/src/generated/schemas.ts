@@ -757,6 +757,370 @@ export const schemaFiles: Record<string, unknown> = {
             "children": []
           }
         }
+      },
+      "row": {
+        "group": "Building blocks",
+        "description": "Puts widgets side by side (Flutter's Row).",
+        "versions": {
+          "1": {
+            "since": "0.3.0",
+            "schema": "widgets/row.v1.json",
+            "children": [
+              "children"
+            ]
+          }
+        }
+      },
+      "column": {
+        "group": "Building blocks",
+        "description": "Stacks widgets top to bottom (Flutter's Column).",
+        "versions": {
+          "1": {
+            "since": "0.3.0",
+            "schema": "widgets/column.v1.json",
+            "children": [
+              "children"
+            ]
+          }
+        }
+      },
+      "stack": {
+        "group": "Building blocks",
+        "description": "Puts widgets on top of each other. Use `positioned` to place one exactly (Flutter's Stack).",
+        "versions": {
+          "1": {
+            "since": "0.3.0",
+            "schema": "widgets/stack.v1.json",
+            "children": [
+              "children"
+            ]
+          }
+        }
+      },
+      "positioned": {
+        "group": "Building blocks",
+        "description": "Places its widget at exact distances from the edges of the `stack` it is in (Flutter's Positioned).",
+        "versions": {
+          "1": {
+            "since": "0.3.0",
+            "schema": "widgets/positioned.v1.json",
+            "children": [
+              "children"
+            ]
+          }
+        }
+      },
+      "padding": {
+        "group": "Building blocks",
+        "description": "Adds space around its widget, a different amount on each side if you like (Flutter's Padding).",
+        "versions": {
+          "1": {
+            "since": "0.3.0",
+            "schema": "widgets/padding.v1.json",
+            "children": [
+              "children"
+            ]
+          }
+        }
+      },
+      "align": {
+        "group": "Building blocks",
+        "description": "Places its widget somewhere inside the space it has (Flutter's Align).",
+        "versions": {
+          "1": {
+            "since": "0.3.0",
+            "schema": "widgets/align.v1.json",
+            "children": [
+              "children"
+            ]
+          }
+        }
+      },
+      "center": {
+        "group": "Building blocks",
+        "description": "Puts its widget in the middle (Flutter's Center).",
+        "versions": {
+          "1": {
+            "since": "0.3.0",
+            "schema": "widgets/center.v1.json",
+            "children": [
+              "children"
+            ]
+          }
+        }
+      },
+      "sized_box": {
+        "group": "Building blocks",
+        "description": "A box of an exact width and height, with an optional widget inside (Flutter's SizedBox).",
+        "versions": {
+          "1": {
+            "since": "0.3.0",
+            "schema": "widgets/sized_box.v1.json",
+            "children": [
+              "children"
+            ]
+          }
+        }
+      },
+      "expanded": {
+        "group": "Building blocks",
+        "description": "Inside a row or column: takes all the room left over (Flutter's Expanded).",
+        "versions": {
+          "1": {
+            "since": "0.3.0",
+            "schema": "widgets/expanded.v1.json",
+            "children": [
+              "children"
+            ]
+          }
+        }
+      },
+      "flexible": {
+        "group": "Building blocks",
+        "description": "Inside a row or column: may grow to take spare room, or stay small (Flutter's Flexible).",
+        "versions": {
+          "1": {
+            "since": "0.3.0",
+            "schema": "widgets/flexible.v1.json",
+            "children": [
+              "children"
+            ]
+          }
+        }
+      },
+      "aspect_ratio": {
+        "group": "Building blocks",
+        "description": "Makes its widget a fixed shape: width divided by height (Flutter's AspectRatio).",
+        "versions": {
+          "1": {
+            "since": "0.3.0",
+            "schema": "widgets/aspect_ratio.v1.json",
+            "children": [
+              "children"
+            ]
+          }
+        }
+      },
+      "fractionally_sized_box": {
+        "group": "Building blocks",
+        "description": "Makes its widget a fraction of the space it has, such as 0.5 for half (Flutter's FractionallySizedBox).",
+        "versions": {
+          "1": {
+            "since": "0.3.0",
+            "schema": "widgets/fractionally_sized_box.v1.json",
+            "children": [
+              "children"
+            ]
+          }
+        }
+      },
+      "constrained_box": {
+        "group": "Building blocks",
+        "description": "Limits how small or how big its widget can be (Flutter's ConstrainedBox).",
+        "versions": {
+          "1": {
+            "since": "0.3.0",
+            "schema": "widgets/constrained_box.v1.json",
+            "children": [
+              "children"
+            ]
+          }
+        }
+      },
+      "fitted_box": {
+        "group": "Building blocks",
+        "description": "Shrinks or stretches its widget to fit the space (Flutter's FittedBox).",
+        "versions": {
+          "1": {
+            "since": "0.3.0",
+            "schema": "widgets/fitted_box.v1.json",
+            "children": [
+              "children"
+            ]
+          }
+        }
+      },
+      "wrap": {
+        "group": "Building blocks",
+        "description": "Lays widgets in a line and starts a new line when they run out of room (Flutter's Wrap).",
+        "versions": {
+          "1": {
+            "since": "0.3.0",
+            "schema": "widgets/wrap.v1.json",
+            "children": [
+              "children"
+            ]
+          }
+        }
+      },
+      "single_child_scroll_view": {
+        "group": "Building blocks",
+        "description": "Lets its widget scroll when it is bigger than the space (Flutter's SingleChildScrollView).",
+        "versions": {
+          "1": {
+            "since": "0.3.0",
+            "schema": "widgets/single_child_scroll_view.v1.json",
+            "children": [
+              "children"
+            ]
+          }
+        }
+      },
+      "list_view": {
+        "group": "Building blocks",
+        "description": "A scrolling list. Give it a `height` to scroll inside that height; without one it is as tall as its contents (Flutter's ListView).",
+        "versions": {
+          "1": {
+            "since": "0.3.0",
+            "schema": "widgets/list_view.v1.json",
+            "children": [
+              "children"
+            ]
+          }
+        }
+      },
+      "grid_view": {
+        "group": "Building blocks",
+        "description": "A grid with a set number of columns. Give it a `height` to scroll inside it (Flutter's GridView).",
+        "versions": {
+          "1": {
+            "since": "0.3.0",
+            "schema": "widgets/grid_view.v1.json",
+            "children": [
+              "children"
+            ]
+          }
+        }
+      },
+      "indexed_stack": {
+        "group": "Building blocks",
+        "description": "Shows only one of its widgets, chosen by `index`, and keeps the others ready (Flutter's IndexedStack).",
+        "versions": {
+          "1": {
+            "since": "0.3.0",
+            "schema": "widgets/indexed_stack.v1.json",
+            "children": [
+              "children"
+            ]
+          }
+        }
+      },
+      "opacity": {
+        "group": "Building blocks",
+        "description": "Makes its widget see-through: 1 is solid, 0 is invisible (Flutter's Opacity).",
+        "versions": {
+          "1": {
+            "since": "0.3.0",
+            "schema": "widgets/opacity.v1.json",
+            "children": [
+              "children"
+            ]
+          }
+        }
+      },
+      "transform": {
+        "group": "Building blocks",
+        "description": "Moves, turns, resizes or flips its widget without changing the layout (Flutter's Transform).",
+        "versions": {
+          "1": {
+            "since": "0.3.0",
+            "schema": "widgets/transform.v1.json",
+            "children": [
+              "children"
+            ]
+          }
+        }
+      },
+      "rotated_box": {
+        "group": "Building blocks",
+        "description": "Turns its widget by quarter turns, and the layout follows (Flutter's RotatedBox).",
+        "versions": {
+          "1": {
+            "since": "0.3.0",
+            "schema": "widgets/rotated_box.v1.json",
+            "children": [
+              "children"
+            ]
+          }
+        }
+      },
+      "clip": {
+        "group": "Building blocks",
+        "description": "Cuts its widget to a rectangle, rounded rectangle or oval (Flutter's ClipRect, ClipRRect, ClipOval).",
+        "versions": {
+          "1": {
+            "since": "0.3.0",
+            "schema": "widgets/clip.v1.json",
+            "children": [
+              "children"
+            ]
+          }
+        }
+      },
+      "box": {
+        "group": "Building blocks",
+        "description": "Flutter's Container: size, space inside and outside, colour or gradient, border, rounded corners, shadows and a background picture.",
+        "versions": {
+          "1": {
+            "since": "0.3.0",
+            "schema": "widgets/box.v1.json",
+            "children": [
+              "children"
+            ]
+          }
+        }
+      },
+      "visibility": {
+        "group": "Building blocks",
+        "description": "Shows or hides its widget, optionally keeping the empty space (Flutter's Visibility).",
+        "versions": {
+          "1": {
+            "since": "0.3.0",
+            "schema": "widgets/visibility.v1.json",
+            "children": [
+              "children"
+            ]
+          }
+        }
+      },
+      "backdrop_blur": {
+        "group": "Building blocks",
+        "description": "Blurs whatever is behind its widget, like frosted glass (Flutter's BackdropFilter).",
+        "versions": {
+          "1": {
+            "since": "0.3.0",
+            "schema": "widgets/backdrop_blur.v1.json",
+            "children": [
+              "children"
+            ]
+          }
+        }
+      },
+      "ink_well": {
+        "group": "Building blocks",
+        "description": "Makes its widget tappable with the Material ripple. Set the widget's `action` to say what a tap does (Flutter's InkWell).",
+        "versions": {
+          "1": {
+            "since": "0.3.0",
+            "schema": "widgets/ink_well.v1.json",
+            "children": [
+              "children"
+            ]
+          }
+        }
+      },
+      "safe_area": {
+        "group": "Building blocks",
+        "description": "Keeps its widget clear of the notch, status bar and home bar (Flutter's SafeArea).",
+        "versions": {
+          "1": {
+            "since": "0.3.0",
+            "schema": "widgets/safe_area.v1.json",
+            "children": [
+              "children"
+            ]
+          }
+        }
       }
     }
   },
@@ -918,6 +1282,131 @@ export const schemaFiles: Record<string, unknown> = {
         "required": [
           "type"
         ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "common/layout.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/common/layout.json",
+    "title": "Layout values",
+    "description": "Values shared by the building-block widgets. They use the same names as Flutter.",
+    "$defs": {
+      "alignment": {
+        "enum": [
+          "topLeft",
+          "topCenter",
+          "topRight",
+          "centerLeft",
+          "center",
+          "centerRight",
+          "bottomLeft",
+          "bottomCenter",
+          "bottomRight"
+        ],
+        "description": "Where something sits inside its space (Flutter's Alignment)."
+      },
+      "mainAxisAlignment": {
+        "enum": [
+          "start",
+          "end",
+          "center",
+          "spaceBetween",
+          "spaceAround",
+          "spaceEvenly"
+        ]
+      },
+      "crossAxisAlignment": {
+        "enum": [
+          "start",
+          "end",
+          "center",
+          "stretch"
+        ]
+      },
+      "boxFit": {
+        "enum": [
+          "contain",
+          "cover",
+          "fill",
+          "fitWidth",
+          "fitHeight",
+          "none",
+          "scaleDown"
+        ]
+      },
+      "scrollDirection": {
+        "enum": [
+          "vertical",
+          "horizontal"
+        ]
+      },
+      "number": {
+        "type": "number",
+        "minimum": -5000,
+        "maximum": 5000
+      },
+      "size": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 5000
+      },
+      "gradient": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "enum": [
+              "linear",
+              "radial"
+            ]
+          },
+          "colors": {
+            "type": "array",
+            "items": {
+              "$ref": "style.json#/$defs/colour"
+            },
+            "minItems": 2,
+            "maxItems": 8
+          },
+          "begin": {
+            "$ref": "#/$defs/alignment"
+          },
+          "end": {
+            "$ref": "#/$defs/alignment"
+          }
+        },
+        "required": [
+          "colors"
+        ],
+        "additionalProperties": false
+      },
+      "shadow": {
+        "type": "object",
+        "properties": {
+          "color": {
+            "$ref": "style.json#/$defs/colour"
+          },
+          "offsetX": {
+            "type": "number",
+            "minimum": -200,
+            "maximum": 200
+          },
+          "offsetY": {
+            "type": "number",
+            "minimum": -200,
+            "maximum": 200
+          },
+          "blur": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 200
+          },
+          "spread": {
+            "type": "number",
+            "minimum": -100,
+            "maximum": 200
+          }
+        },
         "additionalProperties": false
       }
     }
@@ -1793,6 +2282,62 @@ export const schemaFiles: Record<string, unknown> = {
     ],
     "additionalProperties": false
   },
+  "widgets/align.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/align.v1.json",
+    "title": "align (v1) data",
+    "type": "object",
+    "properties": {
+      "alignment": {
+        "$ref": "../common/layout.json#/$defs/alignment"
+      },
+      "widthFactor": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 20
+      },
+      "heightFactor": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 20
+      },
+      "children": {
+        "type": "array",
+        "items": {
+          "$ref": "../common/widget.json"
+        },
+        "maxItems": 1
+      }
+    },
+    "required": [
+      "alignment"
+    ],
+    "additionalProperties": false
+  },
+  "widgets/aspect_ratio.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/aspect_ratio.v1.json",
+    "title": "aspect_ratio (v1) data",
+    "type": "object",
+    "properties": {
+      "aspectRatio": {
+        "type": "number",
+        "exclusiveMinimum": 0,
+        "maximum": 50
+      },
+      "children": {
+        "type": "array",
+        "items": {
+          "$ref": "../common/widget.json"
+        },
+        "maxItems": 1
+      }
+    },
+    "required": [
+      "aspectRatio"
+    ],
+    "additionalProperties": false
+  },
   "widgets/avatar.v1.json": {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "$id": "https://sduikit.dev/schemas/widgets/avatar.v1.json",
@@ -1814,6 +2359,27 @@ export const schemaFiles: Record<string, unknown> = {
     },
     "additionalProperties": false,
     "minProperties": 1
+  },
+  "widgets/backdrop_blur.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/backdrop_blur.v1.json",
+    "title": "backdrop_blur (v1) data",
+    "type": "object",
+    "properties": {
+      "sigma": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 50
+      },
+      "children": {
+        "type": "array",
+        "items": {
+          "$ref": "../common/widget.json"
+        },
+        "maxItems": 1
+      }
+    },
+    "additionalProperties": false
   },
   "widgets/badge.v1.json": {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -1854,6 +2420,74 @@ export const schemaFiles: Record<string, unknown> = {
     "required": [
       "imageUrl"
     ],
+    "additionalProperties": false
+  },
+  "widgets/box.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/box.v1.json",
+    "title": "box (v1) data",
+    "type": "object",
+    "properties": {
+      "alignment": {
+        "$ref": "../common/layout.json#/$defs/alignment"
+      },
+      "width": {
+        "$ref": "../common/style.json#/$defs/length"
+      },
+      "height": {
+        "$ref": "../common/style.json#/$defs/length"
+      },
+      "padding": {
+        "$ref": "../common/style.json#/$defs/sides"
+      },
+      "margin": {
+        "$ref": "../common/style.json#/$defs/sides"
+      },
+      "color": {
+        "$ref": "../common/style.json#/$defs/colour"
+      },
+      "gradient": {
+        "$ref": "../common/layout.json#/$defs/gradient"
+      },
+      "borderRadius": {
+        "$ref": "../common/style.json#/$defs/corner"
+      },
+      "borderWidth": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 20
+      },
+      "borderColor": {
+        "$ref": "../common/style.json#/$defs/colour"
+      },
+      "shape": {
+        "enum": [
+          "rectangle",
+          "circle"
+        ]
+      },
+      "shadows": {
+        "type": "array",
+        "items": {
+          "$ref": "../common/layout.json#/$defs/shadow"
+        },
+        "maxItems": 6
+      },
+      "backgroundImageUrl": {
+        "type": "string",
+        "format": "uri"
+      },
+      "backgroundFit": {
+        "$ref": "../common/layout.json#/$defs/boxFit"
+      },
+      "children": {
+        "type": "array",
+        "items": {
+          "$ref": "../common/widget.json"
+        },
+        "maxItems": 1
+      }
+    },
     "additionalProperties": false
   },
   "widgets/button.v1.json": {
@@ -1933,6 +2567,22 @@ export const schemaFiles: Record<string, unknown> = {
     ],
     "additionalProperties": false
   },
+  "widgets/center.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/center.v1.json",
+    "title": "center (v1) data",
+    "type": "object",
+    "properties": {
+      "children": {
+        "type": "array",
+        "items": {
+          "$ref": "../common/widget.json"
+        },
+        "maxItems": 1
+      }
+    },
+    "additionalProperties": false
+  },
   "widgets/chips.v1.json": {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "$id": "https://sduikit.dev/schemas/widgets/chips.v1.json",
@@ -1966,6 +2616,93 @@ export const schemaFiles: Record<string, unknown> = {
     "required": [
       "chips"
     ],
+    "additionalProperties": false
+  },
+  "widgets/clip.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/clip.v1.json",
+    "title": "clip (v1) data",
+    "type": "object",
+    "properties": {
+      "shape": {
+        "enum": [
+          "rect",
+          "rounded",
+          "oval"
+        ]
+      },
+      "radius": {
+        "$ref": "../common/style.json#/$defs/corner"
+      },
+      "children": {
+        "type": "array",
+        "items": {
+          "$ref": "../common/widget.json"
+        },
+        "maxItems": 1
+      }
+    },
+    "additionalProperties": false
+  },
+  "widgets/column.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/column.v1.json",
+    "title": "column (v1) data",
+    "type": "object",
+    "properties": {
+      "mainAxisAlignment": {
+        "$ref": "../common/layout.json#/$defs/mainAxisAlignment"
+      },
+      "crossAxisAlignment": {
+        "$ref": "../common/layout.json#/$defs/crossAxisAlignment"
+      },
+      "mainAxisSize": {
+        "enum": [
+          "max",
+          "min"
+        ]
+      },
+      "spacing": {
+        "$ref": "../common/style.json#/$defs/space"
+      },
+      "children": {
+        "type": "array",
+        "items": {
+          "$ref": "../common/widget.json"
+        }
+      }
+    },
+    "required": [
+      "children"
+    ],
+    "additionalProperties": false
+  },
+  "widgets/constrained_box.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/constrained_box.v1.json",
+    "title": "constrained_box (v1) data",
+    "type": "object",
+    "properties": {
+      "minWidth": {
+        "$ref": "../common/layout.json#/$defs/size"
+      },
+      "maxWidth": {
+        "$ref": "../common/layout.json#/$defs/size"
+      },
+      "minHeight": {
+        "$ref": "../common/layout.json#/$defs/size"
+      },
+      "maxHeight": {
+        "$ref": "../common/layout.json#/$defs/size"
+      },
+      "children": {
+        "type": "array",
+        "items": {
+          "$ref": "../common/widget.json"
+        },
+        "maxItems": 1
+      }
+    },
     "additionalProperties": false
   },
   "widgets/container.v1.json": {
@@ -2104,6 +2841,84 @@ export const schemaFiles: Record<string, unknown> = {
     ],
     "additionalProperties": false
   },
+  "widgets/expanded.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/expanded.v1.json",
+    "title": "expanded (v1) data",
+    "type": "object",
+    "properties": {
+      "flex": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 20
+      },
+      "children": {
+        "type": "array",
+        "items": {
+          "$ref": "../common/widget.json"
+        },
+        "minItems": 1,
+        "maxItems": 1
+      }
+    },
+    "required": [
+      "children"
+    ],
+    "additionalProperties": false
+  },
+  "widgets/fitted_box.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/fitted_box.v1.json",
+    "title": "fitted_box (v1) data",
+    "type": "object",
+    "properties": {
+      "fit": {
+        "$ref": "../common/layout.json#/$defs/boxFit"
+      },
+      "alignment": {
+        "$ref": "../common/layout.json#/$defs/alignment"
+      },
+      "children": {
+        "type": "array",
+        "items": {
+          "$ref": "../common/widget.json"
+        },
+        "maxItems": 1
+      }
+    },
+    "additionalProperties": false
+  },
+  "widgets/flexible.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/flexible.v1.json",
+    "title": "flexible (v1) data",
+    "type": "object",
+    "properties": {
+      "flex": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 20
+      },
+      "fit": {
+        "enum": [
+          "loose",
+          "tight"
+        ]
+      },
+      "children": {
+        "type": "array",
+        "items": {
+          "$ref": "../common/widget.json"
+        },
+        "minItems": 1,
+        "maxItems": 1
+      }
+    },
+    "required": [
+      "children"
+    ],
+    "additionalProperties": false
+  },
   "widgets/form.v1.json": {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "$id": "https://sduikit.dev/schemas/widgets/form.v1.json",
@@ -2185,6 +3000,35 @@ export const schemaFiles: Record<string, unknown> = {
     ],
     "additionalProperties": false
   },
+  "widgets/fractionally_sized_box.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/fractionally_sized_box.v1.json",
+    "title": "fractionally_sized_box (v1) data",
+    "type": "object",
+    "properties": {
+      "widthFactor": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 10
+      },
+      "heightFactor": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 10
+      },
+      "alignment": {
+        "$ref": "../common/layout.json#/$defs/alignment"
+      },
+      "children": {
+        "type": "array",
+        "items": {
+          "$ref": "../common/widget.json"
+        },
+        "maxItems": 1
+      }
+    },
+    "additionalProperties": false
+  },
   "widgets/gallery.v1.json": {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "$id": "https://sduikit.dev/schemas/widgets/gallery.v1.json",
@@ -2246,6 +3090,50 @@ export const schemaFiles: Record<string, unknown> = {
     "required": [
       "columns",
       "items"
+    ],
+    "additionalProperties": false
+  },
+  "widgets/grid_view.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/grid_view.v1.json",
+    "title": "grid_view (v1) data",
+    "type": "object",
+    "properties": {
+      "crossAxisCount": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 12
+      },
+      "mainAxisSpacing": {
+        "$ref": "../common/style.json#/$defs/space"
+      },
+      "crossAxisSpacing": {
+        "$ref": "../common/style.json#/$defs/space"
+      },
+      "childAspectRatio": {
+        "type": "number",
+        "exclusiveMinimum": 0,
+        "maximum": 20
+      },
+      "scrollDirection": {
+        "$ref": "../common/layout.json#/$defs/scrollDirection"
+      },
+      "padding": {
+        "$ref": "../common/style.json#/$defs/sides"
+      },
+      "height": {
+        "$ref": "../common/layout.json#/$defs/size"
+      },
+      "children": {
+        "type": "array",
+        "items": {
+          "$ref": "../common/widget.json"
+        }
+      }
+    },
+    "required": [
+      "crossAxisCount",
+      "children"
     ],
     "additionalProperties": false
   },
@@ -2321,6 +3209,51 @@ export const schemaFiles: Record<string, unknown> = {
     "required": [
       "url"
     ],
+    "additionalProperties": false
+  },
+  "widgets/indexed_stack.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/indexed_stack.v1.json",
+    "title": "indexed_stack (v1) data",
+    "type": "object",
+    "properties": {
+      "index": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 1000
+      },
+      "alignment": {
+        "$ref": "../common/layout.json#/$defs/alignment"
+      },
+      "children": {
+        "type": "array",
+        "items": {
+          "$ref": "../common/widget.json"
+        }
+      }
+    },
+    "required": [
+      "children"
+    ],
+    "additionalProperties": false
+  },
+  "widgets/ink_well.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/ink_well.v1.json",
+    "title": "ink_well (v1) data",
+    "type": "object",
+    "properties": {
+      "borderRadius": {
+        "$ref": "../common/style.json#/$defs/corner"
+      },
+      "children": {
+        "type": "array",
+        "items": {
+          "$ref": "../common/widget.json"
+        },
+        "maxItems": 1
+      }
+    },
     "additionalProperties": false
   },
   "widgets/key_value.v1.json": {
@@ -2407,6 +3340,123 @@ export const schemaFiles: Record<string, unknown> = {
     },
     "required": [
       "title"
+    ],
+    "additionalProperties": false
+  },
+  "widgets/list_view.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/list_view.v1.json",
+    "title": "list_view (v1) data",
+    "type": "object",
+    "properties": {
+      "scrollDirection": {
+        "$ref": "../common/layout.json#/$defs/scrollDirection"
+      },
+      "reverse": {
+        "type": "boolean"
+      },
+      "spacing": {
+        "$ref": "../common/style.json#/$defs/space"
+      },
+      "padding": {
+        "$ref": "../common/style.json#/$defs/sides"
+      },
+      "height": {
+        "$ref": "../common/layout.json#/$defs/size"
+      },
+      "children": {
+        "type": "array",
+        "items": {
+          "$ref": "../common/widget.json"
+        }
+      }
+    },
+    "required": [
+      "children"
+    ],
+    "additionalProperties": false
+  },
+  "widgets/opacity.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/opacity.v1.json",
+    "title": "opacity (v1) data",
+    "type": "object",
+    "properties": {
+      "opacity": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 1
+      },
+      "children": {
+        "type": "array",
+        "items": {
+          "$ref": "../common/widget.json"
+        },
+        "maxItems": 1
+      }
+    },
+    "required": [
+      "opacity"
+    ],
+    "additionalProperties": false
+  },
+  "widgets/padding.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/padding.v1.json",
+    "title": "padding (v1) data",
+    "type": "object",
+    "properties": {
+      "padding": {
+        "$ref": "../common/style.json#/$defs/sides"
+      },
+      "children": {
+        "type": "array",
+        "items": {
+          "$ref": "../common/widget.json"
+        },
+        "maxItems": 1
+      }
+    },
+    "required": [
+      "padding"
+    ],
+    "additionalProperties": false
+  },
+  "widgets/positioned.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/positioned.v1.json",
+    "title": "positioned (v1) data",
+    "type": "object",
+    "properties": {
+      "left": {
+        "$ref": "../common/layout.json#/$defs/number"
+      },
+      "top": {
+        "$ref": "../common/layout.json#/$defs/number"
+      },
+      "right": {
+        "$ref": "../common/layout.json#/$defs/number"
+      },
+      "bottom": {
+        "$ref": "../common/layout.json#/$defs/number"
+      },
+      "width": {
+        "$ref": "../common/layout.json#/$defs/size"
+      },
+      "height": {
+        "$ref": "../common/layout.json#/$defs/size"
+      },
+      "children": {
+        "type": "array",
+        "items": {
+          "$ref": "../common/widget.json"
+        },
+        "minItems": 1,
+        "maxItems": 1
+      }
+    },
+    "required": [
+      "children"
     ],
     "additionalProperties": false
   },
@@ -2608,6 +3658,91 @@ export const schemaFiles: Record<string, unknown> = {
     ],
     "additionalProperties": false
   },
+  "widgets/rotated_box.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/rotated_box.v1.json",
+    "title": "rotated_box (v1) data",
+    "type": "object",
+    "properties": {
+      "quarterTurns": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 3
+      },
+      "children": {
+        "type": "array",
+        "items": {
+          "$ref": "../common/widget.json"
+        },
+        "maxItems": 1
+      }
+    },
+    "required": [
+      "quarterTurns"
+    ],
+    "additionalProperties": false
+  },
+  "widgets/row.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/row.v1.json",
+    "title": "row (v1) data",
+    "type": "object",
+    "properties": {
+      "mainAxisAlignment": {
+        "$ref": "../common/layout.json#/$defs/mainAxisAlignment"
+      },
+      "crossAxisAlignment": {
+        "$ref": "../common/layout.json#/$defs/crossAxisAlignment"
+      },
+      "mainAxisSize": {
+        "enum": [
+          "max",
+          "min"
+        ]
+      },
+      "spacing": {
+        "$ref": "../common/style.json#/$defs/space"
+      },
+      "children": {
+        "type": "array",
+        "items": {
+          "$ref": "../common/widget.json"
+        }
+      }
+    },
+    "required": [
+      "children"
+    ],
+    "additionalProperties": false
+  },
+  "widgets/safe_area.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/safe_area.v1.json",
+    "title": "safe_area (v1) data",
+    "type": "object",
+    "properties": {
+      "top": {
+        "type": "boolean"
+      },
+      "bottom": {
+        "type": "boolean"
+      },
+      "left": {
+        "type": "boolean"
+      },
+      "right": {
+        "type": "boolean"
+      },
+      "children": {
+        "type": "array",
+        "items": {
+          "$ref": "../common/widget.json"
+        },
+        "maxItems": 1
+      }
+    },
+    "additionalProperties": false
+  },
   "widgets/search_bar.v1.json": {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "$id": "https://sduikit.dev/schemas/widgets/search_bar.v1.json",
@@ -2646,6 +3781,57 @@ export const schemaFiles: Record<string, unknown> = {
     ],
     "additionalProperties": false
   },
+  "widgets/single_child_scroll_view.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/single_child_scroll_view.v1.json",
+    "title": "single_child_scroll_view (v1) data",
+    "type": "object",
+    "properties": {
+      "scrollDirection": {
+        "$ref": "../common/layout.json#/$defs/scrollDirection"
+      },
+      "reverse": {
+        "type": "boolean"
+      },
+      "padding": {
+        "$ref": "../common/style.json#/$defs/sides"
+      },
+      "children": {
+        "type": "array",
+        "items": {
+          "$ref": "../common/widget.json"
+        },
+        "minItems": 1,
+        "maxItems": 1
+      }
+    },
+    "required": [
+      "children"
+    ],
+    "additionalProperties": false
+  },
+  "widgets/sized_box.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/sized_box.v1.json",
+    "title": "sized_box (v1) data",
+    "type": "object",
+    "properties": {
+      "width": {
+        "$ref": "../common/style.json#/$defs/length"
+      },
+      "height": {
+        "$ref": "../common/style.json#/$defs/length"
+      },
+      "children": {
+        "type": "array",
+        "items": {
+          "$ref": "../common/widget.json"
+        },
+        "maxItems": 1
+      }
+    },
+    "additionalProperties": false
+  },
   "widgets/spacer.v1.json": {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "$id": "https://sduikit.dev/schemas/widgets/spacer.v1.json",
@@ -2658,6 +3844,42 @@ export const schemaFiles: Record<string, unknown> = {
     },
     "required": [
       "size"
+    ],
+    "additionalProperties": false
+  },
+  "widgets/stack.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/stack.v1.json",
+    "title": "stack (v1) data",
+    "type": "object",
+    "properties": {
+      "alignment": {
+        "$ref": "../common/layout.json#/$defs/alignment"
+      },
+      "fit": {
+        "enum": [
+          "loose",
+          "expand"
+        ]
+      },
+      "clip": {
+        "type": "boolean"
+      },
+      "width": {
+        "$ref": "../common/style.json#/$defs/length"
+      },
+      "height": {
+        "$ref": "../common/style.json#/$defs/length"
+      },
+      "children": {
+        "type": "array",
+        "items": {
+          "$ref": "../common/widget.json"
+        }
+      }
+    },
+    "required": [
+      "children"
     ],
     "additionalProperties": false
   },
@@ -2822,6 +4044,54 @@ export const schemaFiles: Record<string, unknown> = {
     ],
     "additionalProperties": false
   },
+  "widgets/transform.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/transform.v1.json",
+    "title": "transform (v1) data",
+    "type": "object",
+    "properties": {
+      "rotate": {
+        "type": "number",
+        "minimum": -360,
+        "maximum": 360
+      },
+      "scale": {
+        "type": "number",
+        "minimum": -20,
+        "maximum": 20
+      },
+      "scaleX": {
+        "type": "number",
+        "minimum": -20,
+        "maximum": 20
+      },
+      "scaleY": {
+        "type": "number",
+        "minimum": -20,
+        "maximum": 20
+      },
+      "translateX": {
+        "$ref": "../common/layout.json#/$defs/number"
+      },
+      "translateY": {
+        "$ref": "../common/layout.json#/$defs/number"
+      },
+      "flipX": {
+        "type": "boolean"
+      },
+      "alignment": {
+        "$ref": "../common/layout.json#/$defs/alignment"
+      },
+      "children": {
+        "type": "array",
+        "items": {
+          "$ref": "../common/widget.json"
+        },
+        "maxItems": 1
+      }
+    },
+    "additionalProperties": false
+  },
   "widgets/video_card.v1.json": {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "$id": "https://sduikit.dev/schemas/widgets/video_card.v1.json",
@@ -2841,6 +4111,85 @@ export const schemaFiles: Record<string, unknown> = {
     },
     "required": [
       "thumbnailUrl"
+    ],
+    "additionalProperties": false
+  },
+  "widgets/visibility.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/visibility.v1.json",
+    "title": "visibility (v1) data",
+    "type": "object",
+    "properties": {
+      "visible": {
+        "type": "boolean"
+      },
+      "maintainSpace": {
+        "type": "boolean"
+      },
+      "children": {
+        "type": "array",
+        "items": {
+          "$ref": "../common/widget.json"
+        },
+        "maxItems": 1
+      }
+    },
+    "required": [
+      "visible"
+    ],
+    "additionalProperties": false
+  },
+  "widgets/wrap.v1.json": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://sduikit.dev/schemas/widgets/wrap.v1.json",
+    "title": "wrap (v1) data",
+    "type": "object",
+    "properties": {
+      "direction": {
+        "$ref": "../common/layout.json#/$defs/scrollDirection"
+      },
+      "alignment": {
+        "enum": [
+          "start",
+          "end",
+          "center",
+          "spaceBetween",
+          "spaceAround",
+          "spaceEvenly"
+        ]
+      },
+      "runAlignment": {
+        "enum": [
+          "start",
+          "end",
+          "center",
+          "spaceBetween",
+          "spaceAround",
+          "spaceEvenly"
+        ]
+      },
+      "crossAxisAlignment": {
+        "enum": [
+          "start",
+          "end",
+          "center"
+        ]
+      },
+      "spacing": {
+        "$ref": "../common/style.json#/$defs/space"
+      },
+      "runSpacing": {
+        "$ref": "../common/style.json#/$defs/space"
+      },
+      "children": {
+        "type": "array",
+        "items": {
+          "$ref": "../common/widget.json"
+        }
+      }
+    },
+    "required": [
+      "children"
     ],
     "additionalProperties": false
   }

@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sduikit.dev/schemas/widgets/list_view.v1.json",
+  "title": "list_view (v1) data",
+  "type": "object",
+  "properties": {
+    "scrollDirection": {
+      "$ref": "../common/layout.json#/$defs/scrollDirection"
+    },
+    "reverse": {
+      "type": "boolean"
+    },
+    "spacing": {
+      "$ref": "../common/style.json#/$defs/space"
+    },
+    "padding": {
+      "$ref": "../common/style.json#/$defs/sides"
+    },
+    "height": {
+      "$ref": "../common/layout.json#/$defs/size"
+    },
+    "children": {
+      "type": "array",
+      "items": {
+        "$ref": "../common/widget.json"
+      }
+    }
+  },
+  "required": [
+    "children"
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,923 @@
+{
+  "schema": 1,
+  "id": "blocks",
+  "revision": "1",
+  "sections": [
+    {
+      "id": "layout",
+      "title": "Layout building blocks",
+      "widgets": [
+        {
+          "id": "b_row",
+          "type": "row",
+          "v": 1,
+          "data": {
+            "mainAxisAlignment": "spaceBetween",
+            "crossAxisAlignment": "center",
+            "spacing": 8,
+            "children": [
+              {
+                "id": "b_text_left",
+                "type": "text",
+                "v": 1,
+                "data": {
+                  "text": "Left"
+                }
+              },
+              {
+                "id": "b_expanded",
+                "type": "expanded",
+                "v": 1,
+                "data": {
+                  "flex": 2,
+                  "children": [
+                    {
+                      "id": "b_text_takes_the_rest",
+                      "type": "text",
+                      "v": 1,
+                      "data": {
+                        "text": "Takes the rest"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "b_flexible",
+                "type": "flexible",
+                "v": 1,
+                "data": {
+                  "fit": "loose",
+                  "children": [
+                    {
+                      "id": "b_text_right",
+                      "type": "text",
+                      "v": 1,
+                      "data": {
+                        "text": "Right"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "b_column",
+          "type": "column",
+          "v": 1,
+          "data": {
+            "crossAxisAlignment": "stretch",
+            "spacing": "sm",
+            "children": [
+              {
+                "id": "b_text_stretched_one",
+                "type": "text",
+                "v": 1,
+                "data": {
+                  "text": "Stretched one"
+                }
+              },
+              {
+                "id": "b_text_stretched_two",
+                "type": "text",
+                "v": 1,
+                "data": {
+                  "text": "Stretched two"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "b_stack",
+          "type": "stack",
+          "v": 1,
+          "data": {
+            "alignment": "bottomLeft",
+            "height": 180,
+            "width": "fill",
+            "children": [
+              {
+                "id": "b_stack_photo",
+                "type": "image",
+                "v": 1,
+                "data": {
+                  "url": "https://picsum.photos/seed/stack/600/400",
+                  "alt": "stack",
+                  "aspectRatio": 1.5,
+                  "fit": "cover"
+                }
+              },
+              {
+                "id": "b_positioned",
+                "type": "positioned",
+                "v": 1,
+                "data": {
+                  "left": 12,
+                  "bottom": 12,
+                  "children": [
+                    {
+                      "id": "b_badge",
+                      "type": "badge",
+                      "v": 1,
+                      "data": {
+                        "label": "Positioned",
+                        "tone": "success"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "b_positioned",
+                "type": "positioned",
+                "v": 1,
+                "data": {
+                  "top": 8,
+                  "right": 8,
+                  "children": [
+                    {
+                      "id": "b_icon",
+                      "type": "icon",
+                      "v": 1,
+                      "data": {
+                        "name": "star",
+                        "size": "large"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "b_padding",
+          "type": "padding",
+          "v": 1,
+          "data": {
+            "padding": {
+              "top": 4,
+              "left": 24,
+              "right": 8,
+              "bottom": 4
+            },
+            "children": [
+              {
+                "id": "b_text_padding_with_a_different_amount_on_each_side",
+                "type": "text",
+                "v": 1,
+                "data": {
+                  "text": "Padding with a different amount on each side"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "b_align",
+          "type": "align",
+          "v": 1,
+          "data": {
+            "alignment": "centerRight",
+            "children": [
+              {
+                "id": "b_text_aligned_to_the_right",
+                "type": "text",
+                "v": 1,
+                "data": {
+                  "text": "Aligned to the right"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "b_center",
+          "type": "center",
+          "v": 1,
+          "data": {
+            "children": [
+              {
+                "id": "b_text_centered",
+                "type": "text",
+                "v": 1,
+                "data": {
+                  "text": "Centered"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "b_sized_box",
+          "type": "sized_box",
+          "v": 1,
+          "data": {
+            "width": 160,
+            "height": 48,
+            "children": [
+              {
+                "id": "b_button",
+                "type": "button",
+                "v": 1,
+                "data": {
+                  "label": "160 x 48"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "b_aspect_ratio",
+          "type": "aspect_ratio",
+          "v": 1,
+          "data": {
+            "aspectRatio": 2,
+            "children": [
+              {
+                "id": "b_ratio_photo",
+                "type": "image",
+                "v": 1,
+                "data": {
+                  "url": "https://picsum.photos/seed/ratio/600/400",
+                  "alt": "ratio",
+                  "aspectRatio": 1.5,
+                  "fit": "cover"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "b_fractionally_sized_box",
+          "type": "fractionally_sized_box",
+          "v": 1,
+          "data": {
+            "widthFactor": 0.5,
+            "alignment": "center",
+            "children": [
+              {
+                "id": "b_button",
+                "type": "button",
+                "v": 1,
+                "data": {
+                  "label": "Half width",
+                  "variant": "outline"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "b_constrained_box",
+          "type": "constrained_box",
+          "v": 1,
+          "data": {
+            "maxWidth": 220,
+            "children": [
+              {
+                "id": "b_text_this_text_never_gets_wider_than_220_pixels_however_wide_the_screen_is_so_it_wraps_onto_more_lines_",
+                "type": "text",
+                "v": 1,
+                "data": {
+                  "text": "This text never gets wider than 220 pixels, however wide the screen is, so it wraps onto more lines."
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "b_fitted_box",
+          "type": "fitted_box",
+          "v": 1,
+          "data": {
+            "fit": "scaleDown",
+            "children": [
+              {
+                "id": "b_text_scaled_down_to_fit",
+                "type": "text",
+                "v": 1,
+                "data": {
+                  "text": "Scaled down to fit"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "b_wrap",
+          "type": "wrap",
+          "v": 1,
+          "data": {
+            "spacing": 8,
+            "runSpacing": 8,
+            "children": [
+              {
+                "id": "b_badge_one",
+                "type": "badge",
+                "v": 1,
+                "data": {
+                  "label": "One",
+                  "tone": "neutral"
+                }
+              },
+              {
+                "id": "b_badge_two",
+                "type": "badge",
+                "v": 1,
+                "data": {
+                  "label": "Two",
+                  "tone": "neutral"
+                }
+              },
+              {
+                "id": "b_badge_three",
+                "type": "badge",
+                "v": 1,
+                "data": {
+                  "label": "Three",
+                  "tone": "neutral"
+                }
+              },
+              {
+                "id": "b_badge_four",
+                "type": "badge",
+                "v": 1,
+                "data": {
+                  "label": "Four",
+                  "tone": "neutral"
+                }
+              },
+              {
+                "id": "b_badge_five",
+                "type": "badge",
+                "v": 1,
+                "data": {
+                  "label": "Five",
+                  "tone": "neutral"
+                }
+              },
+              {
+                "id": "b_badge_six",
+                "type": "badge",
+                "v": 1,
+                "data": {
+                  "label": "Six",
+                  "tone": "neutral"
+                }
+              },
+              {
+                "id": "b_badge_seven",
+                "type": "badge",
+                "v": 1,
+                "data": {
+                  "label": "Seven",
+                  "tone": "neutral"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "b_single_child_scroll_view",
+          "type": "single_child_scroll_view",
+          "v": 1,
+          "data": {
+            "scrollDirection": "horizontal",
+            "children": [
+              {
+                "id": "b_row_scroll",
+                "type": "row",
+                "v": 1,
+                "data": {
+                  "spacing": 8,
+                  "children": [
+                    {
+                      "id": "b_button_a",
+                      "type": "button",
+                      "v": 1,
+                      "data": {
+                        "label": "Button A",
+                        "variant": "outline"
+                      }
+                    },
+                    {
+                      "id": "b_button_b",
+                      "type": "button",
+                      "v": 1,
+                      "data": {
+                        "label": "Button B",
+                        "variant": "outline"
+                      }
+                    },
+                    {
+                      "id": "b_button_c",
+                      "type": "button",
+                      "v": 1,
+                      "data": {
+                        "label": "Button C",
+                        "variant": "outline"
+                      }
+                    },
+                    {
+                      "id": "b_button_d",
+                      "type": "button",
+                      "v": 1,
+                      "data": {
+                        "label": "Button D",
+                        "variant": "outline"
+                      }
+                    },
+                    {
+                      "id": "b_button_e",
+                      "type": "button",
+                      "v": 1,
+                      "data": {
+                        "label": "Button E",
+                        "variant": "outline"
+                      }
+                    },
+                    {
+                      "id": "b_button_f",
+                      "type": "button",
+                      "v": 1,
+                      "data": {
+                        "label": "Button F",
+                        "variant": "outline"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "b_list_view",
+          "type": "list_view",
+          "v": 1,
+          "data": {
+            "height": 120,
+            "spacing": 4,
+            "children": [
+              {
+                "id": "b_list_item_first",
+                "type": "list_item",
+                "v": 1,
+                "data": {
+                  "title": "First row",
+                  "chevron": true
+                }
+              },
+              {
+                "id": "b_list_item_second",
+                "type": "list_item",
+                "v": 1,
+                "data": {
+                  "title": "Second row",
+                  "chevron": true
+                }
+              },
+              {
+                "id": "b_list_item_third",
+                "type": "list_item",
+                "v": 1,
+                "data": {
+                  "title": "Third row",
+                  "chevron": true
+                }
+              },
+              {
+                "id": "b_list_item_fourth",
+                "type": "list_item",
+                "v": 1,
+                "data": {
+                  "title": "Fourth row",
+                  "chevron": true
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "b_grid_view",
+          "type": "grid_view",
+          "v": 1,
+          "data": {
+            "crossAxisCount": 3,
+            "mainAxisSpacing": 8,
+            "crossAxisSpacing": 8,
+            "children": [
+              {
+                "id": "b_grid_g1",
+                "type": "image",
+                "v": 1,
+                "data": {
+                  "url": "https://picsum.photos/seed/g1/600/400",
+                  "alt": "g1",
+                  "aspectRatio": 1.5,
+                  "fit": "cover"
+                }
+              },
+              {
+                "id": "b_grid_g2",
+                "type": "image",
+                "v": 1,
+                "data": {
+                  "url": "https://picsum.photos/seed/g2/600/400",
+                  "alt": "g2",
+                  "aspectRatio": 1.5,
+                  "fit": "cover"
+                }
+              },
+              {
+                "id": "b_grid_g3",
+                "type": "image",
+                "v": 1,
+                "data": {
+                  "url": "https://picsum.photos/seed/g3/600/400",
+                  "alt": "g3",
+                  "aspectRatio": 1.5,
+                  "fit": "cover"
+                }
+              },
+              {
+                "id": "b_grid_g4",
+                "type": "image",
+                "v": 1,
+                "data": {
+                  "url": "https://picsum.photos/seed/g4/600/400",
+                  "alt": "g4",
+                  "aspectRatio": 1.5,
+                  "fit": "cover"
+                }
+              },
+              {
+                "id": "b_grid_g5",
+                "type": "image",
+                "v": 1,
+                "data": {
+                  "url": "https://picsum.photos/seed/g5/600/400",
+                  "alt": "g5",
+                  "aspectRatio": 1.5,
+                  "fit": "cover"
+                }
+              },
+              {
+                "id": "b_grid_g6",
+                "type": "image",
+                "v": 1,
+                "data": {
+                  "url": "https://picsum.photos/seed/g6/600/400",
+                  "alt": "g6",
+                  "aspectRatio": 1.5,
+                  "fit": "cover"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "b_indexed_stack",
+          "type": "indexed_stack",
+          "v": 1,
+          "data": {
+            "index": 1,
+            "children": [
+              {
+                "id": "b_text_hidden_index_0__hidden",
+                "type": "text",
+                "v": 1,
+                "data": {
+                  "text": "Hidden (index 0)"
+                }
+              },
+              {
+                "id": "b_text_shown_index_1__shown",
+                "type": "text",
+                "v": 1,
+                "data": {
+                  "text": "Shown (index 1)"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "effects",
+      "title": "Effects and decoration",
+      "widgets": [
+        {
+          "id": "b_opacity",
+          "type": "opacity",
+          "v": 1,
+          "data": {
+            "opacity": 0.4,
+            "children": [
+              {
+                "id": "b_text_faded_to_40_",
+                "type": "text",
+                "v": 1,
+                "data": {
+                  "text": "Faded to 40%"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "b_transform",
+          "type": "transform",
+          "v": 1,
+          "data": {
+            "rotate": -6,
+            "scale": 1.05,
+            "alignment": "center",
+            "children": [
+              {
+                "id": "b_badge",
+                "type": "badge",
+                "v": 1,
+                "data": {
+                  "label": "Tilted",
+                  "tone": "warning"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "b_rotated_box",
+          "type": "rotated_box",
+          "v": 1,
+          "data": {
+            "quarterTurns": 1,
+            "children": [
+              {
+                "id": "b_text_turned_a_quarter",
+                "type": "text",
+                "v": 1,
+                "data": {
+                  "text": "Turned a quarter"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "b_clip",
+          "type": "clip",
+          "v": 1,
+          "data": {
+            "shape": "oval",
+            "children": [
+              {
+                "id": "b_sized_box",
+                "type": "sized_box",
+                "v": 1,
+                "data": {
+                  "width": 120,
+                  "height": 120,
+                  "children": [
+                    {
+                      "id": "b_clip_photo",
+                      "type": "image",
+                      "v": 1,
+                      "data": {
+                        "url": "https://picsum.photos/seed/clip/600/400",
+                        "alt": "clip",
+                        "aspectRatio": 1.5,
+                        "fit": "cover"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "b_box",
+          "type": "box",
+          "v": 1,
+          "data": {
+            "alignment": "center",
+            "height": 120,
+            "padding": {
+              "top": 16,
+              "bottom": 16,
+              "left": 20,
+              "right": 20
+            },
+            "margin": {
+              "top": 4,
+              "bottom": 4
+            },
+            "gradient": {
+              "colors": [
+                "#0B6E4F",
+                "#3B82F6"
+              ],
+              "begin": "topLeft",
+              "end": "bottomRight"
+            },
+            "borderRadius": 16,
+            "shadows": [
+              {
+                "color": "#00000040",
+                "offsetY": 6,
+                "blur": 16
+              }
+            ],
+            "children": [
+              {
+                "id": "b_text_a_box_with_a_gradient_rounded_corners_and_a_shadow_in_box",
+                "type": "text",
+                "v": 1,
+                "data": {
+                  "text": "A box with a gradient, rounded corners and a shadow"
+                },
+                "style": {
+                  "textColor": "#FFFFFF",
+                  "fontWeight": "bold",
+                  "align": "center"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "b_box_circle",
+          "type": "box",
+          "v": 1,
+          "data": {
+            "shape": "circle",
+            "width": 72,
+            "height": 72,
+            "color": "#FF8800",
+            "borderWidth": 3,
+            "borderColor": "#111827",
+            "alignment": "center",
+            "children": [
+              {
+                "id": "b_text_ok_in_circle",
+                "type": "text",
+                "v": 1,
+                "data": {
+                  "text": "OK"
+                },
+                "style": {
+                  "textColor": "#FFFFFF",
+                  "fontWeight": "bold"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "b_visibility",
+          "type": "visibility",
+          "v": 1,
+          "data": {
+            "visible": true,
+            "children": [
+              {
+                "id": "b_text_visible_vis",
+                "type": "text",
+                "v": 1,
+                "data": {
+                  "text": "Visible"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "b_stack_blur",
+          "type": "stack",
+          "v": 1,
+          "data": {
+            "height": 140,
+            "children": [
+              {
+                "id": "b_blur_photo",
+                "type": "image",
+                "v": 1,
+                "data": {
+                  "url": "https://picsum.photos/seed/blur/600/400",
+                  "alt": "blur",
+                  "aspectRatio": 1.5,
+                  "fit": "cover"
+                }
+              },
+              {
+                "id": "b_positioned",
+                "type": "positioned",
+                "v": 1,
+                "data": {
+                  "left": 0,
+                  "right": 0,
+                  "bottom": 0,
+                  "height": 56,
+                  "children": [
+                    {
+                      "id": "b_backdrop_blur",
+                      "type": "backdrop_blur",
+                      "v": 1,
+                      "data": {
+                        "sigma": 8,
+                        "children": [
+                          {
+                            "id": "b_center_blur_center",
+                            "type": "center",
+                            "v": 1,
+                            "data": {
+                              "children": [
+                                {
+                                  "id": "b_text_frosted_glass_frost",
+                                  "type": "text",
+                                  "v": 1,
+                                  "data": {
+                                    "text": "Frosted glass"
+                                  },
+                                  "style": {
+                                    "textColor": "#FFFFFF"
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "b_ink_well",
+          "type": "ink_well",
+          "v": 1,
+          "data": {
+            "borderRadius": "md",
+            "children": [
+              {
+                "id": "b_padding",
+                "type": "padding",
+                "v": 1,
+                "data": {
+                  "padding": {
+                    "top": 12,
+                    "bottom": 12,
+                    "left": 12,
+                    "right": 12
+                  },
+                  "children": [
+                    {
+                      "id": "b_text_tap_me_ripple__ink",
+                      "type": "text",
+                      "v": 1,
+                      "data": {
+                        "text": "Tap me (ripple)"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          "action": {
+            "type": "open_url",
+            "url": "https://example.com",
+            "external": true
+          }
+        },
+        {
+          "id": "b_safe_area",
+          "type": "safe_area",
+          "v": 1,
+          "data": {
+            "top": false,
+            "children": [
+              {
+                "id": "b_text_kept_clear_of_the_home_bar_safe",
+                "type": "text",
+                "v": 1,
+                "data": {
+                  "text": "Kept clear of the home bar"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

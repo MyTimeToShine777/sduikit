@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sduikit.dev/schemas/widgets/ink_well.v1.json",
+  "title": "ink_well (v1) data",
+  "type": "object",
+  "properties": {
+    "borderRadius": {
+      "$ref": "../common/style.json#/$defs/corner"
+    },
+    "children": {
+      "type": "array",
+      "items": {
+        "$ref": "../common/widget.json"
+      },
+      "maxItems": 1
+    }
+  },
+  "additionalProperties": false
+}

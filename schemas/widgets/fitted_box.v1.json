@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sduikit.dev/schemas/widgets/fitted_box.v1.json",
+  "title": "fitted_box (v1) data",
+  "type": "object",
+  "properties": {
+    "fit": {
+      "$ref": "../common/layout.json#/$defs/boxFit"
+    },
+    "alignment": {
+      "$ref": "../common/layout.json#/$defs/alignment"
+    },
+    "children": {
+      "type": "array",
+      "items": {
+        "$ref": "../common/widget.json"
+      },
+      "maxItems": 1
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sduikit.dev/schemas/widgets/box.v1.json",
+  "title": "box (v1) data",
+  "type": "object",
+  "properties": {
+    "alignment": {
+      "$ref": "../common/layout.json#/$defs/alignment"
+    },
+    "width": {
+      "$ref": "../common/style.json#/$defs/length"
+    },
+    "height": {
+      "$ref": "../common/style.json#/$defs/length"
+    },
+    "padding": {
+      "$ref": "../common/style.json#/$defs/sides"
+    },
+    "margin": {
+      "$ref": "../common/style.json#/$defs/sides"
+    },
+    "color": {
+      "$ref": "../common/style.json#/$defs/colour"
+    },
+    "gradient": {
+      "$ref": "../common/layout.json#/$defs/gradient"
+    },
+    "borderRadius": {
+      "$ref": "../common/style.json#/$defs/corner"
+    },
+    "borderWidth": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 20
+    },
+    "borderColor": {
+      "$ref": "../common/style.json#/$defs/colour"
+    },
+    "shape": {
+      "enum": [
+        "rectangle",
+        "circle"
+      ]
+    },
+    "shadows": {
+      "type": "array",
+      "items": {
+        "$ref": "../common/layout.json#/$defs/shadow"
+      },
+      "maxItems": 6
+    },
+    "backgroundImageUrl": {
+      "type": "string",
+      "format": "uri"
+    },
+    "backgroundFit": {
+      "$ref": "../common/layout.json#/$defs/boxFit"
+    },
+    "children": {
+      "type": "array",
+      "items": {
+        "$ref": "../common/widget.json"
+      },
+      "maxItems": 1
+    }
+  },
+  "additionalProperties": false
+}

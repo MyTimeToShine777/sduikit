@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sduikit.dev/schemas/widgets/wrap.v1.json",
+  "title": "wrap (v1) data",
+  "type": "object",
+  "properties": {
+    "direction": {
+      "$ref": "../common/layout.json#/$defs/scrollDirection"
+    },
+    "alignment": {
+      "enum": [
+        "start",
+        "end",
+        "center",
+        "spaceBetween",
+        "spaceAround",
+        "spaceEvenly"
+      ]
+    },
+    "runAlignment": {
+      "enum": [
+        "start",
+        "end",
+        "center",
+        "spaceBetween",
+        "spaceAround",
+        "spaceEvenly"
+      ]
+    },
+    "crossAxisAlignment": {
+      "enum": [
+        "start",
+        "end",
+        "center"
+      ]
+    },
+    "spacing": {
+      "$ref": "../common/style.json#/$defs/space"
+    },
+    "runSpacing": {
+      "$ref": "../common/style.json#/$defs/space"
+    },
+    "children": {
+      "type": "array",
+      "items": {
+        "$ref": "../common/widget.json"
+      }
+    }
+  },
+  "required": [
+    "children"
+  ],
+  "additionalProperties": false
+}

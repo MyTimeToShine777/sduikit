@@ -32,9 +32,9 @@ describe("sampleWidget: every widget starts out valid", () => {
   const listings = listWidgets();
 
   it("lists all the built-in widgets, grouped and described", () => {
-    expect(listings).toHaveLength(38);
+    expect(listings).toHaveLength(66);
     expect(new Set(listings.map((entry) => entry.group))).toEqual(
-      new Set(["Basics", "Layout", "Media", "Content", "Interactive", "Live data"]),
+      new Set(["Basics", "Layout", "Media", "Content", "Interactive", "Live data", "Building blocks"]),
     );
     expect(listings.every((entry) => entry.description.length > 5)).toBe(true);
   });

@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sduikit.dev/schemas/widgets/visibility.v1.json",
+  "title": "visibility (v1) data",
+  "type": "object",
+  "properties": {
+    "visible": {
+      "type": "boolean"
+    },
+    "maintainSpace": {
+      "type": "boolean"
+    },
+    "children": {
+      "type": "array",
+      "items": {
+        "$ref": "../common/widget.json"
+      },
+      "maxItems": 1
+    }
+  },
+  "required": [
+    "visible"
+  ],
+  "additionalProperties": false
+}

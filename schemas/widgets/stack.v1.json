@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sduikit.dev/schemas/widgets/stack.v1.json",
+  "title": "stack (v1) data",
+  "type": "object",
+  "properties": {
+    "alignment": {
+      "$ref": "../common/layout.json#/$defs/alignment"
+    },
+    "fit": {
+      "enum": [
+        "loose",
+        "expand"
+      ]
+    },
+    "clip": {
+      "type": "boolean"
+    },
+    "width": {
+      "$ref": "../common/style.json#/$defs/length"
+    },
+    "height": {
+      "$ref": "../common/style.json#/$defs/length"
+    },
+    "children": {
+      "type": "array",
+      "items": {
+        "$ref": "../common/widget.json"
+      }
+    }
+  },
+  "required": [
+    "children"
+  ],
+  "additionalProperties": false
+}

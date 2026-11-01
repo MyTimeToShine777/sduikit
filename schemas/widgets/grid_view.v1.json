@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sduikit.dev/schemas/widgets/grid_view.v1.json",
+  "title": "grid_view (v1) data",
+  "type": "object",
+  "properties": {
+    "crossAxisCount": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 12
+    },
+    "mainAxisSpacing": {
+      "$ref": "../common/style.json#/$defs/space"
+    },
+    "crossAxisSpacing": {
+      "$ref": "../common/style.json#/$defs/space"
+    },
+    "childAspectRatio": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "maximum": 20
+    },
+    "scrollDirection": {
+      "$ref": "../common/layout.json#/$defs/scrollDirection"
+    },
+    "padding": {
+      "$ref": "../common/style.json#/$defs/sides"
+    },
+    "height": {
+      "$ref": "../common/layout.json#/$defs/size"
+    },
+    "children": {
+      "type": "array",
+      "items": {
+        "$ref": "../common/widget.json"
+      }
+    }
+  },
+  "required": [
+    "crossAxisCount",
+    "children"
+  ],
+  "additionalProperties": false
+}
