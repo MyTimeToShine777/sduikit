@@ -233,8 +233,9 @@ describe("what a dashboard needs", () => {
   });
 
   it("answers the browser's permission check so a dashboard on another address can call it", async () => {
-    const response = await fetch(`${base}/admin/pages`, { method: "OPTIONS" });
+    const response = await fetch(`${base}/admin/pages`, { method: "OPTIONS", headers: { "access-control-request-headers": "authorization, x-currency" } });
     assert.equal(response.status, 204);
+    assert.equal(response.headers.get("access-control-allow-headers"), "authorization, x-currency"); // any header the browser asks for
     assert.equal(response.headers.get("access-control-allow-origin"), "*");
     assert.match(response.headers.get("access-control-allow-methods"), /PUT/);
   });

@@ -7,6 +7,11 @@ and the packages use [semantic versioning](https://semver.org/). The format itse
 
 ## [Unreleased]
 
+### Added (exact preview)
+- Flutter: `SduiContent` draws a page or screen that is already in hand (no loading), and `examples/preview`
+  is a Flutter web page a dashboard can show in a frame to preview a page exactly like the app draws it.
+- Example server accepts whatever extra headers a dashboard sends (CORS).
+
 ### Added (38 widgets in total, live data, drafts and a saved copy)
 - 26 more widgets: `data_list`, `form`, `rich_text`, `quote`, `icon`, `avatar`, `badge`, `alert`,
   `progress`, `stat`, `key_value`, `list_item`, `empty_state`, `steps`, `accordion`, `table`,

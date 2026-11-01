@@ -2,3 +2,8 @@ node_modules/
 dist/
 coverage/
 *.log
+
+# Test browser output (screenshots, notes)
+.playwright-mcp/
+dash-*.png
+*.screenshot.png

@@ -1,0 +1,19 @@
+name: sduikit_preview
+description: A Flutter web page that draws a sduikit page exactly like the app does. A dashboard shows it inside a phone-sized frame.
+publish_to: none
+version: 0.1.0
+
+environment:
+  sdk: ^3.9.0
+  flutter: ">=3.35.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  sduikit:
+    path: ../../packages/flutter
+  web: ^1.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter

@@ -104,6 +104,25 @@ class _SduiViewState extends State<SduiView> {
   }
 
   Widget _content(BuildContext context, Map<String, dynamic> document) {
+    if (SduiContent.canDraw(document)) return SduiContent(document: document, render: widget.render);
+    widget.render.onError?.call(const FormatException('The document has neither "sections" nor "root".'), null);
+    return _RetryView(onRetry: _retry);
+  }
+}
+
+/// Draws a page or screen that is already in hand, with no loading, saved copy or retry.
+/// [SduiView] uses it once it has a document; a preview (for example inside a dashboard) uses it directly.
+class SduiContent extends StatelessWidget {
+  const SduiContent({super.key, required this.document, required this.render});
+
+  final Map<String, dynamic> document;
+  final SduiRender render;
+
+  /// Whether this is a page (has "sections") or a screen (has "root").
+  static bool canDraw(Map<String, dynamic> document) => document['sections'] is List || document['root'] != null;
+
+  @override
+  Widget build(BuildContext context) {
     final sections = document['sections'];
     if (sections is List) {
       final children = <Widget>[];
@@ -117,16 +136,14 @@ class _SduiViewState extends State<SduiView> {
             child: Text(title, style: Theme.of(context).textTheme.titleLarge),
           ));
         }
-        if (widgets is List) children.addAll(widget.render.children(context, widgets));
+        if (widgets is List) children.addAll(render.children(context, widgets));
       }
       return SingleChildScrollView(
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: children),
       );
     }
-    if (document['root'] != null) return buildBlock(context, widget.render, document['root']);
-
-    widget.render.onError?.call(const FormatException('The document has neither "sections" nor "root".'), null);
-    return _RetryView(onRetry: _retry);
+    if (document['root'] != null) return buildBlock(context, render, document['root']);
+    return const SizedBox.shrink();
   }
 }
 

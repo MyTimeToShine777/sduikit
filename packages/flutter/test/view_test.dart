@@ -125,6 +125,26 @@ void main() {
     expect(find.text('Welcome'), findsNothing);
   });
 
+  group('SduiContent (draws a page that is already in hand, for previews)', () {
+    testWidgets('draws a page at once, with no loading and no client', (tester) async {
+      await tester.pumpWidget(host(SduiContent(document: pageWith([textWidget('t', 'Right here')]), render: makeRender(Reports()))));
+      expect(find.text('Right here'), findsOneWidget);
+      expect(find.byKey(const Key('sdui-skeleton')), findsNothing);
+    });
+
+    testWidgets('draws a screen made of blocks', (tester) async {
+      final screen = {'schema': 1, 'id': 's', 'revision': '1', 'root': {'block': 'text', 'text': 'A block'}};
+      await tester.pumpWidget(host(SduiContent(document: screen, render: makeRender(Reports()))));
+      expect(find.text('A block'), findsOneWidget);
+    });
+
+    test('canDraw tells pages and screens from anything else', () {
+      expect(SduiContent.canDraw({'sections': []}), isTrue);
+      expect(SduiContent.canDraw({'root': {'block': 'text'}}), isTrue);
+      expect(SduiContent.canDraw({'schema': 1}), isFalse);
+    });
+  });
+
   testWidgets('a document with neither sections nor root is reported and shows the retry screen', (tester) async {
     final reports = Reports();
     await tester.pumpWidget(viewHost(FakeClient(() async => {'schema': 1}), makeRender(reports)));

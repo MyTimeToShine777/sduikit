@@ -233,7 +233,8 @@ export function createExampleServer({ adminToken, dataFile } = {}) {
   return createServer((request, response) => {
     // Lets a dashboard running on another address (for example localhost:3000) call this server.
     response.setHeader("access-control-allow-origin", "*");
-    response.setHeader("access-control-allow-headers", "content-type, authorization");
+    // Allow whatever extra headers the dashboard sends (many dashboards add their own to every request).
+    response.setHeader("access-control-allow-headers", request.headers["access-control-request-headers"] ?? "content-type, authorization");
     response.setHeader("access-control-allow-methods", "GET, POST, PUT, DELETE, OPTIONS");
     if (request.method === "OPTIONS") {
       response.writeHead(204);

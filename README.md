@@ -33,8 +33,11 @@ It is open source (MIT) and made for any app, not for one company.
 3. **The drawing code** (`sduikit` for Flutter): turns the JSON into real widgets. A broken or
    unknown widget is skipped (or replaced by its fallback) and reported; the rest of the page still
    draws. It keeps the last good copy so the app works offline.
-4. **Dashboard pieces** (`sduikit/vue`): an edit form for any widget, a preview, and helpers for
+4. **Dashboard pieces** (`sduikit/vue`): an edit form for any widget, a quick preview, and helpers for
    drag-and-drop. A complete example dashboard screen lives in the Medivoy internal dashboard.
+   The quick preview is an HTML imitation. For a preview that is **exactly** what people see on their
+   phones, build [`examples/preview`](examples/preview): a Flutter web page that uses the same package
+   as the app, shown by the dashboard in a phone-sized frame.
 
 | Part | Where | Status |
 |---|---|---|
@@ -44,6 +47,7 @@ It is open source (MIT) and made for any app, not for one company.
 | Flutter package | [`packages/flutter`](packages/flutter) | Written, **tests not run yet** |
 | Example server | [`examples/server`](examples/server) | Built, 26 tests pass |
 | Example Flutter app | [`examples/app`](examples/app) | Written, not run |
+| **Exact phone preview** for dashboards | [`examples/preview`](examples/preview) | Written, **not built yet** (needs a Flutter SDK) |
 
 ---
 
@@ -285,6 +289,7 @@ packages/js/         npm package "sduikit" (+ "sduikit/vue")
 packages/flutter/    Flutter package "sduikit"
 examples/server/     example server with drafts, publish, history, rollback
 examples/app/        example Flutter app
+examples/preview/    Flutter web page for an exact preview inside a dashboard
 docs/widgets.md      widget reference (generated)
 docs/superpowers/    design document and implementation plans
 ```
@@ -307,6 +312,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for how to add a widget, and [CHANGELOG.m
 
 * Maps and in-app video playback (the `video_card` hands the video to your app). These need native
   plugins, so the plan is separate add-on packages.
+* The exact phone preview has not been built or tried (it needs a Flutter SDK); dashboards fall back to the quick HTML preview and say so.
 * A ready-made dashboard product. The pieces exist and a complete screen is in the Medivoy internal
   dashboard; a standalone admin app is for each team to build.
 * A database and staff login in the example server (it has a token and a saved file only).
