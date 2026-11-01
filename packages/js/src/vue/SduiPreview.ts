@@ -34,11 +34,18 @@ const iconSymbol = (name: unknown) => (typeof name === "string" ? ICON_SYMBOLS[n
 // ── Look: written once, used by every widget. Sizes follow Flutter's Material 3 defaults so the preview
 // looks like the app. The app's own colours, fonts and sizes come in as --sp-* variables. ──
 const CSS = `
-.sp-root{font-family:var(--sp-font);font-size:14px;line-height:1.4;background:var(--sp-bg);color:var(--sp-on-bg);min-height:100%;box-sizing:border-box;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+.sp-root{font-family:var(--sp-font);font-size:14px;font-weight:400;line-height:1.4;letter-spacing:normal;text-align:start;text-transform:none;background:var(--sp-bg);color:var(--sp-on-bg);min-height:100%;box-sizing:border-box;-webkit-font-smoothing:antialiased;overflow-x:clip}
 .sp-root *{box-sizing:border-box}
-.sp-root p,.sp-root h2,.sp-root h3,.sp-root h4{margin:0}
-.sp-root img{max-width:100%}
-.sp-title{font-size:22px;font-weight:500;padding:16px 16px 8px}
+/* A page that shows this preview (a dashboard) has its own rules for headings, buttons, tables and so on.
+   Undo them inside the preview, so it looks the same everywhere. The classes below then set what they need. */
+.sp-root :where(h1,h2,h3,h4,p,span,strong,em,i,label,small,div,section,ul,li,table,thead,tbody,tr,td,th,button,code,hr,img,svg){margin:0;padding:0;border:0;color:inherit;font:inherit;letter-spacing:inherit;text-transform:none;text-align:inherit;background:none;box-shadow:none;border-radius:0;max-width:none;width:auto;height:auto;min-width:0;min-height:0;list-style:none;text-decoration:none;opacity:1;float:none;filter:none}
+.sp-root :where(img,svg){max-width:100%}
+.sp-root :where(button){cursor:default}
+.sp-root :where(strong){font-weight:700}
+.sp-root :where(em){font-style:italic}
+.sp-title{font-size:22px;font-weight:500;padding:16px 16px 8px;color:var(--sp-on-bg)}
+.sp-item{padding:4px 16px}
+.sp-bleed{padding:0}
 .sp-muted{color:var(--sp-muted)}
 .sp-small{font-size:12px}
 .sp-medium{font-size:16px;font-weight:500}
@@ -78,8 +85,13 @@ const CSS = `
 .sp-table td,.sp-table th{border:1px solid var(--sp-outline);padding:8px;text-align:left}
 .sp-table th{font-weight:700}
 .sp-step{display:flex;gap:12px;padding:6px 0}
-.sp-dot{width:24px;font-size:20px;line-height:1;text-align:center}
+.sp-dot{flex-shrink:0;width:22px;height:22px;margin-top:1px;border-radius:50%;border:2px solid var(--sp-outline);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;line-height:1}
+.sp-dot--done{background:var(--sp-primary);border-color:var(--sp-primary);color:var(--sp-on-primary)}
+.sp-dot--current{border-color:var(--sp-primary)}
+.sp-dot--current::after{content:"";width:8px;height:8px;border-radius:50%;background:var(--sp-primary)}
 .sp-acc{display:flex;justify-content:space-between;align-items:center;padding:12px 0;font-weight:500;border-bottom:1px solid var(--sp-outline)}
+.sp-chev{width:8px;height:8px;margin:0 4px;border-right:2px solid var(--sp-muted);border-bottom:2px solid var(--sp-muted);transform:rotate(45deg);transition:transform .15s}
+.sp-chev--open{transform:rotate(-135deg)}
 .sp-dots{display:flex;justify-content:center;gap:6px;padding-top:8px}
 .sp-dots i{width:8px;height:8px;border-radius:50%;background:var(--sp-outline)}
 .sp-dots i.on{background:var(--sp-primary)}
@@ -152,6 +164,8 @@ const SpImage = defineComponent({
     ratio: Number,
     fit: { type: String, default: "cover" },
     height: Number,
+    // Fill the whole box the picture sits in (used where the box already has a size, like a gallery slide).
+    fill: Boolean,
   },
   setup(props) {
     const failed = ref(false);
@@ -159,8 +173,9 @@ const SpImage = defineComponent({
       const box: Record<string, string> = {};
       if (props.ratio) box.aspectRatio = String(props.ratio);
       if (props.height) box.height = `${props.height}px`;
-      // A picture that cannot load shows a grey box instead, exactly as the app does.
-      if (failed.value) return h("div", { class: "sp-ph", style: { ...box, height: box.height ?? "120px" } }, "▨");
+      if (props.fill) box.height = "100%";
+      // A picture that cannot load shows a grey box of the same size instead, exactly as the app does.
+      if (failed.value) return h("div", { class: "sp-ph", style: { ...box, height: box.height ?? (props.ratio ? undefined : "120px") } }, "▨");
       return h("img", { class: "sp-img", src: props.url, alt: props.alt ?? "", style: { ...box, objectFit: props.fit }, onError: () => (failed.value = true) });
     };
   },
@@ -192,7 +207,7 @@ const SpAccordion = defineComponent({
     };
     return () =>
       h("div", {}, props.items.flatMap((item, index) => [
-        h("div", { class: "sp-acc", "data-accordion": item.title, onClick: () => toggle(index) }, [h("span", item.title), h("span", open.value.includes(index) ? "⌃" : "⌄")]),
+        h("div", { class: "sp-acc", "data-accordion": item.title, onClick: () => toggle(index) }, [h("span", item.title), h("span", { class: `sp-chev${open.value.includes(index) ? " sp-chev--open" : ""}` })]),
         ...(open.value.includes(index) ? item.widgets.map((widget) => renderWidget(props.ctx, widget)) : []),
       ]));
   },
@@ -212,7 +227,7 @@ const SpGallery = defineComponent({
             const element = event.target as HTMLElement;
             page.value = Math.round(element.scrollLeft / Math.max(element.clientWidth, 1));
           },
-        }, props.images.map((image) => h("div", { style: { width: "100%", height: "100%" } }, [h(SpImage, { url: image.url, alt: image.alt, height: undefined, fit: "cover" })]))),
+        }, props.images.map((image) => h("div", { style: { width: "100%", height: "100%" } }, [h(SpImage, { url: image.url, alt: image.alt, fill: true, fit: "cover" })]))),
         props.dots && props.images.length > 1 ? h("div", { class: "sp-dots" }, props.images.map((_, index) => h("i", { class: index === page.value ? "on" : "" }))) : null,
       ]);
   },
@@ -247,6 +262,17 @@ function renderDataList(ctx: Context, widget: Widget, tag: Record<string, unknow
         : h("div", {}, items);
   }
   return h("div", { ...tag }, content);
+}
+
+// Widgets that run from one edge of the phone to the other. Everything else gets a side margin on a page,
+// the same rule the Flutter app follows (see SduiRender.pageChildren), so the preview matches it.
+export const FULL_BLEED_WIDGETS = new Set(["hero", "banner", "gallery", "video_card", "image", "carousel", "divider"]);
+
+// A widget placed directly on a page (not inside another widget), with its page margin.
+function renderOnPage(ctx: Context, widget: Widget): VNode | null {
+  const drawn = renderWidget(ctx, widget);
+  if (!drawn) return null;
+  return h("div", { class: FULL_BLEED_WIDGETS.has(widget.type) ? "sp-bleed" : "sp-item" }, [drawn]);
 }
 
 // ── One widget ──
@@ -411,7 +437,7 @@ function renderWidget(ctx: Context, widget: Widget): VNode | null {
     case "steps":
       return h("div", tag, list(data.steps).map((step: any) =>
         h("div", { class: "sp-step" }, [
-          h("span", { class: "sp-dot", style: { color: step.state === "todo" || !step.state ? p.muted : p.primary } }, step.state === "done" ? "●" : step.state === "current" ? "◉" : "○"),
+          h("span", { class: `sp-dot${step.state === "done" ? " sp-dot--done" : step.state === "current" ? " sp-dot--current" : ""}` }, step.state === "done" ? "✓" : ""),
           h("div", {}, [h("p", { style: { fontWeight: "500" } }, step.title), step.description ? h("p", { class: "sp-muted sp-small" }, step.description) : null]),
         ]),
       ));
@@ -523,7 +549,7 @@ export const SduiPreview = defineComponent({
       if (Array.isArray(document.sections)) {
         body = document.sections.flatMap((section: { id: string; title?: string; widgets: Widget[] }) => [
           section.title ? h("h2", { class: "sp-title", "data-section-title": section.id }, section.title) : null,
-          ...(Array.isArray(section.widgets) ? section.widgets : []).map((widget) => renderWidget(ctx, widget)),
+          ...(Array.isArray(section.widgets) ? section.widgets : []).map((widget) => renderOnPage(ctx, widget)),
         ]);
       } else if (document.root) {
         body = [renderBlock(ctx, document.root as Block)];

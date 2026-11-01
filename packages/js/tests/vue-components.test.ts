@@ -105,6 +105,16 @@ describe("SduiPreview", () => {
     expect(text).toContain("4.6 (212) Customer rating");
   });
 
+  it("gives page content a side margin, but lets pictures and banners run edge to edge", () => {
+    const wrapper = mount(SduiPreview, { props: { document: showcase() } });
+    const wrapperOf = (type: string) => wrapper.find(`[data-widget="${type}"]`).element.parentElement as HTMLElement;
+    for (const type of ["search_bar", "chips", "rich_text", "form"]) expect(wrapperOf(type).className, type).toBe("sp-item");
+    for (const type of ["hero", "gallery", "video_card"]) expect(wrapperOf(type).className, type).toBe("sp-bleed");
+    // Inside another widget there is no extra margin (the container draws its own children as they are).
+    const inner = wrapper.find('[data-id="s_cont_a"]').element.parentElement as HTMLElement;
+    expect(inner.className).not.toContain("sp-item");
+  });
+
   it("opens and closes the accordion, one section at a time", async () => {
     const wrapper = mount(SduiPreview, { props: { document: showcase() } });
     expect(textOf(wrapper)).not.toContain("Return anything within 30 days.");

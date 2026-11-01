@@ -29,10 +29,10 @@ const readFixture = (name) => JSON.parse(readFileSync(join(fixturesFolder, name)
 // Sample rows for the data_list widget. A real server would query its database here.
 const rowsByCity = {
   Dubai: [
-    { id: 7, name: "Dr Rao", specialty: "Dentist", fee: 150, photoUrl: "https://example.com/rao.jpg" },
+    { id: 7, name: "Dr Rao", specialty: "Dentist", fee: 150, photoUrl: "https://picsum.photos/seed/rao/800/450" },
     { id: 8, name: "Dr Khan", specialty: "Cardiologist", fee: 300 },
   ],
-  "Abu Dhabi": [{ id: 9, name: "Dr Li", specialty: "Dermatologist", fee: 220, photoUrl: "https://example.com/li.jpg" }],
+  "Abu Dhabi": [{ id: 9, name: "Dr Li", specialty: "Dermatologist", fee: 220, photoUrl: "https://picsum.photos/seed/li/800/450" }],
 };
 const dataSources = {
   doctors_nearby: (query) => rowsByCity[query.get("city")] ?? [],

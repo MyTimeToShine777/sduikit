@@ -136,7 +136,7 @@ class SduiContent extends StatelessWidget {
             child: Text(title, style: Theme.of(context).textTheme.titleLarge),
           ));
         }
-        if (widgets is List) children.addAll(render.children(context, widgets));
+        if (widgets is List) children.addAll(render.pageChildren(context, widgets));
       }
       return SingleChildScrollView(
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: children),

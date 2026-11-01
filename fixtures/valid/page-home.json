@@ -11,7 +11,7 @@
           "id": "w_banner_1",
           "type": "banner",
           "v": 1,
-          "data": { "imageUrl": "https://example.com/a.jpg", "title": "Welcome" },
+          "data": { "imageUrl": "https://picsum.photos/seed/a/800/450", "title": "Welcome" },
           "style": { "spacing": "md", "radius": "lg", "color": "primary" },
           "action": { "type": "open_screen", "screenId": "offers" },
           "analytics": { "event": "home_banner_tap" },
@@ -54,7 +54,7 @@
                 "id": "w_card_1",
                 "type": "card",
                 "v": 1,
-                "data": { "title": "Teeth cleaning", "subtitle": "From AED 150", "imageUrl": "https://example.com/c1.jpg" },
+                "data": { "title": "Teeth cleaning", "subtitle": "From AED 150", "imageUrl": "https://picsum.photos/seed/c1/800/450" },
                 "action": { "type": "open_sheet", "screenId": "cleaning" }
               },
               {
@@ -126,8 +126,8 @@
           "data": {
             "columns": 2,
             "items": [
-              { "id": "w_grid_1_a", "type": "image", "v": 1, "data": { "url": "https://example.com/g1.jpg", "alt": "One", "aspectRatio": 1, "fit": "cover" } },
-              { "id": "w_grid_1_b", "type": "image", "v": 1, "data": { "url": "https://example.com/g2.jpg", "alt": "Two" } }
+              { "id": "w_grid_1_a", "type": "image", "v": 1, "data": { "url": "https://picsum.photos/seed/g1/800/450", "alt": "One", "aspectRatio": 1, "fit": "cover" } },
+              { "id": "w_grid_1_b", "type": "image", "v": 1, "data": { "url": "https://picsum.photos/seed/g2/800/450", "alt": "Two" } }
             ]
           }
         },

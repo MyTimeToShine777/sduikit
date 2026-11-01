@@ -10,7 +10,7 @@
       "widgets": [
         {
           "id": "s_hero", "type": "hero", "v": 1,
-          "data": { "imageUrl": "https://example.com/hero.jpg", "title": "Spring sale", "subtitle": "Up to 40% off", "ctaLabel": "Shop now" },
+          "data": { "imageUrl": "https://picsum.photos/seed/hero/800/450", "title": "Spring sale", "subtitle": "Up to 40% off", "ctaLabel": "Shop now" },
           "action": { "type": "open_screen", "screenId": "sale" }
         },
         { "id": "s_search", "type": "search_bar", "v": 1, "data": { "placeholder": "Search products" }, "action": { "type": "open_screen", "screenId": "search" } },
@@ -46,7 +46,7 @@
           "data": { "spans": [{ "text": "Free delivery ", "bold": true }, { "text": "on orders over " }, { "text": "$50", "bold": true, "color": "primary" }, { "text": ".", "italic": true }] }
         },
         { "id": "s_icon", "type": "icon", "v": 1, "data": { "name": "star", "size": "large" }, "style": { "textColor": "warning" } },
-        { "id": "s_avatar", "type": "avatar", "v": 1, "data": { "imageUrl": "https://example.com/me.jpg", "initials": "AB", "size": "medium" } },
+        { "id": "s_avatar", "type": "avatar", "v": 1, "data": { "imageUrl": "https://picsum.photos/seed/me/800/450", "initials": "AB", "size": "medium" } },
         { "id": "s_badge", "type": "badge", "v": 1, "data": { "label": "New", "tone": "success" } },
         { "id": "s_alert", "type": "alert", "v": 1, "data": { "title": "Heads up", "message": "Deliveries are slower this week.", "tone": "warning" } },
         { "id": "s_progress", "type": "progress", "v": 1, "data": { "value": 0.6, "label": "60% complete", "shape": "linear" } },
@@ -62,7 +62,7 @@
           "data": { "title": "Notifications", "subtitle": "Choose what you hear about", "icon": "bell", "trailingText": "On", "chevron": true },
           "action": { "type": "open_screen", "screenId": "notifications" }
         },
-        { "id": "s_quote", "type": "quote", "v": 1, "data": { "text": "Setup took five minutes.", "author": "Sam Lee", "role": "Founder", "avatarUrl": "https://example.com/sam.jpg" } },
+        { "id": "s_quote", "type": "quote", "v": 1, "data": { "text": "Setup took five minutes.", "author": "Sam Lee", "role": "Founder", "avatarUrl": "https://picsum.photos/seed/sam/800/450" } },
         { "id": "s_table", "type": "table", "v": 1, "data": { "columns": ["Plan", "Seats"], "rows": [["Free", "1"], ["Team", "10"]] } },
         {
           "id": "s_steps", "type": "steps", "v": 1,
@@ -87,11 +87,11 @@
       "widgets": [
         {
           "id": "s_gallery", "type": "gallery", "v": 1,
-          "data": { "aspectRatio": 1.5, "showDots": true, "images": [{ "url": "https://example.com/g1.jpg", "alt": "Front" }, { "url": "https://example.com/g2.jpg", "alt": "Back" }] }
+          "data": { "aspectRatio": 1.5, "showDots": true, "images": [{ "url": "https://picsum.photos/seed/g1/800/450", "alt": "Front" }, { "url": "https://picsum.photos/seed/g2/800/450", "alt": "Back" }] }
         },
         {
           "id": "s_video", "type": "video_card", "v": 1,
-          "data": { "thumbnailUrl": "https://example.com/video.jpg", "title": "How it works", "duration": "2:14" },
+          "data": { "thumbnailUrl": "https://picsum.photos/seed/video/800/450", "title": "How it works", "duration": "2:14" },
           "action": { "type": "open_url", "url": "https://example.com/video", "external": true }
         },
         { "id": "s_count", "type": "countdown", "v": 1, "data": { "until": "2026-12-01T00:00:00Z", "label": "Sale ends in", "endedText": "The sale has ended" } },

@@ -80,6 +80,27 @@ class SduiRender {
     return widgets;
   }
 
+  /// Widgets that run from one edge of the screen to the other. Everything else gets a side margin on a page.
+  static const Set<String> fullBleedWidgets = {'hero', 'banner', 'gallery', 'video_card', 'image', 'carousel', 'divider'};
+
+  /// Like [children], for widgets placed directly on a page: each gets a side margin of 16, except the
+  /// full-width ones (pictures, banners, carousels). Inside other widgets, use [children] (no extra margin).
+  List<Widget> pageChildren(BuildContext context, List<dynamic> json) {
+    final widgets = <Widget>[];
+    for (final item in json) {
+      final node = SduiNode.tryParse(item);
+      if (node == null) {
+        onError?.call(const FormatException('An entry in a widget list is not a usable widget and was skipped.'), null);
+        continue;
+      }
+      final built = build(context, node);
+      widgets.add(fullBleedWidgets.contains(node.type)
+          ? built
+          : Padding(padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4), child: built));
+    }
+    return widgets;
+  }
+
   Widget _fallbackFor(BuildContext context, SduiNode node) {
     final fallback = node.fallback;
     return fallback == null ? const SizedBox.shrink() : build(context, fallback);

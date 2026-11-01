@@ -270,6 +270,21 @@ void main() {
     });
   });
 
+  group('page margins', () {
+    testWidgets('a text on a page gets a side margin of 16, a banner runs edge to edge', (tester) async {
+      final document = pageWith([
+        textWidget('t', 'Some text'),
+        {'id': 'b', 'type': 'banner', 'v': 1, 'data': {'imageUrl': 'https://example.com/a.jpg', 'title': 'A banner'}},
+      ]);
+      await tester.pumpWidget(pageHost(document, makeRender(Reports())));
+      await tester.pumpAndSettle();
+
+      final page = tester.getSize(find.byType(SingleChildScrollView).first).width;
+      expect(tester.getTopLeft(find.text('Some text')).dx, 16);
+      expect(tester.getSize(find.byType(SizedBox).where((box) => (tester.widget<SizedBox>(box)).height == 160).first).width, page);
+    });
+  });
+
   group('style tokens', () {
     testWidgets('padding and corner tokens come from the theme', (tester) async {
       final manifestTheme = loadFixture('manifest.json')['theme'] as Map<String, dynamic>;

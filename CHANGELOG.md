@@ -7,6 +7,13 @@ and the packages use [semantic versioning](https://semver.org/). The format itse
 
 ## [Unreleased]
 
+### Changed (the preview, again)
+- Page content now has a side margin of 16, except pictures, banners, carousels and other full-width widgets
+  (`FULL_BLEED_WIDGETS` in JavaScript, `SduiRender.pageChildren` in Flutter).
+- The preview is walled off from the page it is shown in (a dashboard's own heading, button and table styles no longer leak in),
+  has a single scroll bar, and a failed picture keeps the size of the picture.
+- The sample pages use real placeholder photos (picsum.photos) so a preview does not look broken.
+
 ### Added (a preview that looks like the app)
 - `SduiPreview` now draws all 38 widgets in a Material style with the app's theme (`theme`), light or dark mode (`dark`)
   and example rows for live-data lists (`dataSamples`). `fillTemplate` is exported for dashboards.
