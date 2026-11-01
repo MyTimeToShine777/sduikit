@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sduikit.dev/schemas/common/style.json",
+  "title": "Style",
+  "description": "Token names only. Never pixels or hex codes; the app theme decides what a token looks like.",
+  "type": "object",
+  "properties": {
+    "spacing": { "$ref": "tokens.json#/$defs/spacing" },
+    "radius": { "$ref": "tokens.json#/$defs/radius" },
+    "color": { "$ref": "tokens.json#/$defs/color" },
+    "textColor": { "$ref": "tokens.json#/$defs/color" },
+    "textSize": { "$ref": "tokens.json#/$defs/textSize" },
+    "align": { "$ref": "tokens.json#/$defs/align" }
+  },
+  "additionalProperties": false
+}

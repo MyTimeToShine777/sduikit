@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sduikit.dev/schemas/common/action.json",
+  "title": "Action",
+  "description": "What happens when the user taps something. The app registers the named native screens and handles call_api.",
+  "type": "object",
+  "discriminator": { "propertyName": "type" },
+  "oneOf": [
+    { "$ref": "#/$defs/open_screen" },
+    { "$ref": "#/$defs/open_sheet" },
+    { "$ref": "#/$defs/open_url" },
+    { "$ref": "#/$defs/open_native" },
+    { "$ref": "#/$defs/call_api" },
+    { "$ref": "#/$defs/share" },
+    { "$ref": "#/$defs/dismiss" }
+  ],
+  "$defs": {
+    "open_screen": {
+      "type": "object",
+      "properties": { "type": { "const": "open_screen" }, "screenId": { "type": "string", "minLength": 1 } },
+      "required": ["type", "screenId"],
+      "additionalProperties": false
+    },
+    "open_sheet": {
+      "type": "object",
+      "properties": { "type": { "const": "open_sheet" }, "screenId": { "type": "string", "minLength": 1 } },
+      "required": ["type", "screenId"],
+      "additionalProperties": false
+    },
+    "open_url": {
+      "type": "object",
+      "properties": {
+        "type": { "const": "open_url" },
+        "url": { "type": "string", "format": "uri" },
+        "external": { "type": "boolean" }
+      },
+      "required": ["type", "url"],
+      "additionalProperties": false
+    },
+    "open_native": {
+      "type": "object",
+      "properties": {
+        "type": { "const": "open_native" },
+        "name": { "type": "string", "minLength": 1 },
+        "params": { "type": "object" }
+      },
+      "required": ["type", "name"],
+      "additionalProperties": false
+    },
+    "call_api": {
+      "type": "object",
+      "properties": {
+        "type": { "const": "call_api" },
+        "name": { "type": "string", "minLength": 1 },
+        "params": { "type": "object" }
+      },
+      "required": ["type", "name"],
+      "additionalProperties": false
+    },
+    "share": {
+      "type": "object",
+      "properties": {
+        "type": { "const": "share" },
+        "text": { "type": "string", "minLength": 1 },
+        "url": { "type": "string", "format": "uri" }
+      },
+      "required": ["type", "text"],
+      "additionalProperties": false
+    },
+    "dismiss": {
+      "type": "object",
+      "properties": { "type": { "const": "dismiss" } },
+      "required": ["type"],
+      "additionalProperties": false
+    }
+  }
+}

@@ -1,0 +1,4 @@
+{
+  "$comment": "Lists every built-in widget type and version. 'since' is the first package version that supports it. 'children' says where the widget's data holds other widgets, for example \"tabs[].widgets\".",
+  "types": {}
+}

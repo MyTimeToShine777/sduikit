@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sduikit.dev/schemas/common/widget.json",
+  "title": "Widget",
+  "description": "The outer shape every widget shares. The shape of `data` depends on type + v and is checked by the widget's own schema (see catalogue.json).",
+  "type": "object",
+  "properties": {
+    "id": { "type": "string", "minLength": 1 },
+    "type": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+    "v": { "type": "integer", "minimum": 1 },
+    "data": { "type": "object" },
+    "style": { "$ref": "style.json" },
+    "action": { "$ref": "action.json" },
+    "analytics": {
+      "type": "object",
+      "properties": {
+        "event": { "type": "string", "minLength": 1 },
+        "params": { "type": "object" }
+      },
+      "required": ["event"],
+      "additionalProperties": false
+    },
+    "rules": { "$ref": "rules.json" },
+    "fallback": {
+      "if": { "type": "object" },
+      "then": { "$ref": "widget.json" },
+      "else": { "type": "null" }
+    }
+  },
+  "required": ["id", "type", "v", "data"],
+  "additionalProperties": false
+}
