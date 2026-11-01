@@ -55,14 +55,18 @@ class SduiNode {
   /// A text value that must be there. Throws [SduiDataError] if it is missing or empty,
   /// so the widget is skipped instead of being drawn with an invented value.
   String requireString(String key) {
-    final value = data[key];
-    if (value is String && value.isNotEmpty) return value;
+    final value = string(key);
+    if (value != null && value.isNotEmpty) return value;
     throw SduiDataError(this, key);
   }
 
+  /// A text value. Numbers and true/false are shown as text (a live row may give a fee of 150),
+  /// which is the same value written differently, not an invented one.
   String? string(String key) {
     final value = data[key];
-    return value is String ? value : null;
+    if (value is String) return value;
+    if (value is num || value is bool) return '$value';
+    return null;
   }
 
   double? number(String key) {

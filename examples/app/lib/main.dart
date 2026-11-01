@@ -40,6 +40,23 @@ class HttpSduiClient implements SduiClient {
     }
   }
 
+  /// Rows for a data_list widget, e.g. fetchData('doctors_nearby', {'city': 'Dubai'}).
+  Future<List<Map<String, dynamic>>> fetchData(String name, Map<String, dynamic> params) async {
+    final uri = Uri.parse(baseUrl).replace(
+      path: '/data/$name',
+      queryParameters: {for (final entry in params.entries) entry.key: '${entry.value}'},
+    );
+    final client = HttpClient();
+    try {
+      final response = await (await client.getUrl(uri)).close();
+      final body = await response.transform(utf8.decoder).join();
+      if (response.statusCode != 200) throw HttpException('The server answered ${response.statusCode}: $body', uri: uri);
+      return [for (final row in jsonDecode(body) as List) Map<String, dynamic>.from(row as Map)];
+    } finally {
+      client.close();
+    }
+  }
+
   @override
   Future<Map<String, dynamic>> fetchPage(String id) => _get('/pages/$id');
 
@@ -88,9 +105,14 @@ class _ExampleAppState extends State<ExampleApp> {
   Widget build(BuildContext context) {
     final render = SduiRender(
       registry: _registry,
+      dataLoader: _client.fetchData,
       actions: SduiActionHandler(
         onOpenScreen: (context, id) => debugPrint('open_screen $id'),
         onCallApi: (name, params) async => debugPrint('call_api $name $params'),
+        nativeScreens: {
+          // A built-in screen the server can open by name, with values taken from the tapped row.
+          'doctor_profile': (context, params) => debugPrint('open the profile of doctor ${params['doctorId']}'),
+        },
       ),
       onError: (error, stackTrace) => debugPrint('sduikit: $error'),
       onAnalytics: (event, params) => debugPrint('analytics: $event $params'),

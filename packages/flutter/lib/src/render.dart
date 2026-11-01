@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import 'actions.dart';
+import 'client.dart';
 import 'model.dart';
 import 'registry.dart';
 import 'theme.dart';
@@ -28,11 +29,15 @@ class SduiRender {
     SduiActionHandler? actions,
     this.onError,
     this.onAnalytics,
+    this.dataLoader,
     this.killedWidgets = const {},
   }) : actions = actions ?? SduiActionHandler(onError: onError);
 
   final SduiWidgetRegistry registry;
   final SduiActionHandler actions;
+
+  /// How `data_list` widgets get their rows. Without one, those widgets are skipped and reported.
+  final SduiDataLoader? dataLoader;
   final SduiErrorHook? onError;
   final SduiAnalyticsHook? onAnalytics;
 

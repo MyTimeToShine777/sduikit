@@ -8,5 +8,6 @@ export 'src/layout.dart' show SduiGridRows;
 export 'src/model.dart';
 export 'src/registry.dart';
 export 'src/render.dart';
+export 'src/template.dart' show fillTemplate;
 export 'src/theme.dart';
 export 'src/view.dart';

@@ -7,6 +7,14 @@ and the packages use [semantic versioning](https://semver.org/). The format itse
 
 ## [Unreleased]
 
+### Added (live data, drafts and a saved copy)
+- `data_list` widget (v1): the app loads rows from its own API and the page repeats a template
+  once per row, filling `{{field}}` placeholders. `validate` understands templates (placeholders
+  are allowed inside them only), and `createSdui` accepts a `templates` list for your own widgets.
+- Flutter: `SduiDataLoader`, `fillTemplate`, and `FileSduiCache` (`package:sduikit/io.dart`) that
+  keeps the last good copy on disk.
+- Example server: `/data/:name`, drafts, publish, history and rollback.
+
 ### Added
 - The format: JSON Schema files for pages, screens, building blocks, the app manifest, actions,
   rules and the 12 starter widgets (`text`, `image`, `button`, `spacer`, `divider`,

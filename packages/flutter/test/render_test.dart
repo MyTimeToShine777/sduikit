@@ -20,6 +20,8 @@ void main() {
       expect(find.byType(Divider), findsWidgets); // divider widget and list dividers
       expect(find.text('Book a visit'), findsOneWidget); // button
       expect(find.text('Upcoming'), findsOneWidget); // tabs
+      expect(find.text('Dr Rao'), findsOneWidget); // data_list rows
+      expect(find.text('Dr Khan'), findsOneWidget);
     });
 
     testWidgets('shows only the first tab, and switches when a tab is tapped', (tester) async {

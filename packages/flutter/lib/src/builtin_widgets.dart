@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'data_list_widget.dart';
 import 'layout.dart';
 import 'model.dart';
 import 'registry.dart';
@@ -20,7 +21,8 @@ void registerBuiltInWidgets(SduiWidgetRegistry registry) {
     ..register('carousel', 1, _carousel)
     ..register('list', 1, _list)
     ..register('grid', 1, _grid)
-    ..register('tabs', 1, _tabs);
+    ..register('tabs', 1, _tabs)
+    ..register('data_list', 1, buildDataList);
 }
 
 TextAlign? _textAlign(Object? token) => switch (token) {

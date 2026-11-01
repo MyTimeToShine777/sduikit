@@ -53,15 +53,29 @@ class Reports {
   final analytics = <MapEntry<String, Map<String, dynamic>>>[];
 }
 
+/// The rows the "doctors_nearby" list gets in tests. The second doctor has no photo.
+final sampleDoctors = <Map<String, dynamic>>[
+  {'id': 7, 'name': 'Dr Rao', 'specialty': 'Dentist', 'fee': 150, 'photoUrl': 'https://example.com/rao.jpg'},
+  {'id': 8, 'name': 'Dr Khan', 'specialty': 'Cardiologist', 'fee': 300},
+];
+
+Future<List<Map<String, dynamic>>> sampleDataLoader(String name, Map<String, dynamic> params) async {
+  if (name == 'doctors_nearby') return sampleDoctors;
+  throw StateError('There is no data called "$name".');
+}
+
 SduiRender makeRender(
   Reports reports, {
   SduiWidgetRegistry? registry,
   SduiActionHandler? actions,
+  SduiDataLoader? dataLoader,
+  bool withoutDataLoader = false,
   Set<String> killedWidgets = const {},
 }) {
   return SduiRender(
     registry: registry ?? SduiWidgetRegistry.withBuiltIns(),
     actions: actions,
+    dataLoader: withoutDataLoader ? null : (dataLoader ?? sampleDataLoader),
     killedWidgets: killedWidgets,
     onError: (error, stackTrace) => reports.errors.add(error),
     onAnalytics: (event, params) => reports.analytics.add(MapEntry(event, params)),

@@ -6,6 +6,10 @@ abstract class SduiClient {
   Future<Map<String, dynamic>> fetchManifest();
 }
 
+/// Loads the rows for a `data_list` widget from your own API. [name] is the name the page uses
+/// (for example "doctors_nearby") and [params] are the values the page passed along.
+typedef SduiDataLoader = Future<List<Map<String, dynamic>>> Function(String name, Map<String, dynamic> params);
+
 /// Keeps the last good copy of each page, so the app can still show something when the
 /// server is slow or unreachable. Use a saved-to-disk version in a real app
 /// (for example one that stores the JSON with shared_preferences).

@@ -66,10 +66,42 @@ SduiView(kind: SduiDocumentKind.page, id: 'home', client: myClient, render: rend
 Use `sduiThemeData(manifest['theme'])` as the app's `ThemeData` so tokens like `md` and `primary`
 match what the server says.
 
-## Known gaps in version 0.1.0
+## Live data (the `data_list` widget)
+
+A `data_list` asks your app for rows and draws its template once per row, filling `{{field}}`
+from each row. You give the package one function:
+
+```dart
+SduiRender(
+  registry: registry,
+  dataLoader: (name, params) async {
+    // name is what the page says, e.g. "doctors_nearby"; params e.g. {'city': 'Dubai'}
+    final rows = await myApi.get('/$name', params);
+    return List<Map<String, dynamic>>.from(rows);
+  },
+);
+```
+
+A field the row does not have is left out, never invented. Without a `dataLoader` the list is
+skipped (or its fallback is drawn) and the error hook is called.
+
+## Keeping the saved copy on the phone
+
+`MemorySduiCache` forgets everything when the app closes. For a copy that survives a restart:
+
+```dart
+import 'package:sduikit/io.dart';
+SduiView(..., cache: FileSduiCache(Directory('${supportDirectory.path}/sduikit')))
+```
+
+## Right-to-left languages
+
+Layout follows the app's text direction (Arabic works), because the package uses start/end
+alignment and ordinary Rows and Columns. Test it with your own Arabic text.
+
+## Known gaps in version 0.2.0
 
 - The carousel's `autoplay` setting is accepted but does not animate yet.
-- `MemorySduiCache` forgets everything when the app closes. For the offline copy to survive a
-  restart, write a `SduiCache` that stores the JSON on disk (for example with `shared_preferences`).
+- `FileSduiCache` uses `dart:io`, so it does not work in a web build.
 - The loading placeholders are static grey boxes (no shimmer).
 - Lottie animations are not included; the design makes them an optional add-on package.
